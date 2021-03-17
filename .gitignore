@@ -13,5 +13,5 @@
 .vscode
 
 # miscellaneous
-.env.*
+.env
 .wakatime-project
