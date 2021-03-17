@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Message from '../elements/Message';
-import { setSuccess } from '../../store/actions/authActions';
+import { setSuccess } from '../../actions/authActions';
 import { RootState } from '../../store';
 
 const Dashboard: FC = () => {
