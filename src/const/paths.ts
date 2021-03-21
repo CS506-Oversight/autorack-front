@@ -7,6 +7,7 @@ export default class AppPaths {
   // User Control
   static SIGN_IN = '/signin';
   static SIGN_UP = '/signup';
+  static SIGN_OUT = '/signout';
 
   // Authenticated Routes
   static AUTHENTICATED = '/authed';
