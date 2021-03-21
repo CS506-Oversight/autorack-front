@@ -14,4 +14,8 @@ export const navItems: Array<NavItemEntry> = [
     label: 'Sign Up',
     link: AppPaths.SIGN_UP,
   },
+  {
+    label: 'Sign Out',
+    link: AppPaths.SIGN_OUT,
+  },
 ];
