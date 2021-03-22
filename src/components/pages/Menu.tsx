@@ -2,6 +2,8 @@ import React from 'react';
 import {SelectForm} from '../elements/ingredient/SelectForm';
 import {FormMenuItem} from '../elements/ingredient/FormMenuItem';
 import {FormIngredient} from '../elements/ingredient/FormIngredient';
+import {FormAddIngredients} from '../elements/ingredient/FormAddIngredients';
+import {Button} from '@material-ui/core';
 
 
 export type Progress = {
@@ -102,21 +104,39 @@ export const Menu = () => {
         prevStep={prevStep}
         handleMenuItem={handleMenuItem}
       />
+
     );
   case 3:
     return (
-      <FormIngredient
-        nextStep={nextStep}
-        prevStep={prevStep}
-        handleIngredient={handleIngredient}
-      />
+      <div>
+        <FormIngredient
+          nextStep={nextStep}
+          prevStep={prevStep}
+          handleIngredient={handleIngredient}
+        />
+        <FormAddIngredients/>
+      </div>
     );
   default:
     return (
       <div>
         {menuItem.price}
         {ingredientItem.price}
+        <FormAddIngredients/>
+        <Button
+          variant='contained'
+          color='primary'
+          style={styles.button}
+          onClick={prevStep}>
+          Back
+        </Button>
       </div>
     );
   }
+};
+
+const styles = {
+  button: {
+    margin: 15,
+  },
 };
