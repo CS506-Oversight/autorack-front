@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from 'react';
 /* import Select from 'react-select';*/
-import {Button, Paper, FormControl, InputAdornment, FilledInput, TextField, InputLabel} from '@material-ui/core';
+import {Button, FormControl, InputAdornment, FilledInput, TextField, InputLabel} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,74 +62,72 @@ export const FormMenuItem = (props: React.PropsWithChildren<FormMenuItemProps>) 
   };
 
   return (
-    <Paper elevation={3}>
-      <React.Fragment>
-        <FormControl fullWidth={false} className={classes.margin} variant="filled">
-          <h3>Fill in Menu Item Things and change this line</h3>
-          <TextField
-            id="Name"
-            label="Name"
-            onChange={updateMenuItem('name')}
-            defaultValue={menuItem.name}
-            variant="filled"
-          />
-          <br/>
-          <TextField
-            id="Description"
-            label="Description"
-            multiline
-            rowsMax={10}
-            onChange={updateMenuItem('description')}
-            defaultValue={menuItem.description}
-            variant="filled"
-          />
-          <br/>
-          <TextField
-            id="Image URL"
-            label="Image Url"
-            onChange={updateMenuItem('imageURL')}
-            defaultValue={menuItem.imageURl}
-            variant="filled"
-          />
-          <br/>
+    <React.Fragment>
+      <FormControl fullWidth={false} className={classes.margin} variant="filled">
+        <h3>Fill in Menu Item Things and change this line</h3>
+        <TextField
+          id="Name"
+          label="Name"
+          onChange={updateMenuItem('name')}
+          defaultValue={menuItem.name}
+          variant="filled"
+        />
+        <br/>
+        <TextField
+          id="Description"
+          label="Description"
+          multiline
+          rowsMax={10}
+          onChange={updateMenuItem('description')}
+          defaultValue={menuItem.description}
+          variant="filled"
+        />
+        <br/>
+        <TextField
+          id="Image URL"
+          label="Image Url"
+          onChange={updateMenuItem('imageURL')}
+          defaultValue={menuItem.imageURl}
+          variant="filled"
+        />
+        <br/>
 
 
-          {/*        <Select
+        {/*        <Select
           value={selection}
           onChange={(option) => handleSelect(option)}
           options={options}
         />*/}
 
-          <FormControl fullWidth = {false} className={classes.margin} variant="filled">
-            <InputLabel htmlFor="filled-adornment-password">Price</InputLabel>
-            <FilledInput
-              onChange={updateMenuPrice('price')}
-              defaultValue={menuItem.price}
-              id="filled-adornment-password"
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            />
-          </FormControl>
-
-          <Button
-            variant='contained'
-            color='primary'
-            style={styles.button}
-            onClick={function() {
-              nextStep(4); // needs to be set
-              handleMenuItem(menuItem);
-            }}>
-                    Continue
-          </Button>
-          <Button
-            variant='contained'
-            color='primary'
-            style={styles.button}
-            onClick={prevStep}>
-            Back
-          </Button>
+        <FormControl fullWidth = {false} className={classes.margin} variant="filled">
+          <InputLabel htmlFor="filled-adornment-password">Price</InputLabel>
+          <FilledInput
+            onChange={updateMenuPrice('price')}
+            defaultValue={menuItem.price}
+            id="filled-adornment-password"
+            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+          />
         </FormControl>
-      </React.Fragment>
-    </Paper>
+
+        <Button
+          variant='contained'
+          color='primary'
+          style={styles.button}
+          onClick={function() {
+            nextStep(4); // needs to be set
+            handleMenuItem(menuItem);
+          }}>
+                    Continue
+        </Button>
+        <Button
+          variant='contained'
+          color='primary'
+          style={styles.button}
+          onClick={prevStep}>
+            Back
+        </Button>
+      </FormControl>
+    </React.Fragment>
 
   );
 };

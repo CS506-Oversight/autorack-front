@@ -1,6 +1,6 @@
 import React, {} from 'react';
 import Select from 'react-select';
-import {Button, Paper} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 
 type FirstChoice = {
@@ -32,23 +32,21 @@ export const SelectForm = (props: React.PropsWithChildren<SelectFormProps>) => {
 
   return (
 
-    <Paper elevation={3}>
-      <React.Fragment>
-        <h3>Select an Option</h3>
-        <Select
-          value={selection}
-          onChange={(option) => handleSelect(option)}
-          options={options}
-        />
-        <Button
-          variant='contained'
-          color='primary'
-          style={styles.button}
-          onClick={setStep}>
+    <React.Fragment>
+      <h3>Select an Option</h3>
+      <Select
+        value={selection}
+        onChange={(option) => handleSelect(option)}
+        options={options}
+      />
+      <Button
+        variant='contained'
+        color='primary'
+        style={styles.button}
+        onClick={setStep}>
               Continue
-        </Button>
-      </React.Fragment>
-    </Paper>
+      </Button>
+    </React.Fragment>
 
   );
 };

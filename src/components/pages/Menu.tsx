@@ -3,8 +3,7 @@ import {SelectForm} from '../elements/ingredient/SelectForm';
 import {FormMenuItem} from '../elements/ingredient/FormMenuItem';
 import {FormIngredient} from '../elements/ingredient/FormIngredient';
 import {FormAddIngredients} from '../elements/ingredient/FormAddIngredients';
-import {Button} from '@material-ui/core';
-
+import {Button, Paper, Grid} from '@material-ui/core';
 
 export type Progress = {
   step: number
@@ -91,31 +90,47 @@ export const Menu = () => {
   switch (step) {
   case 1:
     return (
-      <SelectForm
-        nextStep={nextStep}
-        handleSelect={handleSelect}
-        selection = {selection}
-      />
+      <Paper elevation={3}>
+        <SelectForm
+          nextStep={nextStep}
+          handleSelect={handleSelect}
+          selection = {selection}
+        />
+      </Paper>
     );
   case 2:
     return (
-      <FormMenuItem
-        nextStep={nextStep}
-        prevStep={prevStep}
-        handleMenuItem={handleMenuItem}
-      />
+      <div>
+        <Paper elevation={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={4}>
+              <FormMenuItem
+                nextStep={nextStep}
+                prevStep={prevStep}
+                handleMenuItem={handleMenuItem}
+              />
+
+
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <FormAddIngredients/>
+
+            </Grid>
+          </Grid>
+        </Paper>
+      </div>
 
     );
   case 3:
     return (
-      <div>
+      <Paper elevation={3}>
         <FormIngredient
           nextStep={nextStep}
           prevStep={prevStep}
           handleIngredient={handleIngredient}
         />
-        <FormAddIngredients/>
-      </div>
+      </Paper>
+
     );
   default:
     return (

@@ -1,9 +1,19 @@
 import React, {} from 'react';
 /* import Select from 'react-select';*/
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import {TextField, FormControl, FormLabel, FormGroup, Checkbox,
-  FormControlLabel, FormHelperText} from '@material-ui/core';
+import {
+  Grid,
+  FormControl,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  TextField,
+} from '@material-ui/core';
+import Select from 'react-select';
 
+
+const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -11,6 +21,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
       margin: theme.spacing(3),
+    },
+    margin: {
+      margin: theme.spacing(1),
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
     },
 
   }),
@@ -45,14 +62,26 @@ export const FormAddIngredients = () => {
 /*  const {nextStep, prevStep, handleIngredient} = props;*/
   const classes = useStyles();
 
-  /*  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>({
+    type MenuIngredient = {
+        name: string,
+        measurement: string,
+        amount: number,
+    }
+
+    const MenuItemIngredients: Array<MenuIngredient> = [
+      {name: 'Menu', measurement: 'tsp', amount: 2},
+      {name: 'Ingredient', measurement: 'cup', amount: 3},
+      {name: 'Edit', measurement: 'oz', amount: 1},
+    ];
+
+    /*  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>({
     name: '',
     inventory: 0,
     unit: '',
     price: 0,
   });*/
 
-  /*  const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
+    /*  const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
     setIngredientItem({...ingredientItem, [key]: e.target.value});
     handleIngredient(ingredientItem);
   };
@@ -60,52 +89,95 @@ export const FormAddIngredients = () => {
     setIngredientItem({...ingredientItem, [key]: e.target.value});
     handleIngredient(ingredientItem);
   };*/
-  /*  const {gilad, jason, antoine} = state;*/
-  return (
-    <div>
-      <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">Assign responsibility</FormLabel>
-        <FormGroup>
-          <FormControlLabel
-            control={<
-              Checkbox
-              /*                checked={gilad}*/
-              /*              onChange={handleChange}*/
-              name="gilad" />}
-            label="Gilad Gray"
-          />
+    /*  const {gilad, jason, antoine} = state;*/
+    return (
+      <div>
 
-          <FormControlLabel
-            control={<Checkbox
-              /*                checked={jason}*/
-              /*              onChange={handleChange}*/
-              name="jason" />}
-            label="Jason Killian"
-          />
-          <FormControlLabel
-            control={<Checkbox
-              /*                checked={antoine}*/
-              /*              onChange={handleChange}*/
-              name="antoine" />}
-            label="Antoine Llorca"
-          />
-        </FormGroup>
-        <FormHelperText>Be careful</FormHelperText>
-      </FormControl>
-      <FormControl fullWidth={false} className={classes.formControl} variant="filled">
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Select Ingredients</FormLabel>
+          <FormGroup>
+            <Grid container spacing={3}>
 
-        <TextField
-          id="Unit"
-          label="Unit of Measurement for Ingredient"
-          /*                onChange={updateIngredientItem('unit')}
-                defaultValue={ingredientItem.unit}*/
-          variant="filled"
-        />
-      </FormControl>
-    </div>
+              <Grid item xs={12} sm={4}>
+                <FormControlLabel
+                  control={<
+                    Checkbox
+                    /*                  checked={gilad}
+                  onChange={handleChange}*/
+                    name="gilad" />}
+                  label="Butter"
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Select
+                /*                    value={selection}
+                    onChange={(option) => handleSelect(option)}*/
+                  options={MenuItemIngredients}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  id="Unit"
+                  label="Amount"
+                  /*                onChange={updateIngredientItem('unit')}
+                    defaultValue={ingredientItem.unit}*/
+                  variant="filled"
+                />
+              </Grid>
+
+            </Grid>
+          </FormGroup>
+        </FormControl>
+
+      </div>
 
 
-  /*    <Paper elevation={3}>
+    /*    <div>
+      <Grid container spacing={3}>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Assign responsibility</FormLabel>
+          <FormGroup>
+            <Grid item xs={12} sm={4}>
+              <FormControlLabel
+                control={<
+                  Checkbox
+                  /!*                checked={gilad}*!/
+                  /!*              onChange={handleChange}*!/
+                  name="gilad" />}
+                label="Gilad Gray"
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <FormControl fullWidth={false} className={classes.formControl} variant="filled">
+
+                <TextField
+                  id="Unit"
+                  label="Unit of Measurement for Ingredient"
+                  /!*                onChange={updateIngredientItem('unit')}
+                      defaultValue={ingredientItem.unit}*!/
+                  variant="filled"
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <FormControl fullWidth={false} className={classes.formControl} variant="filled">
+
+                <TextField
+                  id="Unit"
+                  label="Unit of Measurement for Ingredient"
+                  /!*                onChange={updateIngredientItem('unit')}
+                              defaultValue={ingredientItem.unit}*!/
+                  variant="filled"
+                />
+              </FormControl>
+            </Grid>
+          </FormGroup>
+        </FormControl>
+      </Grid>
+    </div>*/
+
+
+    /*    <Paper elevation={3}>
       <React.Fragment>
         <FormControl fullWidth={false} className={classes.margin} variant="filled">
           <h3>Fill in Ingredient Item Things and change this line</h3>
@@ -168,7 +240,7 @@ export const FormAddIngredients = () => {
       </React.Fragment>
     </Paper>*/
 
-  );
+    );
 };
 
 /* const styles = {
