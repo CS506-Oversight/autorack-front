@@ -8,7 +8,9 @@ export default class AppPaths {
   static SIGN_IN = '/signin';
   static SIGN_UP = '/signup';
   static FORGOT_PASSWORD = '/forgot-password';
+
   // Authenticated Routes
   static AUTHENTICATED = '/authed';
   static RESTOCK_PURCHASES = '/restock-purchases'
+  static MENU = '/menu'
 }

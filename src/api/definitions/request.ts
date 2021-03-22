@@ -1,5 +1,7 @@
 // These implementations should be consistent with the backend.
 
+import {OptionTypeBase} from 'react-select';
+
 export type RequestBase = {};
 
 export type SimpleAddRequest = RequestBase & {
