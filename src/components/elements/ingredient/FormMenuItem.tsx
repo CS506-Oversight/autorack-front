@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: '10ch',
   },
+  button: {
+    margin: 15,
+  },
 }));
 
 

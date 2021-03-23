@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, {ChangeEvent} from 'react';
 /* import Select from 'react-select';*/
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import {
@@ -8,7 +8,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  TextField,
+  TextField, Button,
 } from '@material-ui/core';
 import Select from 'react-select';
 
@@ -29,222 +29,172 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
       flexShrink: 0,
     },
+    button: {
+      margin: 15,
+    },
 
   }),
 );
 
+/* type MenuIngredient = {
+    name: string,
+    measurement: string,
+    amount: number,
+};*/
 
-/*
-type IngredientForMenu = {
+ type MenuIngredientForForm = {
+    name: string,
+    measurement: string,
+    amount: number,
+    value: string,
+     used:boolean,
+};
+/* type MenuIngredientList = Array<MenuIngredient> [];*/
+
+type Measurement = {
+    value: string,
+    label: string,
+};
+
+type Ingredient = {
     name: string,
     inventory: number,
     unit: string,
     price: number,
-}
-*/
+};
+// make MenuIngredient
+const IngredientObjectList = new Map<string, MenuIngredientForForm>();
 
-/* const options: Array<FirstChoice> = [
-  {value: 'Menu', label: 'Create Menu Item', step: 2},
-  {value: 'Ingredient', label: 'Create Ingredient', step: 3},
-  {value: 'Edit', label: 'Edit Something?', step: 1},
-];*/
+const IngredientList: Array<Ingredient> = [
+  {name: 'Butter', inventory: 2, unit: 'Tbsp', price: 5.00},
+  {name: 'Ham', inventory: 2, unit: 'Tbsp', price: 5.00},
+  {name: 'Water', inventory: 2, unit: 'Tbsp', price: 5.00},
+  {name: 'Noodles', inventory: 2, unit: 'Tbsp', price: 5.00},
+  {name: 'Tomatoes', inventory: 2, unit: 'Tbsp', price: 5.00},
+];
 
-/*
-type FormIngredientProps = {
-    nextStep: (step:number) => void,
-    prevStep: () => void,
-    handleIngredient: (item: Ingredient) => void,
-}
-*/
+const Measurements: Array<Measurement> = [
+  {value: 'tsp', label: 'tsp'},
+  {value: 'Tbsp', label: 'Tbsp'},
+  {value: 'cup', label: 'cup'},
+  {value: 'oz', label: 'oz'},
+  {value: 'pinch', label: 'pinch'},
+  {value: 'tsp', label: 'tsp'},
+];
 
 
-export const FormAddIngredients = () => {
 /*  const {nextStep, prevStep, handleIngredient} = props;*/
+export const FormAddIngredients = () => {
   const classes = useStyles();
 
-    type MenuIngredient = {
-        name: string,
-        measurement: string,
-        amount: number,
+
+  /*  const [ingredientsForMenu, setIngredientsForMenu] = React.useState<MenuIngredientList>([]);*/
+  // /*    e: React.ChangeEvent<HTMLInputElement>*/
+  const handleCheck = ( e: React.ChangeEvent<HTMLInputElement>) => {
+    if (IngredientObjectList.has(e.target.value)) {
+      // @ts-ignore
+      IngredientObjectList.get(e.target.value).used = !IngredientObjectList.get(e.target.value).used;
     }
-
-    const MenuItemIngredients: Array<MenuIngredient> = [
-      {name: 'Menu', measurement: 'tsp', amount: 2},
-      {name: 'Ingredient', measurement: 'cup', amount: 3},
-      {name: 'Edit', measurement: 'oz', amount: 1},
-    ];
-
-    /*  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>({
-    name: '',
-    inventory: 0,
-    unit: '',
-    price: 0,
-  });*/
-
-    /*  const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setIngredientItem({...ingredientItem, [key]: e.target.value});
-    handleIngredient(ingredientItem);
+    console.log(IngredientObjectList.get(e.target.value));
+    console.log(e.target.value);
   };
-  const updateIngredientNum = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    setIngredientItem({...ingredientItem, [key]: e.target.value});
-    handleIngredient(ingredientItem);
-  };*/
-    /*  const {gilad, jason, antoine} = state;*/
-    return (
-      <div>
 
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Select Ingredients</FormLabel>
-          <FormGroup>
+  const handleSelect= ( selectedOption: Measurement | null, name: string) => {
+    if (!selectedOption) {
+      return;
+    }
+    if (IngredientObjectList.has(name)) {
+      // @ts-ignore
+      IngredientObjectList.get(name).measurement = selectedOption.value;
+    }
+    console.log(IngredientObjectList.get(name));
+  };
+
+  const handleAmount= (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (IngredientObjectList.has(name)) {
+      // @ts-ignore
+      IngredientObjectList.get(name).amount = e.target.value;
+    }
+    console.log(IngredientObjectList.get(name));
+  };
+
+
+  const makeObjects = () => {
+    for (const item of IngredientList) {
+      IngredientObjectList.set(item.name, {
+        name: item.name,
+        measurement: '',
+        amount: 0,
+        value: '',
+        used: false,
+      });
+    }
+  };
+  makeObjects();
+  return (
+
+    <div>
+
+
+      <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel component="legend">Select Ingredients</FormLabel>
+        {IngredientList.map((item) =>
+          <FormGroup key = {item.name}>
             <Grid container spacing={3}>
 
               <Grid item xs={12} sm={4}>
                 <FormControlLabel
                   control={<
                     Checkbox
-                    /*                  checked={gilad}
-                  onChange={handleChange}*/
+                    value = {item.name}
+                    /* checked={gilad}*/
+                    onChange={handleCheck}
                     name="gilad" />}
-                  label="Butter"
+                  label={item.name}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <Select
-                /*                    value={selection}
-                    onChange={(option) => handleSelect(option)}*/
-                  options={MenuItemIngredients}
+                  /*                  value={selection}*/
+                  onChange={(option) => handleSelect(option, item.name)}
+                  options={Measurements}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
                   id="Unit"
                   label="Amount"
-                  /*                onChange={updateIngredientItem('unit')}
-                    defaultValue={ingredientItem.unit}*/
+                  onChange={handleAmount(item.name)}
+                  /*                                  defaultValue={ingredientItem.unit}*/
                   variant="filled"
                 />
               </Grid>
 
             </Grid>
-          </FormGroup>
-        </FormControl>
+          </FormGroup>,
+        )}
 
-      </div>
+      </FormControl>
+      <Button
+        variant='contained'
+        color='primary'
+        style={styles.button}
+        /*              onClick={function() {
+                  nextStep(4); // needs to be set
+handleMenuItem(menuItem);
+              }} */
+      >
 
+                  Add Ingredient
+      </Button>
 
-    /*    <div>
-      <Grid container spacing={3}>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Assign responsibility</FormLabel>
-          <FormGroup>
-            <Grid item xs={12} sm={4}>
-              <FormControlLabel
-                control={<
-                  Checkbox
-                  /!*                checked={gilad}*!/
-                  /!*              onChange={handleChange}*!/
-                  name="gilad" />}
-                label="Gilad Gray"
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth={false} className={classes.formControl} variant="filled">
+    </div>
 
-                <TextField
-                  id="Unit"
-                  label="Unit of Measurement for Ingredient"
-                  /!*                onChange={updateIngredientItem('unit')}
-                      defaultValue={ingredientItem.unit}*!/
-                  variant="filled"
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth={false} className={classes.formControl} variant="filled">
-
-                <TextField
-                  id="Unit"
-                  label="Unit of Measurement for Ingredient"
-                  /!*                onChange={updateIngredientItem('unit')}
-                              defaultValue={ingredientItem.unit}*!/
-                  variant="filled"
-                />
-              </FormControl>
-            </Grid>
-          </FormGroup>
-        </FormControl>
-      </Grid>
-    </div>*/
-
-
-    /*    <Paper elevation={3}>
-      <React.Fragment>
-        <FormControl fullWidth={false} className={classes.margin} variant="filled">
-          <h3>Fill in Ingredient Item Things and change this line</h3>
-          <TextField
-            id="Name"
-            label="Name"
-            onChange={updateIngredientItem('name')}
-            defaultValue={ingredientItem.name}
-            variant="filled"
-          />
-          <br/>
-          <TextField
-            id="Unit"
-            label="Unit of Measurement for Ingredient"
-            onChange={updateIngredientItem('unit')}
-            defaultValue={ingredientItem.unit}
-            variant="filled"
-          />
-          <br/>
-          <FormControl fullWidth = {false} className={classes.margin} variant="filled">
-            <InputLabel htmlFor="filled-adornment-password">
-                            Inventory - Current Available Units of Ingredient
-            </InputLabel>
-            <FilledInput
-              onChange={updateIngredientNum('inventory')}
-              defaultValue={ingredientItem.price}
-              id="filled-adornment-password"
-            />
-          </FormControl>
-          <br/>
-          <FormControl fullWidth = {false} className={classes.margin} variant="filled">
-            <InputLabel htmlFor="filled-adornment-password">
-                            Price - Price to buy One Unit Worth of Inventory
-            </InputLabel>
-            <FilledInput
-              onChange={updateIngredientNum('price')}
-              defaultValue={ingredientItem.price}
-              id="filled-adornment-password"
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            />
-          </FormControl>
-          <Button
-            variant='contained'
-            color='primary'
-            style={styles.button}
-            onClick={function() {
-              nextStep(4); // needs to bet set
-              handleIngredient(ingredientItem);
-            }}>
-                        Continue
-          </Button>
-          <Button
-            variant='contained'
-            color='primary'
-            style={styles.button}
-            onClick={prevStep}>
-                        Back
-          </Button>
-        </FormControl>
-      </React.Fragment>
-    </Paper>*/
-
-    );
+  );
 };
 
-/* const styles = {
+const styles = {
   button: {
     margin: 15,
   },
-};*/
+};
