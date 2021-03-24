@@ -13,7 +13,6 @@ import {
 import Select from 'react-select';
 
 
-const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -24,10 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     margin: {
       margin: theme.spacing(1),
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
     },
     button: {
       margin: 15,
@@ -137,7 +132,18 @@ export const FormAddIngredients = () => {
 
 
       <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">Select Ingredients</FormLabel>
+        <FormLabel component="legend"></FormLabel>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4}>
+              Select Ingredients
+          </Grid>
+          <Grid item xs={12} sm={4}>
+                Select Measurment
+          </Grid>
+          <Grid item xs={12} sm={4}>
+                Select Amount
+          </Grid>
+        </Grid>
         {IngredientList.map((item) =>
           <FormGroup key = {item.name}>
             <Grid container spacing={3}>
@@ -147,7 +153,7 @@ export const FormAddIngredients = () => {
                   control={<
                     Checkbox
                     value = {item.name}
-                    /* checked={gilad}*/
+                    /*                    checked={true}*/
                     onChange={handleCheck}
                     name="gilad" />}
                   label={item.name}
@@ -162,6 +168,7 @@ export const FormAddIngredients = () => {
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
+                  type = 'number'
                   id="Unit"
                   label="Amount"
                   onChange={handleAmount(item.name)}

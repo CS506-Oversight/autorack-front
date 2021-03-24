@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 type MenuItem = {
     name: string,
     description: string,
-    imageURl: string,
+/*    imageURl: string,*/
     price: number,
 }
 
@@ -37,31 +37,37 @@ type MenuItem = {
 ];*/
 
 type FormMenuItemProps = {
-    nextStep: (step:number) => void,
-    prevStep: () => void,
+  nextStep: (step:number) => void,
+  forStep:number,
+  backStep:number,
     handleMenuItem: (item: MenuItem) => void,
 }
 
 
 export const FormMenuItem = (props: React.PropsWithChildren<FormMenuItemProps>) => {
-  const {nextStep, prevStep, handleMenuItem} = props;
+  const {nextStep, forStep, backStep, handleMenuItem} = props;
   const classes = useStyles();
 
   const [menuItem, setMenuItem] = React.useState<MenuItem>({
     name: '',
     description: '',
-    imageURl: '',
+    /*    imageURl: '',*/
     price: 0,
   });
 
   const updateMenuItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMenuItem({...menuItem, [key]: e.target.value});
     handleMenuItem(menuItem);
+    console.log(menuItem.name);
+    /*    console.log(menuItem.imageURl);*/
+    console.log(key);
   };
 
   const updateMenuPrice = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    setMenuItem({...menuItem, [key]: e.target.value});
+    setMenuItem({...menuItem, [key]: +e.target.value});
     handleMenuItem(menuItem);
+    console.log(menuItem.price);
+    /*    console.log(e.target.value);*/
   };
 
   return (
@@ -85,26 +91,19 @@ export const FormMenuItem = (props: React.PropsWithChildren<FormMenuItemProps>) 
           defaultValue={menuItem.description}
           variant="filled"
         />
-        <br/>
+        {/*        <br/>
         <TextField
-          id="Image URL"
+          id="imageURL"
           label="Image Url"
           onChange={updateMenuItem('imageURL')}
           defaultValue={menuItem.imageURl}
           variant="filled"
-        />
-        <br/>
-
-
-        {/*        <Select
-          value={selection}
-          onChange={(option) => handleSelect(option)}
-          options={options}
         />*/}
-
+        <br/>
         <FormControl fullWidth = {false} className={classes.margin} variant="filled">
           <InputLabel htmlFor="filled-adornment-password">Price</InputLabel>
           <FilledInput
+            type = 'number'
             onChange={updateMenuPrice('price')}
             defaultValue={menuItem.price}
             id="filled-adornment-password"
@@ -117,8 +116,17 @@ export const FormMenuItem = (props: React.PropsWithChildren<FormMenuItemProps>) 
           color='primary'
           style={styles.button}
           onClick={function() {
-            nextStep(4); // needs to be set
-            handleMenuItem(menuItem);
+            if (menuItem.name === '') {
+              alert('Please fill in name field');
+            } else if (menuItem.description === '') {
+              alert('Please fill in description field');
+            } else if (isNaN(menuItem.price)) {
+              alert('The price must be a number');
+            } else {
+              console.log(menuItem.price);
+              nextStep(forStep); // needs to be set
+              handleMenuItem(menuItem);
+            }
           }}>
                     Continue
         </Button>
@@ -126,7 +134,9 @@ export const FormMenuItem = (props: React.PropsWithChildren<FormMenuItemProps>) 
           variant='contained'
           color='primary'
           style={styles.button}
-          onClick={prevStep}>
+          onClick={function() {
+            nextStep(backStep);
+          }}>
             Back
         </Button>
       </FormControl>

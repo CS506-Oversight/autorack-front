@@ -33,24 +33,20 @@ type Ingredient = {
   {value: 'Edit', label: 'Edit Something?', step: 1},
 ];*/
 
-type FormIngredientProps = {
+type FormEditIngredientPreloadProps = {
     nextStep: (step:number) => void,
     forStep:number,
     backStep:number,
     handleIngredient: (item: Ingredient) => void,
+    ingredientItemFromSelect: Ingredient,
 }
 
 
-export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProps>) => {
-  const {nextStep, forStep, backStep, handleIngredient} = props;
+export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEditIngredientPreloadProps>) => {
+  const {nextStep, forStep, backStep, handleIngredient, ingredientItemFromSelect} = props;
   const classes = useStyles();
 
-  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>({
-    name: '',
-    inventory: 0,
-    unit: '',
-    price: 0,
-  });
+  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>(ingredientItemFromSelect);
 
   const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
     setIngredientItem({...ingredientItem, [key]: e.target.value});
@@ -83,7 +79,7 @@ export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProp
         <br/>
         <FormControl fullWidth = {false} className={classes.margin} variant="filled">
           <InputLabel htmlFor="filled-adornment-password">
-                Inventory - Current Available Units of Ingredient
+                        Inventory - Current Available Units of Ingredient
           </InputLabel>
           <FilledInput
             type = 'number'
@@ -95,7 +91,7 @@ export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProp
         <br/>
         <FormControl fullWidth = {false} className={classes.margin} variant="filled">
           <InputLabel htmlFor="filled-adornment-password">
-                Price - Price to buy One Unit Worth of Inventory
+                        Price - Price to buy One Unit Worth of Inventory
           </InputLabel>
           <FilledInput
             type = 'number'
@@ -125,7 +121,7 @@ export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProp
               handleIngredient(ingredientItem);
             }
           }}>
-                        Continue
+                    Continue
         </Button>
         <Button
           variant='contained'
@@ -134,7 +130,7 @@ export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProp
           onClick={function() {
             nextStep(backStep);
           }}>
-                Back
+                    Back
         </Button>
       </FormControl>
     </React.Fragment>

@@ -12,7 +12,8 @@ type FirstChoice = {
 const options: Array<FirstChoice> = [
   {value: 'Menu', label: 'Create Menu Item', step: 2},
   {value: 'Ingredient', label: 'Create Ingredient', step: 3},
-  {value: 'Edit', label: 'Edit Something?', step: 1},
+  {value: 'Edit Menu Item', label: 'Edit Menu Item', step: 4},
+  {value: 'Edit Ingredient Item', label: 'Edit Ingredient Item', step: 8},
 ];
 
 type SelectFormProps = {
