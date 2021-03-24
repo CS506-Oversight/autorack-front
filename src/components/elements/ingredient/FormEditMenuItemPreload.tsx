@@ -168,6 +168,7 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
             used: true,
 
           };
+          IngredientObjectList.set(item.name, toArray);
           IngredientListToPage.push(toArray);
         }
       }
@@ -180,6 +181,7 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
           used: false,
         };
         IngredientListToPage.push(toArray);
+        IngredientObjectList.set(item.name, toArray);
       }
     }
     // }
@@ -252,7 +254,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
           };
           nowArray.push(menuThing);
           setMenuIngredientArray(nowArray);
-          /* setMenuIngredientArray((menuIngredientArray) =>[...menuIngredientArray, menuThing]);*/
         }
       }
     });
@@ -263,7 +264,7 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
     return gtg;
   };
 
-  const makeObjects = () => {
+  /*  const makeObjects = () => {
     for (const item of IngredientList) {
       IngredientObjectList.set(item.name, {
         name: item.name,
@@ -275,7 +276,7 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
     }
   };
 
-  makeObjects();
+  makeObjects();*/
   makeIngredientListToPage();
 
 
@@ -382,8 +383,9 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
                           <FormControlLabel
                             control={<
                               Checkbox
+                              defaultChecked={item.used}
                               value = {item.name}
-                              checked={item.used}
+                              /*                              checked={item.used}*/
                               onChange={handleCheck}
                               name="gilad" />}
                             label={item.name}

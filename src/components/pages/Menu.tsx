@@ -60,11 +60,20 @@ type IngredientChoice = {
   label: string,
 }
 
+ type MenuIngredient = {
+  name: string,
+  measurement: string,
+  amount: number,
+  menuItem: string,
+};
+
 
 export const Menu = () => {
   const [progress, setProgress] = React.useState({
     step: 1,
   });
+
+  const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>([]);
 
   const [selected, setSelected] = React.useState<FirstChoice>({
     value: '',
@@ -100,6 +109,11 @@ export const Menu = () => {
     setProgress({
       step: step,
     });
+  };
+
+  const handleMenuIngredientRelation = async (placeArray:Array<MenuIngredient>): Promise<void> => {
+    console.log('here1');
+    await setMenuIngredientArray(placeArray);
   };
 
   const handleMenuItem = async (item: MenuItem): Promise<void> => {
@@ -162,8 +176,8 @@ export const Menu = () => {
   };
   const step = progress.step;
   const selection = selected;
-
-
+  console.log('here');
+  console.log(menuIngredientArray);
   switch (step) {
   case 1:
     return (
@@ -182,6 +196,9 @@ export const Menu = () => {
         forStep = {10}
         backStep = {1}
         handleMenuItem={handleMenuItem}
+        menuItemFromSelect={menuItem}
+        handleMenuIngredientRelation = {handleMenuIngredientRelation}
+        menuIngredientArrayFromMenu={menuIngredientArray}
       />
 
     );
@@ -193,6 +210,7 @@ export const Menu = () => {
           forStep = {10}
           backStep = {1}
           handleIngredient={handleIngredient}
+          ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
 
@@ -226,6 +244,7 @@ export const Menu = () => {
           forStep = {2}
           backStep = {2}
           handleIngredient={handleIngredient}
+          ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
 
@@ -238,6 +257,7 @@ export const Menu = () => {
           forStep = {5}
           backStep = {5}
           handleIngredient={handleIngredient}
+          ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
 
@@ -269,9 +289,6 @@ export const Menu = () => {
   default:
     return (
       <div>
-        {ingredientItem}
-        confirm page?
-        {showIngredientItem}
       </div>
     );
   }

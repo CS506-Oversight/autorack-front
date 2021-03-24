@@ -38,19 +38,16 @@ type FormIngredientProps = {
     forStep:number,
     backStep:number,
     handleIngredient: (item: Ingredient) => void,
+    ingredientItemFromSelect: Ingredient,
+
 }
 
 
 export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProps>) => {
-  const {nextStep, forStep, backStep, handleIngredient} = props;
+  const {nextStep, forStep, backStep, handleIngredient, ingredientItemFromSelect} = props;
   const classes = useStyles();
 
-  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>({
-    name: '',
-    inventory: 0,
-    unit: '',
-    price: 0,
-  });
+  const [ingredientItem, setIngredientItem] = React.useState<Ingredient>(ingredientItemFromSelect);
 
   const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
     setIngredientItem({...ingredientItem, [key]: e.target.value});
