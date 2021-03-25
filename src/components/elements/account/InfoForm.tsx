@@ -10,7 +10,7 @@ import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
 
 import {FetchStatus} from '../../../api/definitions/misc';
 import {User, UserAuthInfo} from '../../../state/auth/data';
-import {useThunkDispatch} from '../../../state/store';
+import {useReduxDispatch} from '../../../state/store';
 import {SnackbarAlert, SnackbarAlertProps} from '../SnackbarAlert';
 import UIButton from '../ui/Button';
 
@@ -40,6 +40,7 @@ type AccountInfoFormProps<T extends UserAuthInfo> = {
   buttonTextLoading?: string,
   accountInfoData: T,
   dispatcher: AsyncThunk<User | null, T, {}>,
+  onSubmitSuccess?: (user?: User | null) => void,
   footer: JSX.Element,
 }
 
@@ -49,6 +50,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
   buttonTextLoading,
   accountInfoData,
   dispatcher,
+  onSubmitSuccess,
   children,
   footer,
 }: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
@@ -58,7 +60,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
     showAlert: false,
   });
 
-  const dispatch = useThunkDispatch();
+  const dispatch = useReduxDispatch();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -69,6 +71,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
     });
     dispatch(dispatcher(accountInfoData))
       .then(unwrapResult)
+      .then((result) => onSubmitSuccess && onSubmitSuccess(result))
       .catch((error) => {
         setFetchStatus({
           fetching: false,
