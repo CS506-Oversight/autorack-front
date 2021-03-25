@@ -3,77 +3,59 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core';
 import {Link as RouterLink} from 'react-router-dom';
 
-import {authDispatchers} from '../../../state/auth/dispatchers';
+import AppPaths from '../../../const/paths';
 import {useAuthSelector} from '../../../state/auth/selector';
-import {useThunkDispatch} from '../../../state/store';
+import {useDispatch} from '../../../state/store';
 import UIButton from '../../elements/ui/Button';
-import {navBarItems} from './Items';
+import {navBarItems, NavItemEntry} from './Items';
 
 const useStyles = makeStyles(() => ({
   menuButton: {
-    width: '80px',
+    padding: '0.3rem 1rem',
     fontFamily: 'Open Sans, sans-serif',
     fontWeight: 700,
-    size: '18px',
-    marginLeft: '38px',
+    size: '1.2rem',
+    marginLeft: '1rem',
+    whiteSpace: 'nowrap', // No line break
   },
   menuFlex: {
     display: 'flex',
     flexDirection: 'row',
   },
-  signOutButton: {
-    width: '150px',
-    fontFamily: 'Open Sans, sans-serif',
-    fontWeight: 700,
-    size: '18px',
-    marginLeft: '38px',
-  },
 }));
 
-const IsNotLoggedInItems = () => {
+const generateNavBarButtons = (filter: (navItem: NavItemEntry) => boolean) => {
   const style = useStyles();
+  const dispatch = useDispatch();
+
   return (
-    <>
-      <div className={style.menuFlex}>
-        <UIButton
-          className={style.menuButton}
-          color="inherit"
-          variant="text"
-          text={navBarItems[0].label}
-          key={navBarItems[0].label}
-          to={navBarItems[0].link}
-          component={RouterLink}
-        />
-        <UIButton
-          className={style.menuButton}
-          to={navBarItems[1].link}
-          color="inherit"
-          variant="text"
-          component={RouterLink}
-          key={navBarItems[1].label}
-          text={navBarItems[1].label}
-        />
-      </div>
-    </>
+    <div className={style.menuFlex}>
+      {
+        navBarItems
+          .filter(filter)
+          .map((navItem) => (
+            <UIButton
+              className={style.menuButton}
+              color="inherit"
+              variant="text"
+              text={navItem.label}
+              key={navItem.label}
+              to={navItem.link}
+              onClick={navItem.onClick && navItem.onClick(dispatch)}
+              component={RouterLink}
+            />
+          ))
+      }
+    </div>
   );
 };
 
-const IsLoggedInItems = () => {
-  const style = useStyles();
-  const dispatch = useThunkDispatch();
+const ItemsWhenAnonymous = () => {
+  return generateNavBarButtons((navItem) => navItem.displayWhenAnonymous);
+};
 
-  return (
-    <>
-      <UIButton
-        className={style.signOutButton}
-        color="secondary"
-        onClick={() => dispatch(authDispatchers.signOut())}
-        key={navBarItems[2].label}
-        text={navBarItems[2].label}
-        variant="contained"
-      />
-    </>
-  );
+const ItemsWhenLoggedIn = () => {
+  return generateNavBarButtons((navItem) => navItem.link === AppPaths.SIGN_OUT);
 };
 
 export const NavMenu = () => {
@@ -81,7 +63,7 @@ export const NavMenu = () => {
 
   return (
     <div>
-      {user != null ? <IsLoggedInItems/> : <IsNotLoggedInItems/>}
+      {user != null ? <ItemsWhenLoggedIn/> : <ItemsWhenAnonymous/>}
     </div>
   );
 };
