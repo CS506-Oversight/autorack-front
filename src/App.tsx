@@ -1,10 +1,6 @@
-import React from 'react';
-
 import {Container, makeStyles} from '@material-ui/core';
-import {Provider} from 'react-redux';
+import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
-import {PersistGate} from 'redux-persist/integration/react';
-
 import './App.css';
 import Copyright from './components/elements/Copyright';
 import {Navigation} from './components/elements/nav/Main';
@@ -15,7 +11,7 @@ import {Homepage} from './components/pages/Homepage';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
 import AppPaths from './const/paths';
-import {persistor, store} from './state/store';
+import {ReduxProvider, ReduxProviderProps} from './state/provider';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,19 +74,19 @@ const AppPage = () => {
 };
 
 /**
- * Main app. Tests should use this and not the others.
+ * Main app, i.e. the entry point.
  *
+ * @param {ReduxProviderProps} props properties for the redux provider
  * @return {JSX.Element}
+ * @constructor
  */
-const App = () => {
+const App = (props: ReduxProviderProps) => {
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <BrowserRouter>
-          <AppPage/>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+    <ReduxProvider {...props}>
+      <BrowserRouter>
+        <AppPage/>
+      </BrowserRouter>
+    </ReduxProvider>
   );
 };
 

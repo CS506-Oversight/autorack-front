@@ -12,7 +12,8 @@ import {useSelector} from 'react-redux';
 import {FetchStatus} from '../../../api/definitions/misc';
 import {User, UserAuthInfo} from '../../../state/auth/data';
 import {authDispatchers} from '../../../state/auth/dispatchers';
-import {RootState, useThunkDispatch} from '../../../state/store';
+import {ReduxState} from '../../../state/state';
+import {useThunkDispatch} from '../../../state/store';
 import UIButton from '../ui/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +54,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
   });
 
   const dispatch = useThunkDispatch();
-  const {error} = useSelector((state: RootState) => state.auth);
+  const {error} = useSelector((state: ReduxState) => state.auth);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();

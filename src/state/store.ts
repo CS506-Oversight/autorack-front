@@ -1,13 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {useDispatch} from 'react-redux';
-import {persistStore} from 'redux-persist';
 import thunk from 'redux-thunk';
 
 import rootReducer from './reducer';
+import {PartialReduxState} from './state';
 
-export const store = configureStore({
+export const createStore = (preloadedState?: PartialReduxState) => configureStore({
   reducer: rootReducer,
   devTools: true,
+  preloadedState,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: {
@@ -18,8 +19,12 @@ export const store = configureStore({
   },
 });
 
-export const persistor = persistStore(store);
+export type ReduxStore = ReturnType<typeof createStore>;
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type Dispatcher = ReduxStore['dispatch'];
 
-export const useThunkDispatch = () => useDispatch<typeof store.dispatch>();
+/**
+ * Return the dispatch function which dispatches a thunk action.
+ * @return {never}
+ */
+export const useThunkDispatch: () => Dispatcher = () => useDispatch<Dispatcher>();
