@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
-import {useDispatch} from 'react-redux';
+import {useDispatch as useReduxDispatch} from 'react-redux';
 import thunk from 'redux-thunk';
 
 import rootReducer from './reducer';
@@ -27,4 +27,4 @@ export type Dispatcher = ReduxStore['dispatch'];
  * Return the dispatch function which dispatches an action (both sync or async).
  * @return {never}
  */
-export const useReduxDispatch: () => Dispatcher = () => useDispatch<Dispatcher>();
+export const useDispatch: () => Dispatcher = () => useReduxDispatch<Dispatcher>();

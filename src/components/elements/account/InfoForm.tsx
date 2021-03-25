@@ -11,7 +11,7 @@ import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
 import {FetchStatus} from '../../../api/definitions/misc';
 import {alertDispatchers} from '../../../state/alert/dispatchers';
 import {User, UserAuthInfo} from '../../../state/auth/data';
-import {useReduxDispatch} from '../../../state/store';
+import {useDispatch} from '../../../state/store';
 import UIButton from '../ui/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +59,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
     fetching: false,
   });
 
-  const dispatch = useReduxDispatch();
+  const dispatch = useDispatch();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
