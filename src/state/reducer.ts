@@ -13,6 +13,4 @@ const persistConfig = {
 
 const rootReducer = combineReducers({auth: authReducer, alert: alertReducer});
 
-export type rootState = ReturnType<typeof rootReducer>;
-
 export default persistReducer(persistConfig, rootReducer);
