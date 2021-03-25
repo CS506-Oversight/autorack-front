@@ -10,7 +10,9 @@ import {RouteCommonProps} from './props';
 
 type PrivateRouteProps = RouteCommonProps;
 
-const renderRoute = (user: User | null, {children}: React.PropsWithChildren<PrivateRouteProps>) => () => {
+const renderRoute = (user: User | null, {children, path}: React.PropsWithChildren<PrivateRouteProps>) => () => {
+  console.log(`Private ${user != null} @ ${path}`);
+
   if (user == null) { // `==` for checking `null` or `undefined`
     return <Redirect to={AppPaths.SIGN_IN}/>;
   }
@@ -24,6 +26,6 @@ export const PrivateRoute = (props: React.PropsWithChildren<PrivateRouteProps>) 
   const {user} = useSelector((state: ReduxState) => state.auth);
 
   return (
-    <Route exact render={renderRoute(user, props)}/>
+    <Route exact path={props.path} render={renderRoute(user, props)}/>
   );
 };

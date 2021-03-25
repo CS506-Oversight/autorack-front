@@ -10,9 +10,11 @@ import {RouteCommonProps} from './props';
 
 type PublicRouteProps = RouteCommonProps;
 
-const renderRoute = (user: User | null, {children}: React.PropsWithChildren<PublicRouteProps>) => () => {
+const renderRoute = (user: User | null, {children, path}: React.PropsWithChildren<PublicRouteProps>) => () => {
+  console.log(`Public ${user != null} @ ${path}`);
+
   if (user != null) { // `==` for checking `null` or `undefined`
-    return <Redirect to={AppPaths.CALC}/>;
+    return <Redirect to={AppPaths.AUTHENTICATED}/>;
   }
 
   return children;
@@ -24,6 +26,6 @@ export const PublicRoute = (props: React.PropsWithChildren<PublicRouteProps>) =>
   const {user} = useSelector((state: ReduxState) => state.auth);
 
   return (
-    <Route exact render={renderRoute(user, props)}/>
+    <Route exact path={props.path} render={renderRoute(user, props)}/>
   );
 };

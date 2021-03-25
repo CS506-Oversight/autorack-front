@@ -10,7 +10,4 @@ export default class AppPaths {
 
   // Authenticated Routes
   static AUTHENTICATED = '/authed';
-
-  // Sample
-  static CALC = '/calc';
 }
