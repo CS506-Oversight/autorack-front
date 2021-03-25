@@ -21,7 +21,7 @@ export const authDispatchers = {
         firstName: signUpData.firstName,
         lastName: signUpData.lastName,
         id: res.user.uid,
-        createdAt: new Date(),
+        createdAt: Date.now(),
       };
       // TODO: Send user data to the database
       // https://stackoverflow.com/q/43509021/11571888
