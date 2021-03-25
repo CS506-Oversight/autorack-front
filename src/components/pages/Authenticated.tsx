@@ -1,7 +1,8 @@
 import React from 'react';
+
 import {useSelector} from 'react-redux';
 
-import {ReduxState} from '../../state/store';
+import {ReduxState} from '../../state/state';
 
 export const Authenticated = () => {
   const {user} = useSelector((state: ReduxState) => state.auth);

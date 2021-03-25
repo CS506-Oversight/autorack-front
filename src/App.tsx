@@ -1,6 +1,8 @@
-import {Container, makeStyles} from '@material-ui/core';
 import React from 'react';
+
+import {Container, makeStyles} from '@material-ui/core';
 import {BrowserRouter} from 'react-router-dom';
+
 import './App.css';
 import Copyright from './components/elements/Copyright';
 import {Navigation} from './components/elements/nav/Main';

@@ -1,4 +1,5 @@
 import {DeepPartial} from 'redux';
+
 import rootReducer from './reducer';
 
 /**
