@@ -1,11 +1,9 @@
 import React from 'react';
 
-import {useSelector} from 'react-redux';
-
-import {ReduxState} from '../../state/state';
+import {useAuthSelector} from '../../state/auth/selector';
 
 export const Authenticated = () => {
-  const {user} = useSelector((state: ReduxState) => state.auth);
+  const {user} = useAuthSelector();
 
   return <h1>Hi, {user?.firstName}! You are authenticated!</h1>;
 };
