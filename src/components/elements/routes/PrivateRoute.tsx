@@ -9,9 +9,7 @@ import {RouteCommonProps} from './props';
 
 type PrivateRouteProps = RouteCommonProps;
 
-const renderRoute = (user: User | null, {children, path}: React.PropsWithChildren<PrivateRouteProps>) => () => {
-  console.log(`Private ${user != null} @ ${path}`);
-
+const renderRoute = (user: User | null, {children}: React.PropsWithChildren<PrivateRouteProps>) => () => {
   if (user == null) { // `==` for checking `null` or `undefined`
     return <Redirect to={AppPaths.SIGN_IN}/>;
   }
