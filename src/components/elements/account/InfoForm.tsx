@@ -11,6 +11,7 @@ import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
 import {FetchStatus} from '../../../api/definitions/misc';
 import {User, UserAuthInfo} from '../../../state/auth/data';
 import {useThunkDispatch} from '../../../state/store';
+import {SnackbarAlert, SnackBarAlertProps} from '../SnackBarAlert';
 import UIButton from '../ui/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,9 +46,10 @@ type AccountInfoFormProps<T extends UserAuthInfo> = {
 export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
   const {title, buttonTextDefault, buttonTextLoading, accountInfoData, dispatcher, children, footer} = props;
 
-  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus & SnackBarAlertProps>({
     fetched: false,
     fetching: false,
+    showAlert: false,
   });
 
   const dispatch = useThunkDispatch();
@@ -57,14 +59,16 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
     setFetchStatus({
       fetching: true,
       fetched: false,
+      showAlert: false,
     });
     dispatch(dispatcher(accountInfoData))
       .then(unwrapResult)
-      .catch(() => {
-        // FIXME: Error handling here
+      .catch((error) => {
         setFetchStatus({
           fetching: false,
           fetched: true,
+          showAlert: true,
+          error: error.message,
         });
       });
   };
@@ -74,6 +78,11 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline/>
+      <SnackbarAlert
+        showAlert={fetchStatus.showAlert}
+        onClose={() => setFetchStatus({...fetchStatus, showAlert: false})}
+        message={fetchStatus?.error || 'An error occurred'}
+      />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon/>

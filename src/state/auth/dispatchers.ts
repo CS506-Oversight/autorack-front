@@ -12,7 +12,7 @@ export const authDispatchers = {
     async (signUpData: SignUpData, {rejectWithValue}) => {
       const res = await fireAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
       if (!res.user) {
-        rejectWithValue('Firebase create user returns null user credential');
+        rejectWithValue('Firebase create user returns null user credential.');
         return null;
       }
 
@@ -34,12 +34,12 @@ export const authDispatchers = {
       const res = await fireAuth.signInWithEmailAndPassword(signInData.email, signInData.password);
 
       if (!res.user) {
-        rejectWithValue('Firebase sign in returns null user credential');
+        rejectWithValue('Firebase sign in returns null user credential.');
         return null;
       }
 
       if (!res.user.email) {
-        rejectWithValue('Firebase sign in returns null email');
+        rejectWithValue('Firebase sign in returns null email.');
         return null;
       }
 

@@ -26,7 +26,10 @@
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
-      "error"
+      "error",
+      {
+        "ignoreRestSiblings": true
+      }
     ],
     "indent": [
       "error",
