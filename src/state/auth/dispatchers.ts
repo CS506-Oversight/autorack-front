@@ -2,18 +2,11 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import fireAuth from '../../config/firebaseConfig';
 import {SignInData, SignUpData, User} from './data';
-import {authSlice} from './reducer';
-
-// noinspection JSUnusedGlobalSymbols
-enum AuthDispatcherName {
-  SIGN_UP = 'signUp',
-  SIGN_IN = 'signIn',
-  SIGN_OUT = 'signOut',
-}
+import {AUTH_STATE_NAME, AuthDispatcherName} from './name';
 
 export const authDispatchers = {
   [AuthDispatcherName.SIGN_UP]: createAsyncThunk<User | null, SignUpData>(
-    `${authSlice.name}/${AuthDispatcherName.SIGN_UP}`,
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_UP}`,
     async (signUpData: SignUpData, {rejectWithValue}) => {
       const res = await fireAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
       if (!res.user) {
@@ -34,7 +27,7 @@ export const authDispatchers = {
     },
   ),
   [AuthDispatcherName.SIGN_IN]: createAsyncThunk<User | null, SignInData>(
-    `${authSlice.name}/${AuthDispatcherName.SIGN_IN}`,
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_IN}`,
     async (signInData: SignInData, {rejectWithValue}) => {
       const res = await fireAuth.signInWithEmailAndPassword(signInData.email, signInData.password);
 
@@ -62,7 +55,7 @@ export const authDispatchers = {
     },
   ),
   [AuthDispatcherName.SIGN_OUT]: createAsyncThunk<null, null>(
-    `${authSlice.name}/${AuthDispatcherName.SIGN_OUT}`,
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_OUT}`,
     async () => {
       await fireAuth.signOut();
       return null;

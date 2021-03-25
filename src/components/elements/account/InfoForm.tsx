@@ -9,9 +9,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
 
 import {FetchStatus} from '../../../api/definitions/misc';
+import {alertDispatchers} from '../../../state/alert/dispatchers';
 import {User, UserAuthInfo} from '../../../state/auth/data';
 import {useReduxDispatch} from '../../../state/store';
-import {SnackbarAlert, SnackbarAlertProps} from '../SnackbarAlert';
 import UIButton from '../ui/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,10 +54,9 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
   children,
   footer,
 }: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
-  const [fetchStatus, setFetchStatus] = useState<FetchStatus & SnackbarAlertProps>({
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({
     fetched: false,
     fetching: false,
-    showAlert: false,
   });
 
   const dispatch = useReduxDispatch();
@@ -67,7 +66,6 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
     setFetchStatus({
       fetching: true,
       fetched: false,
-      showAlert: false,
     });
     dispatch(dispatcher(accountInfoData))
       .then(unwrapResult)
@@ -76,9 +74,8 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
         setFetchStatus({
           fetching: false,
           fetched: true,
-          showAlert: true,
-          error: error.message,
         });
+        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
       });
   };
 
@@ -87,11 +84,6 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline/>
-      <SnackbarAlert
-        showAlert={fetchStatus.showAlert}
-        onClose={() => setFetchStatus({...fetchStatus, showAlert: false})}
-        message={fetchStatus?.error || 'An error occurred'}
-      />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon/>

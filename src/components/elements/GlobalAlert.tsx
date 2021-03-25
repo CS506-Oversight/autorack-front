@@ -1,13 +1,14 @@
 import React from 'react';
 
 import {alertDispatchers} from '../../state/alert/dispatchers';
-import {useThunkDispatch} from '../../state/store';
+import {useAlertSelector} from '../../state/alert/selector';
+import {useReduxDispatch} from '../../state/store';
 import {SnackbarAlert} from './SnackbarAlert';
 
 export const GlobalAlert = () => {
   const {showAlert, severity, message} = useAlertSelector();
 
-  const dispatch = useThunkDispatch();
+  const dispatch = useReduxDispatch();
 
   const onClose = () => {
     dispatch(alertDispatchers.alertClosed());

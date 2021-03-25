@@ -1,14 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {authDispatchers} from './dispatchers';
+import {AUTH_STATE_NAME} from './name';
 import {AuthState} from './state';
 
 const initialState: AuthState = {
   user: null,
 };
 
-export const authSlice = createSlice({
-  name: 'auth',
+const authSlice = createSlice({
+  name: AUTH_STATE_NAME,
   initialState,
   reducers: {},
   extraReducers: (builder) => {
