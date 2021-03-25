@@ -11,7 +11,7 @@ import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
 import {FetchStatus} from '../../../api/definitions/misc';
 import {User, UserAuthInfo} from '../../../state/auth/data';
 import {useThunkDispatch} from '../../../state/store';
-import {SnackbarAlert, SnackBarAlertProps} from '../SnackBarAlert';
+import {SnackbarAlert, SnackbarAlertProps} from '../SnackbarAlert';
 import UIButton from '../ui/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,10 +43,16 @@ type AccountInfoFormProps<T extends UserAuthInfo> = {
   footer: JSX.Element,
 }
 
-export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
-  const {title, buttonTextDefault, buttonTextLoading, accountInfoData, dispatcher, children, footer} = props;
-
-  const [fetchStatus, setFetchStatus] = useState<FetchStatus & SnackBarAlertProps>({
+export const AccountInfoForm = <T extends UserAuthInfo>({
+  title,
+  buttonTextDefault,
+  buttonTextLoading,
+  accountInfoData,
+  dispatcher,
+  children,
+  footer,
+}: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus & SnackbarAlertProps>({
     fetched: false,
     fetching: false,
     showAlert: false,

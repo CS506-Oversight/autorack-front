@@ -8,11 +8,11 @@ const Alert = (props: AlertProps) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
-export type SnackBarAlertProps = {
+export type SnackbarAlertProps = {
   showAlert: boolean,
 }
 
-type SnackBarAlertPrivateProps = SnackBarAlertProps & {
+type SnackbarAlertPrivateProps = SnackbarAlertProps & {
   onClose: (event: React.SyntheticEvent<Element, Event>, reason?: SnackbarCloseReason) => void,
   message: string,
   severity?: Color,
@@ -25,7 +25,7 @@ export const SnackbarAlert = ({
   message,
   severity = 'error',
   autoCloseDuration = 6000,
-}: SnackBarAlertPrivateProps) => {
+}: SnackbarAlertPrivateProps) => {
   return (
     <Snackbar open={showAlert} autoHideDuration={autoCloseDuration} onClose={onClose}>
       <Alert onClose={onClose} severity={severity}>{message}</Alert>
