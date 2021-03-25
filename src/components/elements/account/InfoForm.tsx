@@ -7,13 +7,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
-import {useSelector} from 'react-redux';
 
 import {FetchStatus} from '../../../api/definitions/misc';
 import {User, UserAuthInfo} from '../../../state/auth/data';
-import {authDispatchers} from '../../../state/auth/dispatchers';
-import {ReduxState} from '../../../state/state';
 import {useThunkDispatch} from '../../../state/store';
+import {SnackbarAlert, SnackBarAlertProps} from '../SnackBarAlert';
 import UIButton from '../ui/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,29 +46,29 @@ type AccountInfoFormProps<T extends UserAuthInfo> = {
 export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
   const {title, buttonTextDefault, buttonTextLoading, accountInfoData, dispatcher, children, footer} = props;
 
-  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus & SnackBarAlertProps>({
     fetched: false,
     fetching: false,
+    showAlert: false,
   });
 
   const dispatch = useThunkDispatch();
-  const {error} = useSelector((state: ReduxState) => state.auth);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (error) {
-      dispatch(authDispatchers.setError(error));
-    }
     setFetchStatus({
       fetching: true,
       fetched: false,
+      showAlert: false,
     });
     dispatch(dispatcher(accountInfoData))
       .then(unwrapResult)
-      .catch(() => {
+      .catch((error) => {
         setFetchStatus({
           fetching: false,
           fetched: true,
+          showAlert: true,
+          error: error.message,
         });
       });
   };
@@ -80,12 +78,16 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline/>
+      <SnackbarAlert
+        showAlert={fetchStatus.showAlert}
+        onClose={() => setFetchStatus({...fetchStatus, showAlert: false})}
+        message={fetchStatus?.error || 'An error occurred'}
+      />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">{title}</Typography>
-        {error && <span>{error}</span>}
         <form className={classes.form} onSubmit={onSubmit}>
           {children}
           <UIButton

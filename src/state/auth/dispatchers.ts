@@ -7,18 +7,12 @@ import {SignInData, SignUpData, User} from './data';
 // TODO: Better rejection error messages in thunk actions
 
 export const authDispatchers = {
-  setError: createAsyncThunk<string, string>(
-    'auth/error',
-    async (errorMessage: string) => {
-      return errorMessage;
-    },
-  ),
   signUp: createAsyncThunk<User | null, SignUpData>(
     'auth/signUp',
-    async (signUpData: SignUpData, {dispatch}) => {
+    async (signUpData: SignUpData, {rejectWithValue}) => {
       const res = await fireAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
       if (!res.user) {
-        dispatch(authDispatchers.setError('Failed to sign up the user'));
+        rejectWithValue('Firebase create user returns null user credential.');
         return null;
       }
 
@@ -29,34 +23,28 @@ export const authDispatchers = {
         id: res.user.uid,
         createdAt: new Date(),
       };
-      // await firebase.firestore().collection('/users').doc(res.user.uid).set(userData);
-      // await res.user.sendEmailVerification();
-      // dispatch({
-      //   type: NEED_VERIFICATION,
-      // });
-      // TODO: SEND THIS DATA TO THE DATABASE
+      // TODO: Send user data to the database
+      // https://stackoverflow.com/q/43509021/11571888
       return userData;
     },
   ),
   signIn: createAsyncThunk<User | null, SignInData>(
     'auth/signIn',
-    async (signInData: SignInData, {dispatch}) => {
+    async (signInData: SignInData, {rejectWithValue}) => {
       const res = await fireAuth.signInWithEmailAndPassword(signInData.email, signInData.password);
 
       if (!res.user) {
-        dispatch(authDispatchers.setError('Failed to sign in the user'));
+        rejectWithValue('Firebase sign in returns null user credential.');
         return null;
       }
 
       if (!res.user.email) {
-        dispatch(authDispatchers.setError('No email associated with the user'));
+        rejectWithValue('Firebase sign in returns null email.');
         return null;
       }
 
-      // TODO: Fetch user name from the database
+      // TODO: Fetch user data (first name, last name) from the database
       // https://stackoverflow.com/q/43509021/11571888
-
-      // FIXME: firstName, lastName when signing in
 
       const userData: User = {
         email: res.user.email,
@@ -76,6 +64,3 @@ export const authDispatchers = {
     },
   ),
 };
-
-// TODO: getUserById
-// TODO: sendPasswordResetEmail

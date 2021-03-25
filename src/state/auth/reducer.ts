@@ -5,7 +5,6 @@ import {AuthState} from './state';
 
 const initialState: AuthState = {
   user: null,
-  error: '',
 };
 
 const authSlice = createSlice({
@@ -29,23 +28,6 @@ const authSlice = createSlice({
         state.user = null;
       },
     );
-    // Set error on set-error called or actions rejected
-    [authDispatchers.setError.fulfilled].forEach((thunkCase) => {
-      builder.addCase(
-        thunkCase,
-        (state, {payload}) => {
-          state.error = payload;
-        },
-      );
-    });
-    Object.values(authDispatchers).map((dispatcher) => dispatcher.rejected).forEach((thunkCase) => {
-      builder.addCase(
-        thunkCase,
-        ((state, action) => {
-          state.error = `Async thunk promise rejected for action ${action.type}`;
-        }),
-      );
-    });
   },
 });
 
