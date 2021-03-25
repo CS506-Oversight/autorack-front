@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {authDispatchers} from './dispatchers';
+import {AUTH_STATE_NAME} from './name';
 import {AuthState} from './state';
 
 const initialState: AuthState = {
@@ -8,7 +9,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: AUTH_STATE_NAME,
   initialState,
   reducers: {},
   extraReducers: (builder) => {

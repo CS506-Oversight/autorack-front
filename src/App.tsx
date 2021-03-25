@@ -5,6 +5,7 @@ import {BrowserRouter} from 'react-router-dom';
 
 import './App.css';
 import Copyright from './components/elements/Copyright';
+import {GlobalAlert} from './components/elements/GlobalAlert';
 import {Navigation} from './components/elements/nav/Main';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
@@ -37,6 +38,8 @@ const PageContent = () => {
 
   return (
     <Container className={classes.root}>
+      <GlobalAlert/>
+
       {/* Anonymous users only */}
 
       <PublicRoute path={AppPaths.HOME}>

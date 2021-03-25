@@ -2,13 +2,11 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import fireAuth from '../../config/firebaseConfig';
 import {SignInData, SignUpData, User} from './data';
-
-// For handling a known error: https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk
-// TODO: Better rejection error messages in thunk actions
+import {AUTH_STATE_NAME, AuthDispatcherName} from './name';
 
 export const authDispatchers = {
-  signUp: createAsyncThunk<User | null, SignUpData>(
-    'auth/signUp',
+  [AuthDispatcherName.SIGN_UP]: createAsyncThunk<User | null, SignUpData>(
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_UP}`,
     async (signUpData: SignUpData, {rejectWithValue}) => {
       const res = await fireAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
       if (!res.user) {
@@ -21,15 +19,15 @@ export const authDispatchers = {
         firstName: signUpData.firstName,
         lastName: signUpData.lastName,
         id: res.user.uid,
-        createdAt: new Date(),
+        createdAt: Date.now(),
       };
       // TODO: Send user data to the database
       // https://stackoverflow.com/q/43509021/11571888
       return userData;
     },
   ),
-  signIn: createAsyncThunk<User | null, SignInData>(
-    'auth/signIn',
+  [AuthDispatcherName.SIGN_IN]: createAsyncThunk<User | null, SignInData>(
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_IN}`,
     async (signInData: SignInData, {rejectWithValue}) => {
       const res = await fireAuth.signInWithEmailAndPassword(signInData.email, signInData.password);
 
@@ -56,8 +54,8 @@ export const authDispatchers = {
       return userData;
     },
   ),
-  signOut: createAsyncThunk<null, null>(
-    'auth/signOut',
+  [AuthDispatcherName.SIGN_OUT]: createAsyncThunk<null, null>(
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_OUT}`,
     async () => {
       await fireAuth.signOut();
       return null;

@@ -20,8 +20,6 @@ export const ReduxProvider = (
 
   return (
     <Provider store={reduxStore}>
-      {/* `patchCallback` needs to be executed inside the provider */}
-      {/* {patchCallback && patchCallback(useThunkDispatch())}*/}
       {
         persist ?
           <PersistGate persistor={persistStore(reduxStore)}>{children}</PersistGate> :
