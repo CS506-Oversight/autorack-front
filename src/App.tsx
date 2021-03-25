@@ -6,11 +6,11 @@ import {BrowserRouter} from 'react-router-dom';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import './App.css';
-import {PrivateRoute} from './components/auth/PrivateRoute';
-import {PublicRoute} from './components/auth/PublicRoute';
 import Copyright from './components/elements/Copyright';
 import {Navigation} from './components/elements/nav/Main';
-import {Calculator} from './components/pages/Calculator';
+import {PrivateRoute} from './components/elements/routes/PrivateRoute';
+import {PublicRoute} from './components/elements/routes/PublicRoute';
+import {Authenticated} from './components/pages/Authenticated';
 import {Homepage} from './components/pages/Homepage';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
@@ -39,11 +39,25 @@ const PageContent = () => {
 
   return (
     <Container className={classes.root}>
-      <PublicRoute exact path={AppPaths.HOME} component={Homepage}/>
-      <PublicRoute exact path={AppPaths.SIGN_UP} component={SignUp}/>
-      <PublicRoute exact path={AppPaths.SIGN_IN} component={SignIn}/>
-      <PrivateRoute exact path={AppPaths.CALC} component={Calculator}/>
+      {/* Anonymous users only */}
 
+      <PublicRoute path={AppPaths.HOME}>
+        <Homepage/>
+      </PublicRoute>
+      <PublicRoute path={AppPaths.SIGN_UP}>
+        <SignUp/>
+      </PublicRoute>
+      <PublicRoute path={AppPaths.SIGN_IN}>
+        <SignIn/>
+      </PublicRoute>
+
+      {/* Authentication needed */}
+
+      <PrivateRoute path={AppPaths.AUTHENTICATED}>
+        <Authenticated/>
+      </PrivateRoute>
+
+      {/* Common routes */}
       <Copyright/>
     </Container>
   );
