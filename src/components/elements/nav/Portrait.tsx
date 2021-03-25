@@ -1,7 +1,9 @@
+import React from 'react';
+
 import {Drawer, IconButton, Toolbar} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import React from 'react';
+
 import AutoRackLogo from '../Logo';
 import {NavDrawer} from './Drawer';
 

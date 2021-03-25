@@ -1,4 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
+
 import fireAuth from '../../config/firebaseConfig';
 import {SignInData, SignUpData, User} from './data';
 

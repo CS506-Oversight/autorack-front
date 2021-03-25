@@ -1,5 +1,6 @@
-import Alert from '@material-ui/lab/Alert';
 import React from 'react';
+
+import Alert from '@material-ui/lab/Alert';
 
 // No type definitions available yet
 // https://material-ui.com/components/alert/

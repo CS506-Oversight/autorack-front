@@ -8,6 +8,6 @@ export default class AppPaths {
   static SIGN_IN = '/signin';
   static SIGN_UP = '/signup';
 
-  // Sample
-  static CALC = '/calc';
+  // Authenticated Routes
+  static AUTHENTICATED = '/authed';
 }

@@ -1,6 +1,8 @@
+import React, {useState} from 'react';
+
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import React, {useState} from 'react';
+
 import AppPaths from '../../const/paths';
 import {SignUpData} from '../../state/auth/data';
 import {authDispatchers} from '../../state/auth/dispatchers';

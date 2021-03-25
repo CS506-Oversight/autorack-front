@@ -1,5 +1,6 @@
-import {Button, PropTypes} from '@material-ui/core';
 import React, {ButtonHTMLAttributes} from 'react';
+
+import {Button, PropTypes} from '@material-ui/core';
 
 type ButtonVariant = 'text' | 'outlined' | 'contained';
 

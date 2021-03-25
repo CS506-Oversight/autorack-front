@@ -1,6 +1,8 @@
-import {Link, makeStyles, MenuItem} from '@material-ui/core';
 import React from 'react';
+
+import {Link, makeStyles, MenuItem} from '@material-ui/core';
 import {Link as RouterLink} from 'react-router-dom';
+
 import {navItems} from './Items';
 
 const useStyles = makeStyles(() => ({

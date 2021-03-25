@@ -1,5 +1,6 @@
-import TextField, {TextFieldProps} from '@material-ui/core/TextField';
 import React from 'react';
+
+import TextField, {TextFieldProps} from '@material-ui/core/TextField';
 
 export type InputProps = TextFieldProps & {
   // Shorthand property for `onChange`
