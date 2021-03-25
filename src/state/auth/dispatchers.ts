@@ -54,7 +54,7 @@ export const authDispatchers = {
       return userData;
     },
   ),
-  [AuthDispatcherName.SIGN_OUT]: createAsyncThunk<null, null>(
+  [AuthDispatcherName.SIGN_OUT]: createAsyncThunk<null>(
     `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_OUT}`,
     async () => {
       await fireAuth.signOut();

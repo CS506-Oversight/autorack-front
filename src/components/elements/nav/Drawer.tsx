@@ -1,43 +1,57 @@
 import React from 'react';
 
-import {Link, makeStyles, MenuItem} from '@material-ui/core';
-import {Link as RouterLink} from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
 
-import {navItems} from './Items';
+import {useAuthSelector} from '../../../state/auth/selector';
+import {NavbarButtons} from './ItemButton';
+import {getAnonymousOnlyNavItems, getLoggedInOnlyNavItems, NavItemEntry} from './Items';
+
 
 const useStyles = makeStyles(() => ({
-  drawer: {
-    textDecoration: 'none',
+  drawerMenu: {
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
   },
 }));
 
+type NavButtonsProps = DrawerProps & {
+  fnGetItems: () => Array<NavItemEntry>,
+}
+
+const NavButtons = ({fnGetItems, onItemClicked}: NavButtonsProps) => {
+  const style = useStyles();
+
+  return (
+    <NavbarButtons
+      fnGetItems={fnGetItems}
+      onClickHook={onItemClicked}
+      className={style.drawerMenu}
+    />
+  );
+};
 
 type DrawerProps = {
   onItemClicked: () => void
 }
 
-
 export const NavDrawer = ({onItemClicked}: DrawerProps) => {
-  const style = useStyles();
+  const {user} = useAuthSelector();
+
+  // User authenticated
+  if (user != null) {
+    return (
+      <NavButtons
+        fnGetItems={getLoggedInOnlyNavItems}
+        onItemClicked={onItemClicked}
+      />
+    );
+  }
 
   return (
-    <>
-      {
-        navItems.map((entry) => {
-          return (
-            <Link
-              key={entry.label}
-              component={RouterLink}
-              to={entry.link}
-              color="inherit"
-              className={style.drawer}
-              onClick={onItemClicked}
-            >
-              <MenuItem>{entry.label}</MenuItem>
-            </Link>
-          );
-        })
-      }
-    </>
+    <NavButtons
+      fnGetItems={getAnonymousOnlyNavItems}
+      onItemClicked={onItemClicked}
+    />
   );
 };

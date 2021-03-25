@@ -31,7 +31,9 @@ export const NavPortrait = () => {
       </IconButton>
 
       <Drawer anchor="left" open={isDrawerOpened} onClose={() => setDrawerOpened(false)}>
-        <div className={style.drawerContainer}><NavDrawer onItemClicked={() => setDrawerOpened(false)}/></div>
+        <div className={style.drawerContainer}>
+          <NavDrawer onItemClicked={() => setDrawerOpened(false)}/>
+        </div>
       </Drawer>
 
       <div><AutoRackLogo/></div>

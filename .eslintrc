@@ -58,6 +58,11 @@
         ]
       }
     ],
+    // TypeScript helps checking the properties of the React components
+    // https://stackoverflow.com/a/61229771/11571888
+    "react/prop-types": [
+      "off"
+    ],
     "spaced-comment": [
       "error",
       "always",
