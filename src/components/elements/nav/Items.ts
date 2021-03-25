@@ -1,10 +1,5 @@
 import AppPaths from '../../../const/paths';
 
-// type NavItemEntry = {
-//   label: string,
-//   link: string,
-// }
-
 interface NavItemEntry {
   id: number,
   label: string,
