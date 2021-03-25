@@ -7,12 +7,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
-import {useSelector} from 'react-redux';
 
 import {FetchStatus} from '../../../api/definitions/misc';
 import {User, UserAuthInfo} from '../../../state/auth/data';
-import {authDispatchers} from '../../../state/auth/dispatchers';
-import {ReduxState} from '../../../state/state';
 import {useThunkDispatch} from '../../../state/store';
 import UIButton from '../ui/Button';
 
@@ -54,13 +51,9 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
   });
 
   const dispatch = useThunkDispatch();
-  const {error} = useSelector((state: ReduxState) => state.auth);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (error) {
-      dispatch(authDispatchers.setError(error));
-    }
     setFetchStatus({
       fetching: true,
       fetched: false,
@@ -68,6 +61,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
     dispatch(dispatcher(accountInfoData))
       .then(unwrapResult)
       .catch(() => {
+        // FIXME: Error handling here
         setFetchStatus({
           fetching: false,
           fetched: true,
@@ -85,7 +79,6 @@ export const AccountInfoForm = <T extends UserAuthInfo>(props: React.PropsWithCh
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">{title}</Typography>
-        {error && <span>{error}</span>}
         <form className={classes.form} onSubmit={onSubmit}>
           {children}
           <UIButton
