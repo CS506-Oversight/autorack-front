@@ -39,7 +39,7 @@ type FormShowIngredientProps = {
     nextStep: (step:number) => void,
     forStep:number,
     backStep:number,
-    selectMenu: IngredientChoice,
+    selectIngredient: IngredientChoice,
     handleShowIngredientItem: (selectIngredient: IngredientChoice | null) => void,
 }
 
@@ -52,17 +52,22 @@ type Ingredient = {
 const options: Array<IngredientChoice> = [];
 
 export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngredientProps>) => {
-  const {nextStep, forStep, backStep, selectMenu, handleShowIngredientItem} = props;
+  const {nextStep, forStep, backStep, selectIngredient, handleShowIngredientItem} = props;
 
 
   const setStep = () => {
-    nextStep(forStep);
+    if (selectIngredient.value === '') {
+
+    } else {
+      nextStep(forStep);
+    }
   };
 
   const makeOptionsArray = () => {
     while (options.length != 0) {
       options.pop();
     }
+
     // might mess up if menuList is updated from database
     for (const item of IngredientList) {
       const option: IngredientChoice = {
@@ -81,7 +86,7 @@ export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngred
       <React.Fragment>
         <h3>Select a Menu Item</h3>
         <Select
-          value={selectMenu}
+          value={selectIngredient}
           onChange={(option) => handleShowIngredientItem(option)}
           options={options}
         />

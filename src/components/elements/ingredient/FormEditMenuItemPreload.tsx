@@ -154,7 +154,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
     while (IngredientListToPage.length != 0) {
       IngredientListToPage.pop();
     }
-    /*    if (IngredientListToPage.length < IngredientList.length) {*/
     for (const item of IngredientList) {
       let eq = false;
       for (const data of MenuIngredientList) {
@@ -194,7 +193,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
     setMenuItem({...menuItem, [key]: e.target.value});
     handleMenuItem(menuItem);
     console.log(menuItem.name);
-    /*    console.log(menuItem.imageURl);*/
     console.log(key);
   };
 
@@ -202,7 +200,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
     setMenuItem({...menuItem, [key]: +e.target.value});
     handleMenuItem(menuItem);
     console.log(menuItem.price);
-    /*    console.log(e.target.value);*/
   };
 
   const handleCheck = ( e: React.ChangeEvent<HTMLInputElement>) => {
@@ -264,19 +261,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
     return gtg;
   };
 
-  /*  const makeObjects = () => {
-    for (const item of IngredientList) {
-      IngredientObjectList.set(item.name, {
-        name: item.name,
-        measurement: {value: '', label: 'Select...'},
-        amount: 0,
-        value: '',
-        used: false,
-      });
-    }
-  };
-
-  makeObjects();*/
   makeIngredientListToPage();
 
 
@@ -306,14 +290,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormMenuA
                   defaultValue={menuItem.description}
                   variant="filled"
                 />
-                {/*        <br/>
-        <TextField
-          id="imageURL"
-          label="Image Url"
-          onChange={updateMenuItem('imageURL')}
-          defaultValue={menuItem.imageURl}
-          variant="filled"
-        />*/}
                 <br/>
                 <FormControl fullWidth = {false} className={classes.margin} variant="filled">
                   <InputLabel htmlFor="filled-adornment-password">Price</InputLabel>
