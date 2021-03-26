@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="816.572" height="244" viewBox="0 0 816.572 244">
+  <g id="Group_27" data-name="Group 27" transform="translate(-382 -276)">
+    <text id="TM" transform="translate(1168.572 319)" fill="#a7a7a7" font-size="20" font-family="OpenSans, Open Sans"><tspan x="0" y="0">TM</tspan></text>
+    <g id="Group_21" data-name="Group 21" transform="translate(-145 -13)">
+      <path id="Path_8" data-name="Path 8" d="M42,0h1a42,42,0,0,1,0,84H42A42,42,0,0,1,42,0Z" transform="translate(846 391)" fill="#ff7474"/>
+      <rect id="Rectangle_6" data-name="Rectangle 6" width="85" height="85" rx="42.5" transform="translate(797 369)" fill="#0bd0ff"/>
+      <rect id="Rectangle_5" data-name="Rectangle 5" width="85" height="84" rx="42" transform="translate(834 322)" fill="#ff7474"/>
+      <rect id="Rectangle_9" data-name="Rectangle 9" width="86" height="86" rx="43" transform="translate(876 342)" fill="#0bd0ff"/>
+    </g>
+    <text id="aut" transform="translate(382 277)" fill="#fff" font-size="180" font-family="ShreeDev0714-Bold, 'Shree Devanagari 714'" font-weight="700"><tspan x="0" y="166">aut</tspan></text>
+    <text id="rack" transform="translate(821 276)" fill="#fff" font-size="180" font-family="ShreeDev0714-Bold, 'Shree Devanagari 714'" font-weight="700"><tspan x="0" y="166">rack</tspan></text>
+  </g>
+</svg>
