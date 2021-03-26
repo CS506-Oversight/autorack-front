@@ -15,7 +15,12 @@ export const ForgotPassword = () => {
   });
 
   const onSubmitSuccess = () => {
-    dispatch(alertDispatchers.showAlert({severity: 'success', message: 'A Reset link was sent to your email!'}));
+    dispatch(
+      alertDispatchers.showAlert({
+        severity: 'success',
+        message: 'A Reset link was sent to your email!',
+      }),
+    );
     setUserEmail({email: ''});
   };
 
