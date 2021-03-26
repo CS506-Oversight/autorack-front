@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, {useEffect} from 'react';
 import {SelectForm} from '../elements/ingredient/SelectForm';
 import {FormIngredient} from '../elements/ingredient/FormIngredient';
 import {Button, Grid, Paper} from '@material-ui/core';
@@ -15,11 +15,13 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ClearIcon from '@material-ui/icons/Clear';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
+import {IconButton} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     table: {
-      minWidth: 100,
+      minWidth: 50,
+    },
+    tableRow: {
+      height: 50,
     },
   }),
 );
@@ -164,8 +169,8 @@ export const Menu = () => {
     setExpanded(isExpanded ? panel : false);
     /*    console.log(expanded);*/
 
-    console.log(menuItemAdjacentArray);
-    console.log(menuItem);
+    /*    console.log(menuItemAdjacentArray);*/
+    /*    console.log(menuItem);*/
   };
 
 
@@ -175,15 +180,42 @@ export const Menu = () => {
 
 
   const addItemToShow = async (): Promise<void> => {
+    if (expanded !== false) {
+      updateAdjacentArray(+expanded);
+    }
+    console.log(menuItemAdjacentArray);
+    handleMenuItem(menuItemAdjacentArray[itemsToShow]);
     await setItemsToShow(itemsToShow+1);
   };
+  useEffect(() => {
+    handleMenuItem(menuItemAdjacentArray[+expanded]);
+  }, [itemsToShow]);
 
 
   const [menuItemAdjacentArray, setMenuItemAdjacentArray] = React.useState<Array<MenuItem>>([]);
 
+  const [menuItemFinalArray, setMenuItemFinalArray] = React.useState<Array<MenuItem>>([]);
+
+
+  const updateFinalArray = () => {
+    /*    while (menuItemFinalArray.length != 0) {
+      menuItemFinalArray.pop();
+    }*/
+    const tempArray:Array<MenuItem> = ([]);
+    /*    const tempArray = menuItemFinalArray;*/
+    if (menuItemAdjacentArray.length!= 0) {
+      for (let i = 0; i< itemsToShow; i++) {
+        tempArray.push(menuItemAdjacentArray[i]);
+      }
+    }
+    /*    console.log(Object.is(tempArray, menuItemFinalArray));*/
+    setMenuItemFinalArray(tempArray);
+    /*    console.log(menuItemFinalArray);*/
+  };
+
   const MenuItemMap = new Map<string, MenuItem>();
   const handleMapStart = async (): Promise<void> => {
-    console.log('here');
+    /*    console.log('here');*/
     setItemsToShow(1);
     /* console.log('here');*/
     /*    console.log('here');*/
@@ -206,10 +238,33 @@ export const Menu = () => {
   };
 
   const updateAdjacentArray = (index: number) => {
-    console.log(menuItem);
-    const tempArray = menuItemAdjacentArray;
+    /*    console.log(menuItem);*/
+    const tempArray:Array<MenuItem> = ([]);
+    for (const item of menuItemAdjacentArray) {
+      tempArray.push(item);
+    }
+    /*    const tempArray = menuItemAdjacentArray;*/
+    /*    console.log(Object.is(tempArray, menuItemAdjacentArray));*/
     tempArray[index] = menuItem;
     setMenuItemAdjacentArray(tempArray);
+  };
+
+  const deleteFromAdjacentArray = (index: number) => {
+    const tempArray:Array<MenuItem> = ([]);
+    const newMenuItem:MenuItem = {
+      name: '',
+      description: '',
+      price: 0,
+    };
+    for (let i=0; i<index; i++) {
+      tempArray.push(menuItemAdjacentArray[i]);
+    }
+    for (let i=index; i<menuItemAdjacentArray.length-1; i++) {
+      tempArray.push(menuItemAdjacentArray[i+1]);
+    }
+    tempArray.push(newMenuItem);
+    setMenuItemAdjacentArray(tempArray);
+    setItemsToShow(itemsToShow-1);
   };
 
   const [selected, setSelected] = React.useState<FirstChoice>({
@@ -222,6 +277,23 @@ export const Menu = () => {
     description: '',
     price: 0,
   });
+  useEffect(() => {
+    /*    console.log(menuItem);*/
+    if (expanded !== false) {
+      updateAdjacentArray(+expanded);
+    }
+
+    console.log(menuItem);
+  }, [menuItem]);
+
+  useEffect(() => {
+    updateFinalArray();
+    console.log(menuItemAdjacentArray);
+  }, [menuItemAdjacentArray]);
+
+  useEffect(() => {
+    console.log(menuItemFinalArray);
+  }, [menuItemFinalArray]);
 
   /*  useEffect(() => {
     console.log(expanded);
@@ -259,8 +331,7 @@ export const Menu = () => {
   };
 
   const handleMenuItem = async (item: MenuItem): Promise<void> => {
-    console.log(menuItem);
-    console.log(item);
+    /*    console.log(item);*/
     await setMenuItem(item);
     /*    console.log(item);*/
     /*    console.log(menuItem);*/
@@ -394,7 +465,7 @@ export const Menu = () => {
                       backStep={1}
                       newIng={6}
                       handleMenuItem={handleMenuItem}
-                      menuItemFromSelect={menuItem}
+                      menuItemFromSelect={item}
                       handleMenuIngredientRelation={handleMenuIngredientRelation}
                       menuIngredientArrayFromMenu={menuIngredientArray}
                     />
@@ -408,23 +479,24 @@ export const Menu = () => {
               <Table className={classes.table} aria-label="caption table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Added Menu Items</TableCell>
+                    <TableCell align="right">Added Menu Items</TableCell>
+
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="left">item</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="left">item</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="left">item</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="left">item</TableCell>
-                  </TableRow>
-                </TableBody>
+
+                {menuItemFinalArray.map((item:MenuItem, index:number) =>
+                  <TableBody key = {index}>
+                    <TableRow>
+                      <TableCell align="right">{item.name}
+                        <IconButton color="primary" onClick={() => {
+                          deleteFromAdjacentArray(index);
+                        }}>
+                          <ClearIcon/>
+                        </IconButton></TableCell>
+                    </TableRow>
+                  </TableBody>,
+                )}
+
               </Table>
             </Paper>
           </Grid>

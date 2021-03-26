@@ -18,6 +18,7 @@ import {makeStyles} from '@material-ui/core/styles';
 /* import {FormAddIngredients} from './FormAddIngredients';*/
 import Select from 'react-select';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -170,14 +171,13 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
   };
 
   useEffect(() => {
-    console.log(menuItem);
+    /*    console.log(menuItem);*/
     handleMenuItem(menuItem);
   }, [menuItem]);
 
   const updateMenuPrice = (key: string) => async (e: ChangeEvent<HTMLInputElement>) => {
     await setMenuItem({...menuItem, [key]: +e.target.value});
-    /*    console.log('ehre');*/
-    await handleMenuItem(menuItem);
+    /*    await handleMenuItem(menuItem);*/
     /*    console.log(e.target.value);*/
   };
 
@@ -257,6 +257,8 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       IngredientListToPage.push(value);
     },
     );
+    IngredientListToPage.sort((a, b) =>
+      (a.name>b.name) ? 1: -1);
   };
 
   makeIngredientMapToPage();
@@ -306,7 +308,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   />
                 </FormControl>
 
-                <Button
+                {/*                <Button
                   variant='contained'
                   color='primary'
                   style={styles.button}
@@ -320,14 +322,16 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                     } else if (!checkIngredientFill()) {
 
                     } else {
-                      /*                      console.log(menuItem.price);*/
-                      nextStep(forStep); // needs to be set
+                                            console.log(menuItem.price);
+                                            nextStep(forStep); // needs to be set
                       handleMenuItem(menuItem);
                       handleMenuIngredientRelation(menuIngredientArray);
+                      updateFinalArray();
                     }
                   }}>
                     Add
-                </Button>
+                </Button>*/}
+
                 {/*                <Button
                   variant='contained'
                   color='primary'
