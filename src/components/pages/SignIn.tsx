@@ -13,7 +13,7 @@ const SignInFooter = () => {
   return (
     <Grid container>
       <Grid item xs>
-        <Link href="#" variant="body2">
+        <Link href={AppPaths.FORGOT_PASSWORD} variant="body2">
           Forgot password?
         </Link>
       </Grid>

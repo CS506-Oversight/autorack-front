@@ -56,3 +56,8 @@ export type SignUpData = UserAuthInfo & UserInfo;
  * Data needed for signing in an user.
  */
 export type SignInData = UserAuthInfo;
+
+/**
+ * Data needed for forgot password.
+ */
+export type ResetPasswordData = PublicUserAuthInfo;

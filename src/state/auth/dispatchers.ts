@@ -1,11 +1,13 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import fireAuth from '../../config/firebaseConfig';
-import {SignInData, SignUpData, User} from './data';
+import {ResetPasswordData, SignInData, SignUpData, User} from './data';
 import {AUTH_STATE_NAME, AuthDispatcherName} from './name';
 
+export type AuthActionReturn<R> = R extends User ? (R | null): R;
+
 export const authDispatchers = {
-  [AuthDispatcherName.SIGN_UP]: createAsyncThunk<User | null, SignUpData>(
+  [AuthDispatcherName.SIGN_UP]: createAsyncThunk<AuthActionReturn<User | null>, SignUpData>(
     `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_UP}`,
     async (signUpData: SignUpData, {rejectWithValue}) => {
       const res = await fireAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
@@ -26,7 +28,7 @@ export const authDispatchers = {
       return userData;
     },
   ),
-  [AuthDispatcherName.SIGN_IN]: createAsyncThunk<User | null, SignInData>(
+  [AuthDispatcherName.SIGN_IN]: createAsyncThunk<AuthActionReturn<User | null>, SignInData>(
     `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_IN}`,
     async (signInData: SignInData, {rejectWithValue}) => {
       const res = await fireAuth.signInWithEmailAndPassword(signInData.email, signInData.password);
@@ -54,10 +56,17 @@ export const authDispatchers = {
       return userData;
     },
   ),
-  [AuthDispatcherName.SIGN_OUT]: createAsyncThunk<null>(
+  [AuthDispatcherName.SIGN_OUT]: createAsyncThunk<AuthActionReturn<null>>(
     `${AUTH_STATE_NAME}/${AuthDispatcherName.SIGN_OUT}`,
     async () => {
       await fireAuth.signOut();
+      return null;
+    },
+  ),
+  [AuthDispatcherName.FORGOT_PASSWORD]: createAsyncThunk<AuthActionReturn<null>, ResetPasswordData>(
+    `${AUTH_STATE_NAME}/${AuthDispatcherName.FORGOT_PASSWORD}`,
+    async (resetPasswordData: ResetPasswordData) => {
+      await fireAuth.sendPasswordResetEmail(resetPasswordData.email);
       return null;
     },
   ),
