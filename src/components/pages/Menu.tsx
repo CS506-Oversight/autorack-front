@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {} from 'react';
 import {SelectForm} from '../elements/ingredient/SelectForm';
 import {FormIngredient} from '../elements/ingredient/FormIngredient';
 import {Button, Grid, Paper} from '@material-ui/core';
@@ -144,37 +144,72 @@ export const Menu = () => {
 
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+  /*  const [currentPanel, setCurrentPanel] = React.useState<String>();*/
+
+  const handleAccordionChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    /*    setCurrentPanel(panel);*/
+    console.log(menuItem);
+    console.log(expanded);
+    console.log(+expanded);
+    if (expanded !== false) {
+      console.log('not false');
+      updateAdjacentArray(+expanded);
+    }
+    /*    setMenuItem(menuItemAdjacentArray[+panel]);*/
+    /*    console.log(expanded);*/
+    /*        useEffect(() => {*/
+    handleMenuItem(menuItemAdjacentArray[+panel]);
+    /*    updateAdjacentArray(+panel);*/
+    /*    }, [menuItem]);*/
     setExpanded(isExpanded ? panel : false);
-    console.log();
+    /*    console.log(expanded);*/
+
+    console.log(menuItemAdjacentArray);
+    console.log(menuItem);
   };
+
 
   const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>(MenuIngredientList);
 
   const [itemsToShow, setItemsToShow] = React.useState<number>(1);
 
+
   const addItemToShow = async (): Promise<void> => {
     await setItemsToShow(itemsToShow+1);
   };
 
+
+  const [menuItemAdjacentArray, setMenuItemAdjacentArray] = React.useState<Array<MenuItem>>([]);
+
   const MenuItemMap = new Map<string, MenuItem>();
-  const MenuItemAdjacentArray: Array<MenuItem> = [];
   const handleMapStart = async (): Promise<void> => {
+    console.log('here');
+    setItemsToShow(1);
+    /* console.log('here');*/
     /*    console.log('here');*/
-    while (MenuItemAdjacentArray.length != 0) {
-      MenuItemAdjacentArray.pop();
+    while (menuItemAdjacentArray.length != 0) {
+      menuItemAdjacentArray.pop();
     }
+    const tempArray = menuItemAdjacentArray;
     MenuItemMap.clear();
-    for (let i =0; i <= 100; i++) {
+    for (let i =0; i <= 10; i++) {
       const newMenuItem:MenuItem = {
         name: '',
         description: '',
         price: 0,
       };
       MenuItemMap.set(i.toString(), newMenuItem);
-      MenuItemAdjacentArray.push(newMenuItem);
+      tempArray.push(newMenuItem);
     }
-    /*    console.log(MenuItemAdjacentArray);*/
+    setMenuItemAdjacentArray(tempArray);
+    /*    console.log(menuItemAdjacentArray);*/
+  };
+
+  const updateAdjacentArray = (index: number) => {
+    console.log(menuItem);
+    const tempArray = menuItemAdjacentArray;
+    tempArray[index] = menuItem;
+    setMenuItemAdjacentArray(tempArray);
   };
 
   const [selected, setSelected] = React.useState<FirstChoice>({
@@ -187,6 +222,11 @@ export const Menu = () => {
     description: '',
     price: 0,
   });
+
+  /*  useEffect(() => {
+    console.log(expanded);
+    updateAdjacentArray(+expanded);
+  }, [expanded, menuItem]);*/
 
   const [ingredientItem, setIngredientItem] = React.useState<Ingredient>({
     name: '',
@@ -219,10 +259,13 @@ export const Menu = () => {
   };
 
   const handleMenuItem = async (item: MenuItem): Promise<void> => {
-    await setMenuItem(item);
+    console.log(menuItem);
     console.log(item);
+    await setMenuItem(item);
+    /*    console.log(item);*/
     /*    console.log(menuItem);*/
   };
+
 
   const handleIngredient = (item: Ingredient) => {
     setIngredientItem(item);
@@ -303,8 +346,8 @@ export const Menu = () => {
     }
   };
 
-  /*  console.log(MenuItemAdjacentArray);*/
-  handleMapStart();
+  /*  console.log(menuItemAdjacentArray);*/
+  /*  handleMapStart();*/
   const step = progress.step;
   const selection = selected;
   /*  console.log('here');
@@ -321,24 +364,26 @@ export const Menu = () => {
       </Paper>
     );
   case 2:
+
     return (
       <div>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={10}>
-            {MenuItemAdjacentArray.map((item:MenuItem, index:number) =>
+            {menuItemAdjacentArray.map((item:MenuItem, index:number) =>
               (index < itemsToShow)?
 
                 <Accordion
                   key = {index}
                   expanded={expanded === index.toString()}
-                  onChange={handleChange(index.toString())}
+                  onChange={handleAccordionChange(index.toString())}
                 >
 
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header">
                     <Typography className={classes.heading}>{index}</Typography>
-                    <Typography className={classes.secondaryHeading}>I am an accordion</Typography>
+                    <Typography className={classes.secondaryHeading}>{(item.name === '')?
+                      'New Menu Item':item.name}</Typography>
 
                   </AccordionSummary>
                   <AccordionDetails>
@@ -349,7 +394,7 @@ export const Menu = () => {
                       backStep={1}
                       newIng={6}
                       handleMenuItem={handleMenuItem}
-                      menuItemFromSelect={item}
+                      menuItemFromSelect={menuItem}
                       handleMenuIngredientRelation={handleMenuIngredientRelation}
                       menuIngredientArrayFromMenu={menuIngredientArray}
                     />
@@ -422,7 +467,7 @@ export const Menu = () => {
           onClick={function() {
             addItemToShow();
           }}>
-          Add Menu item
+          Add Another
         </Button>
       </div>
 
