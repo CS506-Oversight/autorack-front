@@ -47,9 +47,24 @@ const options: Array<MenuChoice> = [];
 export const FormShowMenu = (props: React.PropsWithChildren<SelectFormProps>) => {
   const {nextStep, forStep, backStep, selectMenu, handleShowMenuItem} = props;
 
+  /*  const [showMenuItem, setShowMenuItem] = React.useState<MenuChoice>({
+    value: '',
+    label: 'Select a Menu Item',
+    step: 4,
+  });
 
+  const hereHandleShowMenuItem = async (menuOption: MenuChoice | null): Promise<void> => {
+    if (!menuOption) {
+      return;
+    }
+    await setShowMenuItem(menuOption);
+  };*/
   const setStep = () => {
-    nextStep(forStep);
+    if (selectMenu.value === '') {
+
+    } else {
+      nextStep(forStep);
+    }
   };
 
   const makeOptionsArray = () => {

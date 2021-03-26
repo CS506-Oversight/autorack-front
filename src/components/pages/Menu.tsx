@@ -1,14 +1,15 @@
 import React from 'react';
 import {SelectForm} from '../elements/ingredient/SelectForm';
-/* import {FormMenuItem} from '../elements/ingredient/FormMenuItem';*/
 import {FormIngredient} from '../elements/ingredient/FormIngredient';
-/* import {FormAddIngredients} from '../elements/ingredient/FormAddIngredients';*/
 import {Paper} from '@material-ui/core';
 import {FormMenuAndIngredients} from '../elements/ingredient/FormMenuAndIngredients';
 import {FormShowMenu} from '../elements/ingredient/FormShowMenu';
-import {FormEditMenuItemPreload} from '../elements/ingredient/FormEditMenuItemPreload';
+/* import {FormEditMenuItemPreload} from '../elements/ingredient/FormEditMenuItemPreload';*/
 import {FormShowIngredient} from '../elements/ingredient/FormShowIngredient';
 import {FormEditIngredientPreload} from '../elements/ingredient/FormEditIngredientPreload';
+import {FormConfirmationMenu} from '../elements/ingredient/FormConfirmationMenu';
+import {FormConfirmationIngredient} from '../elements/ingredient/FormConfirmationIngredient';
+
 
 export type Progress = {
   step: number
@@ -28,6 +29,42 @@ const IngredientList: Array<Ingredient> = [
   {name: 'Water', inventory: 2, unit: 'Tbsp', price: 5.00},
   {name: 'Noodles', inventory: 2, unit: 'Tbsp', price: 5.00},
   {name: 'Tomatoes', inventory: 2, unit: 'Tbsp', price: 5.00},
+];
+
+
+const butter:MenuIngredient = {
+  name: 'Butter',
+  measurement: 'Tbsp',
+  amount: 5,
+  menuItem: 'Chicken',
+};
+
+const ham:MenuIngredient = {
+  name: 'Ham',
+  measurement: 'Tbsp',
+  amount: 4,
+  menuItem: 'Chicken',
+};
+
+const water:MenuIngredient = {
+  name: 'Water',
+  measurement: 'oz',
+  amount: 3,
+  menuItem: 'Chicken',
+};
+
+const steak:MenuIngredient = {
+  name: 'Water',
+  measurement: 'oz',
+  amount: 3,
+  menuItem: 'Steak',
+};
+
+const MenuIngredientList: Array<MenuIngredient> = [
+  butter,
+  ham,
+  water,
+  steak,
 ];
 
 type FirstChoice = {
@@ -73,7 +110,7 @@ export const Menu = () => {
     step: 1,
   });
 
-  const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>([]);
+  const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>(MenuIngredientList);
 
   const [selected, setSelected] = React.useState<FirstChoice>({
     value: '',
@@ -83,7 +120,6 @@ export const Menu = () => {
   const [menuItem, setMenuItem] = React.useState<MenuItem>({
     name: '',
     description: '',
-    /*    imageURl: '',*/
     price: 0,
   });
 
@@ -97,13 +133,14 @@ export const Menu = () => {
   const [showMenuItem, setShowMenuItem] = React.useState<MenuChoice>({
     value: '',
     label: 'Select a Menu Item',
-    step: progress.step,
+    step: 4,
   });
 
   const [showIngredientItem, setShowIngredientItem] = React.useState<IngredientChoice>({
     value: '',
     label: 'Select an Ingredient',
   });
+
 
   const nextStep = (step: number) => {
     setProgress({
@@ -112,41 +149,33 @@ export const Menu = () => {
   };
 
   const handleMenuIngredientRelation = async (placeArray:Array<MenuIngredient>): Promise<void> => {
-    console.log('here1');
+    /*    console.log('here1');*/
     await setMenuIngredientArray(placeArray);
   };
 
   const handleMenuItem = async (item: MenuItem): Promise<void> => {
     await setMenuItem(item);
-    console.log(menuItem);
+    /*    console.log(menuItem);*/
   };
 
   const handleIngredient = (item: Ingredient) => {
     setIngredientItem(item);
   };
 
-  /*  const firstMenuItemSet = (itemName: String) => {
-    console.log('here');
-    for (const menuItem of MenuList) {
-      if (itemName === menuItem.name) {
-        console.log(menuItem);
-        setMenuItem(menuItem);
-      }
-    }
-  };*/
 
   const handleShowMenuItem = async (menuOption: MenuChoice | null): Promise<void> => {
     if (!menuOption) {
       return;
     }
     await setShowMenuItem(menuOption);
+    console.log('here');
     /*    console.log(menuOption);*/
 
     for (const listThing of MenuList) {
       if (menuOption.value === listThing.name) {
         await setMenuItem(listThing);
-        console.log(listThing);
-        console.log(menuItem);
+        /*        console.log(listThing);
+        console.log(menuItem);*/
       }
     }
   };
@@ -164,7 +193,8 @@ export const Menu = () => {
     }
   };
 
-  console.log(menuItem);
+
+  /*  console.log(menuItem);*/
   const selectMenu = showMenuItem;
   const selectIngredient = showIngredientItem;
 
@@ -173,11 +203,44 @@ export const Menu = () => {
       return;
     }
     setSelected(selectedOption);
+
+    if (selectedOption.value === 'Menu') {
+      // set all states to normal
+      const defaultMenuItem : MenuItem = {
+        name: '',
+        description: '',
+        price: 0,
+      };
+      handleMenuItem(defaultMenuItem);
+    } else if (selectedOption.value === 'Ingredient') {
+      const defaultIngredientItem : Ingredient = {
+        name: '',
+        inventory: 0,
+        unit: '',
+        price: 0,
+      };
+      handleIngredient(defaultIngredientItem);
+    } else if (selectedOption.value === 'Edit Menu Item') {
+      const defaultShowMenu : MenuChoice = {
+        value: '',
+        label: 'Select a Menu Item',
+        step: 4,
+      };
+      handleShowMenuItem(defaultShowMenu);
+    } else if (selectedOption.value === 'Edit Ingredient Item') {
+      const defaultShowIngredient : IngredientChoice = {
+        value: '',
+        label: 'Select an Ingredient',
+      };
+      handleShowIngredientItem(defaultShowIngredient);
+    }
   };
+
+
   const step = progress.step;
   const selection = selected;
-  console.log('here');
-  console.log(menuIngredientArray);
+  /*  console.log('here');
+  console.log(menuIngredientArray);*/
   switch (step) {
   case 1:
     return (
@@ -195,6 +258,7 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep = {10}
         backStep = {1}
+        newIng={6}
         handleMenuItem={handleMenuItem}
         menuItemFromSelect={menuItem}
         handleMenuIngredientRelation = {handleMenuIngredientRelation}
@@ -207,7 +271,7 @@ export const Menu = () => {
       <Paper elevation={3}>
         <FormIngredient
           nextStep={nextStep}
-          forStep = {10}
+          forStep = {13}
           backStep = {1}
           handleIngredient={handleIngredient}
           ingredientItemFromSelect={ingredientItem}
@@ -227,13 +291,24 @@ export const Menu = () => {
     );
   case 5:
     return (
-      <FormEditMenuItemPreload
+      <FormMenuAndIngredients
         nextStep={nextStep}
-        forStep = {10}
+        forStep = {11}
+        backStep = {4}
+        newIng={7}
+        handleMenuItem={handleMenuItem}
+        menuItemFromSelect={menuItem}
+        handleMenuIngredientRelation = {handleMenuIngredientRelation}
+        menuIngredientArrayFromMenu={menuIngredientArray}
+      />
+
+    /*      <FormEditMenuItemPreload
+        nextStep={nextStep}
+        forStep = {11}
         backStep = {4}
         handleMenuItem={handleMenuItem}
         menuItemFromSelect={menuItem}
-      />
+      />*/
 
     );
   case 6:
@@ -241,7 +316,7 @@ export const Menu = () => {
       <Paper elevation={3}>
         <FormIngredient
           nextStep={nextStep}
-          forStep = {2}
+          forStep = {12}
           backStep = {2}
           handleIngredient={handleIngredient}
           ingredientItemFromSelect={ingredientItem}
@@ -254,7 +329,7 @@ export const Menu = () => {
       <Paper elevation={3}>
         <FormIngredient
           nextStep={nextStep}
-          forStep = {5}
+          forStep = {14}
           backStep = {5}
           handleIngredient={handleIngredient}
           ingredientItemFromSelect={ingredientItem}
@@ -268,7 +343,7 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep = {9}
         backStep = {1}
-        selectMenu = {selectIngredient}
+        selectIngredient= {selectIngredient}
         handleShowIngredientItem={handleShowIngredientItem}
       />
     );
@@ -278,14 +353,67 @@ export const Menu = () => {
       <Paper elevation={3}>
         <FormEditIngredientPreload
           nextStep={nextStep}
-          forStep = {10}
+          forStep = {15}
           backStep = {8}
           handleIngredient={handleIngredient}
           ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
-
     );
+
+  case 10:
+    return (
+      <FormConfirmationMenu
+        nextStep={nextStep}
+        forStep={1}
+        backStep={2}
+      />
+    );
+  case 11:
+    return (
+      <FormConfirmationMenu
+        nextStep={nextStep}
+        forStep={1}
+        backStep={5}
+      />
+    );
+    // done
+  case 12:
+    return (
+      <FormConfirmationIngredient
+        nextStep={nextStep}
+        forStep={2}
+        backStep = {6}
+      />
+    );
+    // done
+  case 13:
+    return (
+      <FormConfirmationIngredient
+        nextStep={nextStep}
+        forStep={1}
+        backStep = {3}
+      />
+    );
+    // done
+  case 14:
+    return (
+      <FormConfirmationIngredient
+        nextStep={nextStep}
+        forStep={5}
+        backStep = {7}
+      />
+    );
+    // done
+  case 15:
+    return (
+      <FormConfirmationIngredient
+        nextStep={nextStep}
+        forStep={1}
+        backStep = {9}
+      />
+    );
+
   default:
     return (
       <div>
