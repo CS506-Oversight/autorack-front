@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useEffect} from 'react';
 /* import Select from 'react-select';*/
 import {
   Button,
@@ -106,6 +106,7 @@ type FormMenuAndIngredientProps = {
     handleMenuIngredientRelation: (placeArray:Array<MenuIngredient>) => void,
     menuIngredientArrayFromMenu:Array<MenuIngredient>,
 
+
 }
 
 
@@ -129,7 +130,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       let eq = false;
       for (const data of menuIngredientArray) {
         if ((data.menuItem === menuItem.name) && (data.name === item.name)) {
-          console.log(data);
+          /*          console.log(data);*/
           eq = true;
           const toArray: MenuIngredientForForm = {
             name: data.name,
@@ -161,15 +162,22 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
   };
 
 
-  const updateMenuItem = (key: string)=> async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    await setMenuItem({...menuItem, [key]: e.target.value});
-    handleMenuItem(menuItem);
+  const updateMenuItem = (key: string)=> (e: ChangeEvent<HTMLTextAreaElement>) => {
+    /*    console.log('here');*/
+    setMenuItem({...menuItem, [key]: e.target.value});
+    /*    handleMenuItem(menuItem);*/
     /*    console.log(menuItem.imageURl);*/
   };
 
+  useEffect(() => {
+    console.log(menuItem);
+    handleMenuItem(menuItem);
+  }, [menuItem]);
+
   const updateMenuPrice = (key: string) => async (e: ChangeEvent<HTMLInputElement>) => {
     await setMenuItem({...menuItem, [key]: +e.target.value});
-    handleMenuItem(menuItem);
+    /*    console.log('ehre');*/
+    await handleMenuItem(menuItem);
     /*    console.log(e.target.value);*/
   };
 
@@ -236,7 +244,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
     if (!gtg) {
       alert(consoleLine);
     }
-    console.log(menuIngredientArray);
+    /*    console.log(menuIngredientArray);*/
     return gtg;
   };
 
@@ -253,6 +261,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
 
   makeIngredientMapToPage();
   makeIngredientListToPage();
+  /*  console.log(menuIngredientArray);*/
 
 
   // @ts-ignore
