@@ -171,7 +171,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
   };
 
   useEffect(() => {
-    /*    console.log(menuItem);*/
+    console.log(menuItem);
     handleMenuItem(menuItem);
   }, [menuItem]);
 
@@ -282,6 +282,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   id="Name"
                   label="Name"
                   onChange={updateMenuItem('name')}
+                  value = {menuItemFromSelect.name}
                   defaultValue={menuItem.name}
                   variant="filled"
                 />
@@ -291,6 +292,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   label="Description"
                   multiline
                   rowsMax={10}
+                  value = {menuItemFromSelect.description}
                   onChange={updateMenuItem('description')}
                   defaultValue={menuItem.description}
                   variant="filled"
@@ -302,6 +304,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   <FilledInput
                     type = 'number'
                     onChange={updateMenuPrice('price')}
+                    value = {menuItemFromSelect.price}
                     defaultValue={menuItem.price}
                     id="filled-adornment-password"
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}

@@ -180,12 +180,14 @@ export const Menu = () => {
 
 
   const addItemToShow = async (): Promise<void> => {
-    if (expanded !== false) {
-      updateAdjacentArray(+expanded);
+    if (itemsToShow <= 10) {
+      if (expanded !== false) {
+        updateAdjacentArray(+expanded);
+      }
+      console.log(menuItemAdjacentArray);
+      handleMenuItem(menuItemAdjacentArray[itemsToShow]);
+      await setItemsToShow(itemsToShow+1);
     }
-    console.log(menuItemAdjacentArray);
-    handleMenuItem(menuItemAdjacentArray[itemsToShow]);
-    await setItemsToShow(itemsToShow+1);
   };
   useEffect(() => {
     handleMenuItem(menuItemAdjacentArray[+expanded]);
@@ -257,13 +259,27 @@ export const Menu = () => {
       price: 0,
     };
     for (let i=0; i<index; i++) {
-      tempArray.push(menuItemAdjacentArray[i]);
+      const changeMenuitem:MenuItem = {
+        name: menuItemAdjacentArray[i].name,
+        description: menuItemAdjacentArray[i].description,
+        price: menuItemAdjacentArray[i].price,
+      };
+      /*      console.log(Object.is(changeMenuitem, menuItemAdjacentArray[i]));*/
+      tempArray.push(changeMenuitem);
     }
     for (let i=index; i<menuItemAdjacentArray.length-1; i++) {
-      tempArray.push(menuItemAdjacentArray[i+1]);
+      const changeMenuitem:MenuItem = {
+        name: menuItemAdjacentArray[i+1].name,
+        description: menuItemAdjacentArray[i+1].description,
+        price: menuItemAdjacentArray[i+1].price,
+      };
+      tempArray.push(changeMenuitem);
     }
     tempArray.push(newMenuItem);
+    console.log(Object.is(tempArray, menuItemAdjacentArray));
     setMenuItemAdjacentArray(tempArray);
+    console.log(menuItemAdjacentArray);
+    handleMenuItem(menuItemAdjacentArray[index]);
     setItemsToShow(itemsToShow-1);
   };
 
@@ -441,20 +457,21 @@ export const Menu = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={10}>
             {menuItemAdjacentArray.map((item:MenuItem, index:number) =>
-              (index < itemsToShow)?
 
+              (index < itemsToShow) ?
                 <Accordion
-                  key = {index}
+                  key={index}
                   expanded={expanded === index.toString()}
                   onChange={handleAccordionChange(index.toString())}
                 >
+                  {console.log(index)}
 
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}
+                  <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header">
                     <Typography className={classes.heading}>{index}</Typography>
-                    <Typography className={classes.secondaryHeading}>{(item.name === '')?
-                      'New Menu Item':item.name}</Typography>
+                    <Typography className={classes.secondaryHeading}>{(item.name === '') ?
+                      'New Menu Item' : item.name}</Typography>
 
                   </AccordionSummary>
                   <AccordionDetails>
