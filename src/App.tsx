@@ -10,6 +10,7 @@ import {Navigation} from './components/elements/nav/Main';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {Authenticated} from './components/pages/Authenticated';
+import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
@@ -50,6 +51,9 @@ const PageContent = () => {
       </PublicRoute>
       <PublicRoute path={AppPaths.SIGN_IN}>
         <SignIn/>
+      </PublicRoute>
+      <PublicRoute path={AppPaths.FORGOT_PASSWORD}>
+        <ForgotPassword/>
       </PublicRoute>
 
       {/* Authentication needed */}

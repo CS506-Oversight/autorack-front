@@ -22,13 +22,15 @@ const authSlice = createSlice({
         },
       );
     });
-    // Remove user (set to null) on sign out
-    builder.addCase(
-      authDispatchers.signOut.fulfilled,
-      (state) => {
-        state.user = null;
-      },
-    );
+    // Handles forgot password / sign-out
+    [authDispatchers.forgotPassword.fulfilled, authDispatchers.signOut.fulfilled].forEach((thunkCase) => {
+      builder.addCase(
+        thunkCase,
+        (state) => {
+          state.user = null;
+        },
+      );
+    });
   },
 });
 

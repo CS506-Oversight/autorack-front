@@ -10,7 +10,8 @@ import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
 
 import {FetchStatus} from '../../../api/definitions/misc';
 import {alertDispatchers} from '../../../state/alert/dispatchers';
-import {User, UserAuthInfo} from '../../../state/auth/data';
+import {PublicUserAuthInfo} from '../../../state/auth/data';
+import {AuthActionReturn} from '../../../state/auth/dispatchers';
 import {useDispatch} from '../../../state/store';
 import UIButton from '../ui/Button';
 
@@ -34,17 +35,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type AccountInfoFormProps<T extends UserAuthInfo> = {
+type AccountInfoFormProps<T extends PublicUserAuthInfo, R> = {
   title: string,
   buttonTextDefault: string,
   buttonTextLoading?: string,
   accountInfoData: T,
-  dispatcher: AsyncThunk<User | null, T, {}>,
-  onSubmitSuccess?: (user?: User | null) => void,
-  footer: JSX.Element,
+  dispatcher: AsyncThunk<AuthActionReturn<R>, T, {}>,
+  onSubmitSuccess?: (user?: AuthActionReturn<R>) => void,
+  footer?: JSX.Element,
 }
 
-export const AccountInfoForm = <T extends UserAuthInfo>({
+export const AccountInfoForm = <T extends PublicUserAuthInfo, R>({
   title,
   buttonTextDefault,
   buttonTextLoading,
@@ -53,7 +54,7 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
   onSubmitSuccess,
   children,
   footer,
-}: React.PropsWithChildren<AccountInfoFormProps<T>>) => {
+}: React.PropsWithChildren<AccountInfoFormProps<T, R>>) => {
   const [fetchStatus, setFetchStatus] = useState<FetchStatus>({
     fetched: false,
     fetching: false,
@@ -76,7 +77,15 @@ export const AccountInfoForm = <T extends UserAuthInfo>({
           fetched: true,
         });
         dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
-      });
+      })
+      .finally(() => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+      },
+
+      );
   };
 
   const classes = useStyles();
