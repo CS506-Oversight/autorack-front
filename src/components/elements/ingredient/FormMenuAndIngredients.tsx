@@ -110,6 +110,7 @@ type FormMenuAndIngredientProps = {
 
 
 export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAndIngredientProps>) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {nextStep, forStep, backStep, newIng, handleMenuItem, menuItemFromSelect,
     handleMenuIngredientRelation, menuIngredientArrayFromMenu} = props;
   const classes = useStyles();
@@ -316,9 +317,9 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                       handleMenuIngredientRelation(menuIngredientArray);
                     }
                   }}>
-                    Continue
+                    Add
                 </Button>
-                <Button
+                {/*                <Button
                   variant='contained'
                   color='primary'
                   style={styles.button}
@@ -326,7 +327,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                     nextStep(backStep);
                   }}>
                     Back
-                </Button>
+                </Button>*/}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={8}>
