@@ -1,14 +1,45 @@
 import React from 'react';
 import {SelectForm} from '../elements/ingredient/SelectForm';
 import {FormIngredient} from '../elements/ingredient/FormIngredient';
-import {Paper} from '@material-ui/core';
+import {Button, Grid, Paper} from '@material-ui/core';
 import {FormMenuAndIngredients} from '../elements/ingredient/FormMenuAndIngredients';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import {FormShowMenu} from '../elements/ingredient/FormShowMenu';
 /* import {FormEditMenuItemPreload} from '../elements/ingredient/FormEditMenuItemPreload';*/
 import {FormShowIngredient} from '../elements/ingredient/FormShowIngredient';
 import {FormEditIngredientPreload} from '../elements/ingredient/FormEditIngredientPreload';
 import {FormConfirmationMenu} from '../elements/ingredient/FormConfirmationMenu';
 import {FormConfirmationIngredient} from '../elements/ingredient/FormConfirmationIngredient';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+    },
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      flexBasis: '33.33%',
+      flexShrink: 0,
+    },
+    secondaryHeading: {
+      fontSize: theme.typography.pxToRem(15),
+      color: theme.palette.text.secondary,
+    },
+    table: {
+      minWidth: 100,
+    },
+  }),
+);
 
 
 export type Progress = {
@@ -106,11 +137,45 @@ type IngredientChoice = {
 
 
 export const Menu = () => {
+  const classes = useStyles();
   const [progress, setProgress] = React.useState({
     step: 1,
   });
 
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+
+  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+    console.log();
+  };
+
   const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>(MenuIngredientList);
+
+  const [itemsToShow, setItemsToShow] = React.useState<number>(1);
+
+  const addItemToShow = async (): Promise<void> => {
+    await setItemsToShow(itemsToShow+1);
+  };
+
+  const MenuItemMap = new Map<string, MenuItem>();
+  const MenuItemAdjacentArray: Array<MenuItem> = [];
+  const handleMapStart = async (): Promise<void> => {
+    /*    console.log('here');*/
+    while (MenuItemAdjacentArray.length != 0) {
+      MenuItemAdjacentArray.pop();
+    }
+    MenuItemMap.clear();
+    for (let i =0; i <= 100; i++) {
+      const newMenuItem:MenuItem = {
+        name: '',
+        description: '',
+        price: 0,
+      };
+      MenuItemMap.set(i.toString(), newMenuItem);
+      MenuItemAdjacentArray.push(newMenuItem);
+    }
+    /*    console.log(MenuItemAdjacentArray);*/
+  };
 
   const [selected, setSelected] = React.useState<FirstChoice>({
     value: '',
@@ -155,6 +220,7 @@ export const Menu = () => {
 
   const handleMenuItem = async (item: MenuItem): Promise<void> => {
     await setMenuItem(item);
+    console.log(item);
     /*    console.log(menuItem);*/
   };
 
@@ -168,7 +234,7 @@ export const Menu = () => {
       return;
     }
     await setShowMenuItem(menuOption);
-    console.log('here');
+    /*    console.log('here');*/
     /*    console.log(menuOption);*/
 
     for (const listThing of MenuList) {
@@ -206,6 +272,7 @@ export const Menu = () => {
 
     if (selectedOption.value === 'Menu') {
       // set all states to normal
+      handleMapStart();
       const defaultMenuItem : MenuItem = {
         name: '',
         description: '',
@@ -236,7 +303,8 @@ export const Menu = () => {
     }
   };
 
-
+  /*  console.log(MenuItemAdjacentArray);*/
+  handleMapStart();
   const step = progress.step;
   const selection = selected;
   /*  console.log('here');
@@ -254,16 +322,109 @@ export const Menu = () => {
     );
   case 2:
     return (
-      <FormMenuAndIngredients
-        nextStep={nextStep}
-        forStep = {10}
-        backStep = {1}
-        newIng={6}
-        handleMenuItem={handleMenuItem}
-        menuItemFromSelect={menuItem}
-        handleMenuIngredientRelation = {handleMenuIngredientRelation}
-        menuIngredientArrayFromMenu={menuIngredientArray}
-      />
+      <div>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={10}>
+            {MenuItemAdjacentArray.map((item:MenuItem, index:number) =>
+              (index < itemsToShow)?
+
+                <Accordion
+                  key = {index}
+                  expanded={expanded === index.toString()}
+                  onChange={handleChange(index.toString())}
+                >
+
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header">
+                    <Typography className={classes.heading}>{index}</Typography>
+                    <Typography className={classes.secondaryHeading}>I am an accordion</Typography>
+
+                  </AccordionSummary>
+                  <AccordionDetails>
+
+                    <FormMenuAndIngredients
+                      nextStep={nextStep}
+                      forStep={10}
+                      backStep={1}
+                      newIng={6}
+                      handleMenuItem={handleMenuItem}
+                      menuItemFromSelect={item}
+                      handleMenuIngredientRelation={handleMenuIngredientRelation}
+                      menuIngredientArrayFromMenu={menuIngredientArray}
+                    />
+                  </AccordionDetails>
+
+                </Accordion> : null,
+            )}
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <Paper elevation={3}>
+              <Table className={classes.table} aria-label="caption table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Added Menu Items</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell align="left">item</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left">item</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left">item</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left">item</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Button
+          variant='contained'
+          color='primary'
+          style={styles.button}
+          onClick={function() {
+            /*            if (menuItem.name === '') {
+              alert('Please fill in name field');
+            } else if (menuItem.description === '') {
+              alert('Please fill in description field');
+            } else if (isNaN(menuItem.price)) {
+              alert('The price must be a number');
+            } else if (!checkIngredientFill()) {
+
+            } else {*/
+            /*                      console.log(menuItem.price);*/
+            nextStep(10); // needs to be set
+            /*              handleMenuItem(menuItem);
+              handleMenuIngredientRelation(menuIngredientArray);
+            }*/
+          }}>
+          Continue
+        </Button>
+        <Button
+          variant='contained'
+          color='primary'
+          style={styles.button}
+          onClick={function() {
+            nextStep(1);
+          }}>
+          Back
+        </Button>
+        <Button
+          variant='contained'
+          color='primary'
+          style={styles.button}
+          onClick={function() {
+            addItemToShow();
+          }}>
+          Add Menu item
+        </Button>
+      </div>
 
     );
   case 3:
@@ -422,8 +583,8 @@ export const Menu = () => {
   }
 };
 
-/* const styles = {
+const styles = {
   button: {
     margin: 15,
   },
-};*/
+};
