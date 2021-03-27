@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect} from 'react';
+import React, {ChangeEvent} from 'react';
 /* import Select from 'react-select';*/
 import {
   Button,
@@ -15,7 +15,6 @@ import {
   Grid,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-/* import {FormAddIngredients} from './FormAddIngredients';*/
 import Select from 'react-select';
 
 
@@ -45,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 type MenuItem = {
     name: string,
     description: string,
-    /*    imageURl: string,*/
     price: number,
 }
 
@@ -61,41 +59,6 @@ type Measurement = {
     label: string,
 };
 
-type Ingredient = {
-    name: string,
-    inventory: number,
-    unit: string,
-    price: number,
-};
-
-type MenuIngredient = {
-    name: string,
-    measurement: string,
-    amount: number,
-    menuItem: string,
-};
-
-/* type MenuIngredientList = Array<MenuIngredient> [];*/
-
-const IngredientObjectList = new Map<string, MenuIngredientForForm>();
-
-const IngredientList: Array<Ingredient> = [
-  {name: 'Butter', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Ham', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Water', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Noodles', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Tomatoes', inventory: 2, unit: 'Tbsp', price: 5.00},
-];
-
-const Measurements: Array<Measurement> = [
-  {value: 'tsp', label: 'tsp'},
-  {value: 'Tbsp', label: 'Tbsp'},
-  {value: 'cup', label: 'cup'},
-  {value: 'oz', label: 'oz'},
-  {value: 'pinch', label: 'pinch'},
-  {value: 'tsp', label: 'tsp'},
-];
-const IngredientListToPage: Array<MenuIngredientForForm> = [];
 
 type FormMenuAndIngredientProps = {
     nextStep: (step:number) => void,
@@ -103,82 +66,30 @@ type FormMenuAndIngredientProps = {
     backStep:number,
     newIng: number,
     handleMenuItem: (item: MenuItem) => void,
-    menuItemFromSelect: MenuItem,
-    handleMenuIngredientRelation: (placeArray:Array<MenuIngredient>) => void,
-    menuIngredientArrayFromMenu:Array<MenuIngredient>,
-
-
+    menuItem: MenuItem,
+    Measurements: Array<Measurement>,
+    IngredientListToPage: Array<MenuIngredientForForm>,
+  IngredientObjectList: Map<string, MenuIngredientForForm>,
+  handleIngredientObjectList: (item:Map<string, MenuIngredientForForm>) => void,
 }
 
 
 export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAndIngredientProps>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {nextStep, forStep, backStep, newIng, handleMenuItem, menuItemFromSelect,
-    handleMenuIngredientRelation, menuIngredientArrayFromMenu} = props;
+  const {nextStep, forStep, backStep, newIng, handleMenuItem, menuItem,
+    Measurements, IngredientListToPage, IngredientObjectList, handleIngredientObjectList} = props;
+
   const classes = useStyles();
-
-  const [menuItem, setMenuItem] = React.useState<MenuItem>( menuItemFromSelect);
-
-  const [menuIngredientArray, setMenuIngredientArray] = React.useState<
-      Array<MenuIngredient>>(menuIngredientArrayFromMenu);
-
-  const makeIngredientMapToPage = () => {
-    /*    while (IngredientListToPage.length != 0) {
-      IngredientListToPage.pop();
-    }*/
-    /*    if (IngredientListToPage.length < IngredientList.length) {*/
-    for (const item of IngredientList) {
-      let eq = false;
-      for (const data of menuIngredientArray) {
-        if ((data.menuItem === menuItem.name) && (data.name === item.name)) {
-          /*          console.log(data);*/
-          eq = true;
-          const toArray: MenuIngredientForForm = {
-            name: data.name,
-            measurement: {value: data.measurement, label: data.measurement},
-            amount: data.amount,
-            value: data.name,
-            used: true,
-
-          };
-          IngredientObjectList.set(item.name, toArray);
-          /*          IngredientListToPage.push(toArray);*/
-        }
-      }
-      if (!eq) {
-        const toArray: MenuIngredientForForm = {
-          name: item.name,
-          measurement: {value: '', label: 'Select...'},
-          amount: 0,
-          value: item.name,
-          used: false,
-        };
-        IngredientObjectList.set(item.name, toArray);
-        /*        IngredientListToPage.push(toArray);*/
-      }
-    }
-    /*    console.log(IngredientListToPage);*/
-    /*    console.log(IngredientObjectList);*/
-    // }
-  };
 
 
   const updateMenuItem = (key: string)=> (e: ChangeEvent<HTMLTextAreaElement>) => {
-    /*    console.log('here');*/
-    setMenuItem({...menuItem, [key]: e.target.value});
-    /*    handleMenuItem(menuItem);*/
-    /*    console.log(menuItem.imageURl);*/
+    handleMenuItem({...menuItem, [key]: e.target.value});
   };
 
-  useEffect(() => {
-    console.log(menuItem);
-    handleMenuItem(menuItem);
-  }, [menuItem]);
 
-  const updateMenuPrice = (key: string) => async (e: ChangeEvent<HTMLInputElement>) => {
-    await setMenuItem({...menuItem, [key]: +e.target.value});
-    /*    await handleMenuItem(menuItem);*/
-    /*    console.log(e.target.value);*/
+  const updateMenuPrice = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    handleMenuItem({...menuItem, [key]: +e.target.value});
+    handleIngredientObjectList(IngredientObjectList);
   };
 
   const handleCheck = ( e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,7 +97,8 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       // @ts-ignore
       IngredientObjectList.get(e.target.value).used = !IngredientObjectList.get(e.target.value).used;
     }
-    /*    console.log(IngredientObjectList.get(e.target.value).used);*/
+    handleIngredientObjectList(IngredientObjectList);
+    /*    console.log('here2');*/
   };
 
   const handleSelect= ( selectedOption: Measurement | null, name: string) => {
@@ -197,7 +109,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       // @ts-ignore
       IngredientObjectList.get(name).measurement = selectedOption;
     }
-    /*    console.log(IngredientObjectList.get(name));*/
+    handleIngredientObjectList(IngredientObjectList);
   };
 
   const handleAmount= (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -205,70 +117,12 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       // @ts-ignore
       IngredientObjectList.get(name).amount = e.target.value;
     }
-    /*    console.log(IngredientObjectList.get(name));*/
   };
 
-  const checkIngredientFill = () => {
-    let consoleLine = 'These ingredients need to be completed: \n';
-    let gtg = true;
-    // const menuIngredientArray =
-    const nowArray :Array<MenuIngredient>= menuIngredientArray;
-    while (nowArray.length != 0) {
-      nowArray.pop();
-    }
-    IngredientObjectList.forEach((value: MenuIngredientForForm, key: string) => {
-      /*      console.log(key, value);*/
-      if (value.used) {
-        if ((value.measurement === {value: '', label: 'Select...'}) || (value.amount == 0)) {
-          gtg = false;
-          consoleLine += key;
-          consoleLine +='\n';
-        } else {
-          /*          const nowArray: Array<MenuIngredient> = [];*/
-          const menuThing :MenuIngredient = {
-            name: value.name,
-            measurement: value.measurement.value,
-            amount: value.amount,
-            menuItem: menuItem.name,
-          };
-          console.log(menuThing);
-          nowArray.push(menuThing);
-          console.log(nowArray);
-          setMenuIngredientArray(nowArray);
-          /*
-          setMenuIngredientArray((menuIngredientArray) =>[...menuIngredientArray, menuThing]);
-*/
-        }
-      }
-    });
-    if (!gtg) {
-      alert(consoleLine);
-    }
-    /*    console.log(menuIngredientArray);*/
-    return gtg;
-  };
 
-  const makeIngredientListToPage = () => {
-    while (IngredientListToPage.length != 0) {
-      IngredientListToPage.pop();
-    }
-
-    IngredientObjectList.forEach((value: MenuIngredientForForm) => {
-      IngredientListToPage.push(value);
-    },
-    );
-    IngredientListToPage.sort((a, b) =>
-      (a.name>b.name) ? 1: -1);
-  };
-
-  makeIngredientMapToPage();
-  makeIngredientListToPage();
   /*  console.log(menuIngredientArray);*/
 
 
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
     <React.Fragment>
       <div>
@@ -282,7 +136,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   id="Name"
                   label="Name"
                   onChange={updateMenuItem('name')}
-                  value = {menuItemFromSelect.name}
+                  value = {menuItem.name}
                   defaultValue={menuItem.name}
                   variant="filled"
                 />
@@ -292,7 +146,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   label="Description"
                   multiline
                   rowsMax={10}
-                  value = {menuItemFromSelect.description}
+                  value = {menuItem.description}
                   onChange={updateMenuItem('description')}
                   defaultValue={menuItem.description}
                   variant="filled"
@@ -304,7 +158,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   <FilledInput
                     type = 'number'
                     onChange={updateMenuPrice('price')}
-                    value = {menuItemFromSelect.price}
+                    value = {menuItem.price}
                     defaultValue={menuItem.price}
                     id="filled-adornment-password"
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -363,8 +217,8 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                                 Select Amount
                     </Grid>
                   </Grid>
-                  {IngredientListToPage.map((item) =>
-                    <FormGroup key = {item.name}>
+                  {IngredientListToPage.map((item:MenuIngredientForForm, index:number) =>
+                    <FormGroup key = {index}>
                       <Grid container spacing={3}>
 
                         <Grid item xs={12} sm={4}>
@@ -409,9 +263,10 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   color='primary'
                   style={styles.button}
                   onClick={function() {
-                    if (checkIngredientFill()) {
+                    /* if (checkIngredientFill()) {*/
+                    if (true) {
                       nextStep(newIng);
-                      handleMenuIngredientRelation(menuIngredientArray);
+                      /*                      handleMenuIngredientRelation(menuIngredientArray);*/
                     }// needs to be set
 
                     /*                    handleMenuItem(menuItem);*/
