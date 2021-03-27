@@ -177,12 +177,12 @@ export const Menu = () => {
   const handleAccordionChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     if (expanded !== false) {
       updateAdjacentArray(+expanded);
-      /*      updateAdjacentIngredientArray(+expanded);*/
-      updateAdjacentIngredientMap(+expanded);
+      updateAdjacentIngredientArray(+expanded);
+      /*      updateAdjacentIngredientMap(+expanded);*/
     }
     handleMenuItem(menuItemAdjacentArray[+panel]);
     handleMenuIngredientList(ingredientListToPageArray[+panel]);
-    handleIngredientObjectList(ingredientMapArray[+panel]);
+    /*    handleIngredientObjectList(ingredientMapArray[+panel]);*/
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -192,13 +192,13 @@ export const Menu = () => {
     if (itemsToShow <= maxAccordions) {
       if (expanded !== false) {
         updateAdjacentArray(+expanded);
-        /*        updateAdjacentIngredientArray(+expanded);*/
-        updateAdjacentIngredientMap(+expanded);
+        updateAdjacentIngredientArray(+expanded);
+        /*        updateAdjacentIngredientMap(+expanded);*/
       }
       /*      console.log(menuItemAdjacentArray);*/
       handleMenuItem(menuItemAdjacentArray[itemsToShow]);
       handleMenuIngredientList(ingredientListToPageArray[itemsToShow]);
-      handleIngredientObjectList(ingredientMapArray[itemsToShow]);
+      /*      handleIngredientObjectList(ingredientMapArray[itemsToShow]);*/
       await setItemsToShow(itemsToShow+1);
     }
   };
@@ -207,7 +207,7 @@ export const Menu = () => {
     if (expanded !== false) {
       handleMenuItem(menuItemAdjacentArray[+expanded]);
       handleMenuIngredientList(ingredientListToPageArray[+expanded]);
-      handleIngredientObjectList(ingredientMapArray[+expanded]);
+      /*      handleIngredientObjectList(ingredientMapArray[+expanded]);*/
     }
   }, [itemsToShow]);
 
@@ -305,7 +305,7 @@ export const Menu = () => {
       // set all states to normal
       setInitialized(false);
       initializeAdjacentArray();
-      makeIngredientMapToPage();
+      makeIngredientListToPage();
       const defaultMenuItem : MenuItem = {
         name: '',
         description: '',
@@ -389,6 +389,8 @@ export const Menu = () => {
     if (!menuOption) {
       return;
     }
+    setInitialized(false);
+    initializeAdjacentArray();
     setShowMenuItem(menuOption);
     for (const listObj of MenuList) {
       if (menuOption.value === listObj.name) {
@@ -422,19 +424,11 @@ export const Menu = () => {
 
 
   const handleMenuIngredientRelation = (placeArray:Array<MenuIngredient>) => {
-    setMenuIngredientArray(placeArray);
-  };
-  /*  const ingredientObjectList = new Map<string, MenuIngredientForForm>();*/
-  const [ingredientObjectList, setIngredientObjectList] = React.useState<Map<string, MenuIngredientForForm>>(
-    new Map<string, MenuIngredientForForm>(),
-  );
-
-  const handleIngredientObjectList = (item:Map<string, MenuIngredientForForm>) => {
-    const tempMap = new Map<string, MenuIngredientForForm>();
-    item.forEach((value: MenuIngredientForForm, key: string) => {
-      tempMap.set(key, value);
-    });
-    setIngredientObjectList(tempMap);
+    const tempArray:Array<MenuIngredient> = [];
+    for (const item of placeArray) {
+      tempArray.push(item);
+    }
+    setMenuIngredientArray(tempArray);
   };
 
 
@@ -471,57 +465,48 @@ export const Menu = () => {
     return tempMap;
   };
 
-  const [ingredientMapArray, setIngredientMapArray] =
-      React.useState<Array<Map<string, MenuIngredientForForm>>>([]);
-
-
-  const initializeAdjacentIngredientMap = () => {
-    while (ingredientMapArray.length != 0) {
-      ingredientMapArray.pop();
-    }
-    const tempArray:Array<Map<string, MenuIngredientForForm>> = [];
-    for (let i =0; i <= maxAccordions; i++) {
-      const newArrayItem = makeIngredientMapToPage();
-      tempArray.push(newArrayItem);
-    }
-    console.log(tempArray);
-    setIngredientMapArray(tempArray);
-  };
-
-  const updateAdjacentIngredientMap = (index: number) => {
-    console.log(ingredientMapArray);
-    const tempArray:Array<Map<string, MenuIngredientForForm>> = ([]);
-    for (const item of ingredientMapArray) {
-      tempArray.push(item);
-      /*      console.log(item);*/
-    }
-    tempArray[index] = ingredientObjectList;
-    setIngredientMapArray(tempArray);
-  };
 
   const [ingredientListToPage, setIngredientListToPage] = React.useState<Array<MenuIngredientForForm>>([]);
 
   const handleMenuIngredientList = (item:Array<MenuIngredientForForm>) => {
-    setIngredientListToPage(item);
+    const tempArray:Array<MenuIngredientForForm> = [];
+    for (const arrObj of item) {
+      tempArray.push(arrObj);
+    }
+    console.log(Object.is(tempArray, ingredientListToPage));
+    setIngredientListToPage(tempArray);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const makeIngredientListToPage = () => {
     const tempArray:Array<MenuIngredientForForm> = [];
-    /*    while (ingredientListToPage.length != 0) {
-      ingredientListToPage.pop();
-    }*/
-
-    ingredientObjectList.forEach((value: MenuIngredientForForm) => {
-      tempArray.push(value);
-    },
-    );
-    tempArray.sort((a, b) =>
-      (a.name>b.name) ? 1: -1);
-
-    setIngredientListToPage(tempArray);
+    for (const item of IngredientList) {
+      let eqMenuItem = false;
+      for (const data of menuIngredientArray) {
+        if ((data.menuItem === menuItem.name) && (data.name === item.name)) {
+          eqMenuItem = true;
+          const toArray: MenuIngredientForForm = {
+            name: data.name,
+            measurement: {value: data.measurement, label: data.measurement},
+            amount: data.amount,
+            value: data.name,
+            used: true,
+          };
+          tempArray.push(toArray);
+        }
+      }
+      if (!eqMenuItem) {
+        const toArray: MenuIngredientForForm = {
+          name: item.name,
+          measurement: {value: '', label: 'Select...'},
+          amount: 0,
+          value: item.name,
+          used: false,
+        };
+        tempArray.push(toArray);
+      }
+    }
     return tempArray;
-    console.log(tempArray);
   };
 
 
@@ -548,22 +533,24 @@ export const Menu = () => {
     setIngredientListToPageArray(tempArray);
   };
 
-  const updateAdjacentIngredientArray = () => {
+  const updateAdjacentIngredientArray = (index: number) => {
     const tempArray:Array<Array<MenuIngredientForForm>> = ([]);
-    for (const item of ingredientMapArray) {
+    for (const item of ingredientListToPageArray) {
       const innerArray:Array<MenuIngredientForForm> = [];
-      item.forEach((value: MenuIngredientForForm) => {
-        innerArray.push(value);
-      });
+      for (const innerItem of item) {
+        innerArray.push(innerItem);
+      }
       tempArray.push(innerArray);
     }
+    tempArray[index] = ingredientListToPage;
     setIngredientListToPageArray(tempArray);
     console.log(tempArray);
   };
 
-  const deleteFromIngredientMap = (index: number) => {
-    const tempArray:Array<Map<string, MenuIngredientForForm>> = [];
-    const tempMap = new Map<string, MenuIngredientForForm>();
+
+  const deleteFromIngredientArray = (index: number) => {
+    const tempArray:Array<Array<MenuIngredientForForm>> = [];
+    const innerArray:Array<MenuIngredientForForm> =[];
     for (const item of IngredientList) {
       const toArray: MenuIngredientForForm = {
         name: item.name,
@@ -572,34 +559,29 @@ export const Menu = () => {
         value: item.name,
         used: false,
       };
-      tempMap.set(item.name, toArray);
+      innerArray.push(toArray);
     }
     for (let i=0; i<index; i++) {
-      tempArray[i] = (ingredientMapArray[i]);
+      tempArray[i] = (ingredientListToPageArray[i]);
     }
-    for (let i=index; i<ingredientMapArray.length-1; i++) {
-      tempArray[i] = (ingredientMapArray[i+1]);
+    for (let i=index; i<ingredientListToPageArray.length-1; i++) {
+      tempArray[i] = (ingredientListToPageArray[i+1]);
     }
-    tempArray.push(tempMap);
-    setIngredientMapArray(tempArray);
+    tempArray.push(innerArray);
+    console.log(Object.is(tempArray, ingredientListToPageArray));
+    setIngredientListToPageArray(tempArray);
   };
 
 
   useEffect(() => {
     console.log(menuItem);
+    handleMenuIngredientList(makeIngredientListToPage());
   }, [menuItem]);
 
-  useEffect(() => {
-    if (!initialized) {
-      makeIngredientListToPage();
-    }
-    console.log(ingredientObjectList);
-  }, [ingredientObjectList]);
 
   useEffect(() => {
     if (!initialized) {
       initializeAdjacentIngredientArray();
-      initializeAdjacentIngredientMap();
     }
     console.log(ingredientListToPage);
   }, [ingredientListToPage]);
@@ -607,49 +589,58 @@ export const Menu = () => {
   useEffect(() => {
     console.log(ingredientListToPageArray);
   }, [ingredientListToPageArray]);
-  useEffect(() => {
-    updateAdjacentIngredientArray();
-    console.log(ingredientMapArray);
-  }, [ingredientMapArray]);
 
+  useEffect(() => {
+    console.log(menuIngredientArray);
+  }, [menuIngredientArray]);
+
+
+  useEffect(() => {
+    console.log(ingredientListToPage);
+  }, [ingredientListToPage]);
 
   const checkIngredientFill = () => {
-    let consoleLine = 'These ingredients need to be completed: \n';
+    let consoleLine = '';
     let isAccepted = true;
-    const tempArray :Array<MenuIngredient>= menuIngredientArray;
-    /*    while (tempArray.length != 0) {
+    const tempArray: Array<MenuIngredient> = menuIngredientArray;
+    while (tempArray.length != 0) {
       tempArray.pop();
-    }*/
-    ingredientObjectList.forEach((value: MenuIngredientForForm, key: string) => {
-      let isInArray = false;
-      /*      console.log(key, value);*/
-      if (value.used) {
-        if ((value.measurement === {value: '', label: 'Select...'}) || (value.amount == 0)) {
-          isAccepted = false;
-          consoleLine += key;
-          consoleLine +='\n';
-        } else {
-          const menuObj :MenuIngredient = {
-            name: value.name,
-            measurement: value.measurement.value,
-            amount: value.amount,
-            menuItem: menuItem.name,
-          };
-          for (let i = 0; i<tempArray.length; i++) {
-            if (tempArray[i].name === menuObj.name && tempArray[i].menuItem===menuObj.menuItem) {
-              tempArray[i] = menuObj;
-              isInArray = true;
+    }
+    for (let i = 0; i < itemsToShow; i++) {
+      const item = ingredientListToPageArray[i];
+      consoleLine += 'These ingredients need to be completed: \n';
+      for (const value of item) {
+        let isInArray = false;
+        /*      console.log(key, value);*/
+        if (value.used) {
+          if ((value.measurement === {value: '', label: 'Select...'}) || (value.amount == 0)) {
+            isAccepted = false;
+            consoleLine += value.name;
+            consoleLine += '\n';
+          } else {
+            const menuObj: MenuIngredient = {
+              name: value.name,
+              measurement: value.measurement.value,
+              amount: value.amount,
+              menuItem: menuItem.name,
+            };
+            for (let i = 0; i < tempArray.length; i++) {
+              if (tempArray[i].name === menuObj.name && tempArray[i].menuItem === menuObj.menuItem) {
+                tempArray[i] = menuObj;
+                isInArray = true;
+              }
             }
-          }
-          if (!isInArray) {
-            tempArray.push(menuObj);
+            if (!isInArray) {
+              tempArray.push(menuObj);
+            }
           }
         }
       }
-    });
+    }
     if (!isAccepted) {
       alert(consoleLine);
     } else {
+      updateFinalArray();
       handleMenuIngredientRelation(tempArray);
     }
     /*    console.log(menuIngredientArray);*/
@@ -703,8 +694,7 @@ export const Menu = () => {
                       menuItem={item}
                       Measurements={Measurements}
                       IngredientListToPage={ingredientListToPage}
-                      IngredientObjectList={ingredientObjectList}
-                      handleIngredientObjectList={handleIngredientObjectList}
+                      handleMenuIngredientList={handleMenuIngredientList}
 
                     />
                   </AccordionDetails>
@@ -728,7 +718,7 @@ export const Menu = () => {
                       <TableCell align="right">{item.name}
                         <IconButton color="primary" onClick={() => {
                           deleteFromAdjacentArray(index);
-                          deleteFromIngredientMap(index);
+                          deleteFromIngredientArray(index);
                         }}>
                           <ClearIcon/>
                         </IconButton></TableCell>
@@ -755,8 +745,8 @@ export const Menu = () => {
 
             } else {
               nextStep(10); // needs to be set
-              handleMenuItem(menuItem);
-              handleMenuIngredientRelation(menuIngredientArray);
+              /*              handleMenuItem(menuItem);*/
+              /* handleMenuIngredientRelation(menuIngredientArray);*/
             }
           }}>
           Continue
@@ -816,8 +806,8 @@ export const Menu = () => {
         menuItem={menuItem}
         Measurements={Measurements}
         IngredientListToPage={ingredientListToPage}
-        IngredientObjectList={ingredientObjectList}
-        handleIngredientObjectList={handleIngredientObjectList}
+        handleMenuIngredientList={handleMenuIngredientList}
+
       />
     );
   case 6:

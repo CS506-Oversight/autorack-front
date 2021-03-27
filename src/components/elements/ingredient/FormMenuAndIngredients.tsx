@@ -69,15 +69,14 @@ type FormMenuAndIngredientProps = {
     menuItem: MenuItem,
     Measurements: Array<Measurement>,
     IngredientListToPage: Array<MenuIngredientForForm>,
-  IngredientObjectList: Map<string, MenuIngredientForForm>,
-  handleIngredientObjectList: (item:Map<string, MenuIngredientForForm>) => void,
+  handleMenuIngredientList: (item:Array<MenuIngredientForForm>) => void,
 }
 
 
 export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAndIngredientProps>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {nextStep, forStep, backStep, newIng, handleMenuItem, menuItem,
-    Measurements, IngredientListToPage, IngredientObjectList, handleIngredientObjectList} = props;
+    Measurements, IngredientListToPage, handleMenuIngredientList} = props;
 
   const classes = useStyles();
 
@@ -89,39 +88,59 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
 
   const updateMenuPrice = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
     handleMenuItem({...menuItem, [key]: +e.target.value});
-    handleIngredientObjectList(IngredientObjectList);
   };
 
-  const handleCheck = ( e: React.ChangeEvent<HTMLInputElement>) => {
-    if (IngredientObjectList.has(e.target.value)) {
+  const handleCheck = (name:string) => {
+    for (let i = 0; i<IngredientListToPage.length; i++) {
+      if (name == IngredientListToPage[i].name) {
+        IngredientListToPage[i].used=!IngredientListToPage[i].used;
+      }
+    }
+    handleMenuIngredientList(IngredientListToPage);
+    /*    if (IngredientObjectList.has(e.target.value)) {
       // @ts-ignore
       IngredientObjectList.get(e.target.value).used = !IngredientObjectList.get(e.target.value).used;
     }
-    handleIngredientObjectList(IngredientObjectList);
+    handleIngredientObjectList(IngredientObjectList);*/
     /*    console.log('here2');*/
+    handleMenuIngredientList(IngredientListToPage);
   };
 
-  const handleSelect= ( selectedOption: Measurement | null, name: string) => {
+  const handleSelect= (selectedOption: Measurement | null, name: string) => {
     if (!selectedOption) {
       return;
     }
-    if (IngredientObjectList.has(name)) {
+    for (let i = 0; i<IngredientListToPage.length; i++) {
+      if (name == IngredientListToPage[i].name) {
+        IngredientListToPage[i].measurement=selectedOption;
+      }
+    }
+    handleMenuIngredientList(IngredientListToPage);
+    /*    if (IngredientObjectList.has(name)) {
       // @ts-ignore
       IngredientObjectList.get(name).measurement = selectedOption;
     }
-    handleIngredientObjectList(IngredientObjectList);
+    handleIngredientObjectList(IngredientObjectList);*/
   };
 
   const handleAmount= (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    if (IngredientObjectList.has(name)) {
+    for (let i = 0; i<IngredientListToPage.length; i++) {
+      if (name == IngredientListToPage[i].name) {
+        IngredientListToPage[i].amount=+e.target.value;
+      }
+    }
+    handleMenuIngredientList(IngredientListToPage);
+    /*    if (IngredientObjectList.has(name)) {
       // @ts-ignore
       IngredientObjectList.get(name).amount = e.target.value;
-    }
+    }*/
   };
 
 
   /*  console.log(menuIngredientArray);*/
 
+
+  // @ts-ignore
 
   return (
     <React.Fragment>
@@ -226,9 +245,12 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                             control={<
                               Checkbox
                               defaultChecked={item.used}
+                              checked={item.used}
                               value = {item.name}
                               /*                              checked={item.used}*/
-                              onChange={handleCheck}
+                              onChange={() => {
+                                handleCheck(item.name);
+                              }}
 
                               name="gilad" />}
                             label={item.name}
@@ -237,6 +259,8 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                         <Grid item xs={12} sm={4}>
                           <Select
                             defaultValue={item.measurement}
+                            // @ts-ignore
+                            value = {item.measurement}
                             onChange={(option) => handleSelect(option, item.name)}
                             options={Measurements}
                           />
@@ -244,11 +268,11 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                         <Grid item xs={12} sm={4}>
                           <TextField
                             defaultValue={item.amount}
+                            value = {item.amount}
                             type = 'number'
                             id="Unit"
                             label="Amount"
                             onChange={handleAmount(item.name)}
-                            /*                                  defaultValue={ingredientItem.unit}*/
                             variant="filled"
                           />
                         </Grid>
