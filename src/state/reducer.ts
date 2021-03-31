@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 
 import alertReducer from './alert/reducer';
 import authReducer from './auth/reducer';
+import restockReducer from './restock/restockReducer';
 
 const persistConfig = {
   key: 'root',
@@ -11,6 +12,6 @@ const persistConfig = {
   whitelist: ['auth', 'alert'],
 };
 
-const rootReducer = combineReducers({auth: authReducer, alert: alertReducer});
+const rootReducer = combineReducers({auth: authReducer, alert: alertReducer, restock: restockReducer});
 
 export default persistReducer(persistConfig, rootReducer);
