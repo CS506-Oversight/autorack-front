@@ -6,6 +6,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Manual',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -25,6 +26,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Manual',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -44,6 +46,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Auto',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -63,6 +66,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Auto',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -82,6 +86,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Auto',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -101,6 +106,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Manual',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -120,6 +126,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Auto',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -139,6 +146,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Manual',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -158,6 +166,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/05/2021',
     totalPrice: 1290.69,
+    type: 'Auto',
     itemsData: [{
       description: 'Cheese Curds',
       unitPrice: 5.25,
@@ -177,6 +186,7 @@ export const dummyData: RestockData = [
     status: 'completed',
     purchaseDate: '04/28/2021',
     totalPrice: 367.77,
+    type: 'Manual',
     itemsData: [{
       description: 'Black Beans',
       unitPrice: 2.50,
@@ -196,6 +206,7 @@ export const dummyData: RestockData = [
     status: 'processing',
     purchaseDate: '05/07/2021',
     totalPrice: 157.82,
+    type: 'Auto',
     itemsData: [{
       description: 'Fanta Soda',
       unitPrice: 6.0,
@@ -211,6 +222,7 @@ export const dummyData: RestockData = [
     status: 'processing',
     purchaseDate: '07/02/2021',
     totalPrice: 528.10,
+    type: 'Manual',
     itemsData: [{
       description: 'Fanta Soda',
       unitPrice: 6.0,
@@ -234,6 +246,7 @@ export const dummyData: RestockData = [
     status: 'shipped',
     purchaseDate: '07/05/2021',
     totalPrice: 996.44,
+    type: 'Auto',
     itemsData: [{
       description: 'Crab Meat',
       unitPrice: 12.0,

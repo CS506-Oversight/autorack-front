@@ -3,6 +3,7 @@ export type RestockItemInfo = {
     status: string;
     purchaseDate: string;
     totalPrice: number;
+    type: 'Manual' | 'Auto';
 }
 
 export type ItemDataInfo = {

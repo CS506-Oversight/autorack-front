@@ -35,6 +35,7 @@ const headCells: HeadCell[] = [
   {id: 'id', numeric: false, label: 'Order #'},
   {id: 'purchaseDate', numeric: false, label: 'Purchase Date'},
   {id: 'status', numeric: false, label: 'Status'},
+  {id: 'type', numeric: false, label: 'Type'},
   {id: 'totalPrice', numeric: true, label: 'Total Price ($)'},
 ];
 
@@ -182,6 +183,7 @@ export const RestockPurchasesTable = () => {
                           />
                           {row.status}
                         </TableCell>
+                        <TableCell>{row.type}</TableCell>
                         <TableCell>{row.totalPrice}</TableCell>
                         <TableCell>
                           <PurchaseModal data={row.itemsData} orderId={row.id}/>
