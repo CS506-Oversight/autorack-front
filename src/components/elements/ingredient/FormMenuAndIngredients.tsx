@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 type MenuItem = {
-    name: string,
-    description: string,
-    price: number,
+  name: string,
+  description: string,
+  price: number,
 }
 
 type MenuIngredientForForm = {
@@ -55,20 +55,20 @@ type MenuIngredientForForm = {
   used:boolean,
 };
 type Measurement = {
-    value: string,
-    label: string,
+  value: string,
+  label: string,
 };
 
 
 type FormMenuAndIngredientProps = {
-    nextStep: (step:number) => void,
-    forStep:number,
-    backStep:number,
-    newIng: number,
-    handleMenuItem: (item: MenuItem) => void,
-    menuItem: MenuItem,
-    Measurements: Array<Measurement>,
-    IngredientListToPage: Array<MenuIngredientForForm>,
+  nextStep: (step:number) => void,
+  forStep:number,
+  backStep:number,
+  newIng: number,
+  handleMenuItem: (item: MenuItem) => void,
+  menuItem: MenuItem,
+  Measurements: Array<Measurement>,
+  IngredientListToPage: Array<MenuIngredientForForm>,
   handleMenuIngredientList: (item:Array<MenuIngredientForForm>) => void,
 }
 
@@ -227,13 +227,13 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   <FormLabel component="legend"></FormLabel>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={4}>
-                                Select Ingredients
+                        Select Ingredients
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                                Select Measurment
+                        Select Measurment
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                                Select Amount
+                        Select Amount
                     </Grid>
                   </Grid>
                   {IngredientListToPage.map((item:MenuIngredientForForm, index:number) =>
@@ -297,7 +297,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   }}
                 >
 
-                        Add Ingredient
+                    Add Ingredient
                 </Button>
 
               </div>

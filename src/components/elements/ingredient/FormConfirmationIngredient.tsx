@@ -14,10 +14,19 @@ import Paper from '@material-ui/core/Paper';
 //     {name: 'name here', unit: 'unit here', inv: 0, price: 0},
 //   ];
 
+type Ingredient = {
+    name: string,
+    inventory: number,
+    unit: string,
+    price: number,
+}
+
 type ConfirmationFormProps = {
   nextStep: (step:number) => void,
   forStep: number,
   backStep: number,
+    ingredientItem:Ingredient,
+    handleIngredient: (item: Ingredient) => void,
 }
 
 const useStyles = makeStyles({
@@ -26,22 +35,22 @@ const useStyles = makeStyles({
   },
 });
 
-// eslint-disable-next-line require-jsdoc
-function createData(name: string, unit: string, inv: number, price: number) {
-  return {name, unit, inv, price};
-}
-
-const rows = [
-  createData('Something Here', 'desc', 6.0, 1),
-];
-
-
 export const FormConfirmationIngredient = (props: React.PropsWithChildren<ConfirmationFormProps>) => {
-  const {nextStep, forStep, backStep} = props;
+  const {nextStep, forStep, backStep, ingredientItem, handleIngredient} = props;
 
   const classes = useStyles();
   const setStep = () => {
     nextStep(forStep);
+  };
+
+  const resetIngredient = () => {
+    const temp:Ingredient = {
+      name: '',
+      inventory: 0,
+      unit: '',
+      price: 0,
+    };
+    handleIngredient(temp);
   };
 
   return (
@@ -59,16 +68,14 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.unit}</TableCell>
-                <TableCell align="right">{row.inv}</TableCell>
-                <TableCell align="right">{row.price}</TableCell>
-              </TableRow>
-            ))}
+            <TableRow>
+              <TableCell component="th" scope="row">
+                {ingredientItem.name}
+              </TableCell>
+              <TableCell align="right">{ingredientItem.unit}</TableCell>
+              <TableCell align="right">{ingredientItem.inventory}</TableCell>
+              <TableCell align="right">{ingredientItem.price}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -76,9 +83,14 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
         variant='contained'
         color='primary'
         style={styles.button}
-        onClick={setStep}>
+        onClick={function() {
+          setStep();
+          resetIngredient();
+        }}>
               Confirm
       </Button>
+      {/* Here is where ingredient should be sent to
+            be added to database*/}
       <Button
         variant='contained'
         color='primary'
