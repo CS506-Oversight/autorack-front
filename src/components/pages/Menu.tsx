@@ -21,6 +21,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import {IconButton} from '@material-ui/core';
+import {FormEditMenuItemPreload} from '../elements/ingredient/FormEditMenuItemPreload';
 // Styling
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -280,7 +281,9 @@ export const Menu = () => {
     /*    const tempArray = menuItemFinalArray;*/
     if (menuItemAdjacentArray.length!= 0) {
       for (let i = 0; i< itemsToShow; i++) {
-        tempArray.push(menuItemAdjacentArray[i]);
+        if (menuItemAdjacentArray[i].name !== '') {
+          tempArray.push(menuItemAdjacentArray[i]);
+        }
       }
     }
     setMenuItemFinalArray(tempArray);
@@ -321,6 +324,7 @@ export const Menu = () => {
       };
       handleIngredient(defaultIngredientItem);
     } else if (selectedOption.value === 'Edit Menu Item') {
+      initializeAdjacentArray();
       const defaultShowMenu : MenuChoice = {
         value: '',
         label: 'Select a Menu Item',
@@ -352,6 +356,9 @@ export const Menu = () => {
     if (expanded !== false) {
       updateAdjacentArray(+expanded);
     }
+    if (progress.step == 4) {
+      handleMenuIngredientList(makeIngredientListToPage());
+    }
 
     /*    console.log(menuItem);*/
   }, [menuItem]);
@@ -362,7 +369,7 @@ export const Menu = () => {
   }, [menuItemAdjacentArray]);
 
   useEffect(() => {
-    /*    console.log(menuItemFinalArray);*/
+    console.log(menuItemFinalArray);
   }, [menuItemFinalArray]);
 
 
@@ -432,40 +439,6 @@ export const Menu = () => {
   };
 
 
-  // More complex functions for ingredient mapping
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const makeIngredientMapToPage = () => {
-    const tempMap = new Map<string, MenuIngredientForForm>();
-    for (const item of IngredientList) {
-      let eqMenuItem = false;
-      for (const data of menuIngredientArray) {
-        if ((data.menuItem === menuItem.name) && (data.name === item.name)) {
-          eqMenuItem = true;
-          const toArray: MenuIngredientForForm = {
-            name: data.name,
-            measurement: {value: data.measurement, label: data.measurement},
-            amount: data.amount,
-            value: data.name,
-            used: true,
-          };
-          tempMap.set(item.name, toArray);
-        }
-      }
-      if (!eqMenuItem) {
-        const toArray: MenuIngredientForForm = {
-          name: item.name,
-          measurement: {value: '', label: 'Select...'},
-          amount: 0,
-          value: item.name,
-          used: false,
-        };
-        tempMap.set(item.name, toArray);
-      }
-    }
-    return tempMap;
-  };
-
-
   const [ingredientListToPage, setIngredientListToPage] = React.useState<Array<MenuIngredientForForm>>([]);
 
   const handleMenuIngredientList = (item:Array<MenuIngredientForForm>) => {
@@ -473,11 +446,10 @@ export const Menu = () => {
     for (const arrObj of item) {
       tempArray.push(arrObj);
     }
-    console.log(Object.is(tempArray, ingredientListToPage));
     setIngredientListToPage(tempArray);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const makeIngredientListToPage = () => {
     const tempArray:Array<MenuIngredientForForm> = [];
     for (const item of IngredientList) {
@@ -575,7 +547,7 @@ export const Menu = () => {
 
   useEffect(() => {
     console.log(menuItem);
-    handleMenuIngredientList(makeIngredientListToPage());
+    /*    handleMenuIngredientList(makeIngredientListToPage());*/
   }, [menuItem]);
 
 
@@ -594,10 +566,6 @@ export const Menu = () => {
     console.log(menuIngredientArray);
   }, [menuIngredientArray]);
 
-
-  useEffect(() => {
-    console.log(ingredientListToPage);
-  }, [ingredientListToPage]);
 
   const checkIngredientFill = () => {
     let consoleLine = '';
@@ -622,7 +590,7 @@ export const Menu = () => {
               name: value.name,
               measurement: value.measurement.value,
               amount: value.amount,
-              menuItem: menuItem.name,
+              menuItem: menuItemAdjacentArray[i].name,
             };
             for (let i = 0; i < tempArray.length; i++) {
               if (tempArray[i].name === menuObj.name && tempArray[i].menuItem === menuObj.menuItem) {
@@ -640,6 +608,7 @@ export const Menu = () => {
     if (!isAccepted) {
       alert(consoleLine);
     } else {
+      console.log(tempArray);
       updateFinalArray();
       handleMenuIngredientRelation(tempArray);
     }
@@ -678,8 +647,8 @@ export const Menu = () => {
                   <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header">
-                    <Typography className={classes.heading}>{index}</Typography>
-                    <Typography className={classes.secondaryHeading}>{(item.name === '') ?
+                    <Typography className={classes.heading}></Typography>
+                    <Typography className={classes.heading}>{(item.name === '') ?
                       'New Menu Item' : item.name}</Typography>
 
                   </AccordionSummary>
@@ -745,8 +714,6 @@ export const Menu = () => {
 
             } else {
               nextStep(10); // needs to be set
-              /*              handleMenuItem(menuItem);*/
-              /* handleMenuIngredientRelation(menuIngredientArray);*/
             }
           }}>
           Continue
@@ -797,7 +764,7 @@ export const Menu = () => {
     );
   case 5:
     return (
-      <FormMenuAndIngredients
+      <FormEditMenuItemPreload
         nextStep={nextStep}
         forStep = {11}
         backStep = {4}
@@ -807,6 +774,8 @@ export const Menu = () => {
         Measurements={Measurements}
         IngredientListToPage={ingredientListToPage}
         handleMenuIngredientList={handleMenuIngredientList}
+        checkIngredientFill={checkIngredientFill}
+        updateAdjacentIngredientArray={ updateAdjacentIngredientArray}
 
       />
     );
@@ -866,6 +835,9 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep={1}
         backStep={2}
+        menuIngredientArray={menuIngredientArray}
+        menuItemFinalArray={menuItemFinalArray}
+
       />
     );
   case 11:
@@ -874,6 +846,9 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep={1}
         backStep={5}
+        menuIngredientArray={menuIngredientArray}
+        menuItemFinalArray={menuItemFinalArray}
+
       />
     );
     // done
@@ -883,6 +858,8 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep={2}
         backStep = {6}
+        ingredientItem={ingredientItem}
+        handleIngredient={handleIngredient}
       />
     );
     // done
@@ -892,6 +869,8 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep={1}
         backStep = {3}
+        ingredientItem={ingredientItem}
+        handleIngredient={handleIngredient}
       />
     );
     // done
@@ -901,6 +880,8 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep={5}
         backStep = {7}
+        ingredientItem={ingredientItem}
+        handleIngredient={handleIngredient}
       />
     );
     // done
@@ -910,6 +891,8 @@ export const Menu = () => {
         nextStep={nextStep}
         forStep={1}
         backStep = {9}
+        ingredientItem={ingredientItem}
+        handleIngredient={handleIngredient}
       />
     );
 

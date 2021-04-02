@@ -49,6 +49,7 @@ export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEdi
   const [ingredientItem, setIngredientItem] = React.useState<Ingredient>(ingredientItemFromSelect);
 
   const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
+    console.log('here');
     setIngredientItem({...ingredientItem, [key]: e.target.value});
     handleIngredient(ingredientItem);
   };
@@ -64,7 +65,7 @@ export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEdi
         <TextField
           id="Name"
           label="Name"
-          onChange={updateIngredientItem('name')}
+          value = {ingredientItem.name}
           defaultValue={ingredientItem.name}
           variant="filled"
         />

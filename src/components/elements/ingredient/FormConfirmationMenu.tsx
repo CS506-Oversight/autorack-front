@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, {useEffect} from 'react';
 /* import Select from 'react-select';*/
 import {Button} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
@@ -11,33 +11,25 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 
-/* type ConfirmationMenu = {
-  value: string,
-  label: string,
-  step: number,
-//   name: string,
-//   desc: string,
-//   price: number,
-//   ingr: string,
-//   amt: number,
-//   unit: string,
-}*/
+type MenuIngredient = {
+    name: string,
+    measurement: string,
+    amount: number,
+    menuItem: string,
+};
 
-/* const options: Array<ConfirmationMenu> = [
-  {value: 'Menu', label: 'Create Menu Item', step: 2},
-  {value: 'Ingredient', label: 'Create Ingredient', step: 3},
-  {value: 'Edit Menu Item', label: 'Edit Menu Item', step: 4},
-  {value: 'Edit Ingredient Item', label: 'Edit Ingredient Item', step: 8},
-];*/
-
-// const options: Array<ConfirmationMenu> = [
-//     {name: 'name here', desc: 'desc here', price: 0, ingr: "ingr here", amt: 0, unit: "unit here"},
-//   ];
+type MenuItem = {
+    name: string,
+    description: string,
+    price: number,
+}
 
 type ConfirmationFormProps = {
   nextStep: (step:number) => void,
   forStep: number,
   backStep: number,
+    menuIngredientArray: Array<MenuIngredient>,
+    menuItemFinalArray: Array<MenuItem>,
 }
 
 const useStyles = makeStyles({
@@ -46,24 +38,40 @@ const useStyles = makeStyles({
   },
 });
 
-// eslint-disable-next-line require-jsdoc
-function createData(name: string, desc: string, price: number, ingr: string, amt: number, unit: string) {
-  return {name, desc, price, ingr, amt, unit};
-}
-
-const rows = [
-  createData('Frozen yoghurt', ' ', 6.0, 'ingr', 1, 'tsp'),
-];
-
 
 export const FormConfirmationMenu = (props: React.PropsWithChildren<ConfirmationFormProps>) => {
-  const {nextStep, forStep, backStep} = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {nextStep, forStep, backStep, menuIngredientArray, menuItemFinalArray} = props;
 
   const classes = useStyles();
   const setStep = () => {
     nextStep(forStep);
   };
 
+  useEffect(() => {
+    makeTableRows();
+  }, [menuItemFinalArray]);
+
+  useEffect(() => {
+    makeTableRows();
+  }, [menuIngredientArray]);
+
+  const rowNums: Array<number> = [];
+  const makeTableRows = () => {
+    while (rowNums.length != 0) {
+      rowNums.pop();
+    }
+    for (let i = 0; i<menuItemFinalArray.length; i++) {
+      let num = 0;
+      for (const item of menuIngredientArray) {
+        if (item.menuItem === menuItemFinalArray[i].name) {
+          num+=1;
+        }
+      }
+      rowNums.push(num+1);
+    }
+  };
+  makeTableRows();
   return (
 
     <React.Fragment>
@@ -75,25 +83,30 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
               <TableCell>Name</TableCell>
               <TableCell align="right">Description</TableCell>
               <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Ingredients</TableCell>
+              <TableCell align="right">Ingredient</TableCell>
               <TableCell align="right">Amount</TableCell>
               <TableCell align="right">Unit</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.desc}</TableCell>
-                <TableCell align="right">{row.price}</TableCell>
-                <TableCell align="right">{row.ingr}</TableCell>
-                <TableCell align="right">{row.amt}</TableCell>
-                <TableCell align="right">{row.unit}</TableCell>
+
+          {menuItemFinalArray.map((row:MenuItem, index:number) =>
+            <TableBody key={row.name}>
+              <TableRow>
+
+                <TableCell component="th" scope="row" rowSpan={rowNums[index]}>{row.name}</TableCell>
+                <TableCell align="right" rowSpan={rowNums[index]}>{row.description}</TableCell>
+                <TableCell align="right" rowSpan={rowNums[index]}>${row.price}</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
+              {menuIngredientArray.map((ingRow:MenuIngredient, count:number) =>
+                (ingRow.menuItem === row.name) ?
+                  <TableRow key = {count}>
+                    <TableCell align="right" >{ingRow.name}</TableCell>
+                    <TableCell align="right" >{ingRow.amount}</TableCell>
+                    <TableCell align="right" >{ingRow.measurement}</TableCell>
+                  </TableRow>: null,
+              )}
+            </TableBody>,
+          )}
         </Table>
       </TableContainer>
       <Button
@@ -103,6 +116,8 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
         onClick={setStep}>
               Confirm
       </Button>
+      {/* Here is where both arrays should be sent to
+            be added to database*/}
       <Button
         variant='contained'
         color='primary'
