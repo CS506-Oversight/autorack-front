@@ -1,5 +1,7 @@
-import Grid from '@material-ui/core/Grid';
 import React from 'react';
+
+import Grid from '@material-ui/core/Grid';
+
 import UIInput from '../ui/Input';
 
 export type InputNameProps = {
@@ -26,7 +28,7 @@ export const InputName = (props: InputNameProps) => {
     firstLabel = 'First Name',
     lastName = 'lastName',
     lastPlaceholder = 'Last Name',
-    lastLabel = 'LastName',
+    lastLabel = 'Last Name',
   } = props;
 
   return (

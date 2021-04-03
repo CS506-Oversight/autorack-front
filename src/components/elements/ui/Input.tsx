@@ -1,18 +1,30 @@
-import TextField, {TextFieldProps} from '@material-ui/core/TextField';
-import React, {InputHTMLAttributes} from 'react';
+import React from 'react';
 
-export type InputProps = InputHTMLAttributes<HTMLInputElement> & TextFieldProps & {
-  // Shorthand property
+import TextField, {TextFieldProps} from '@material-ui/core/TextField';
+
+export type InputProps = TextFieldProps & {
+  // Shorthand property for `onChange`
   onValueChanged?: (newValue: string) => void,
 };
 
-const UIInput = (props: InputProps) => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.onChange?.(e);
-    props.onValueChanged?.(e.target.value);
+const UIInput = ({onChange, onValueChanged, required, value, ...props}: InputProps) => {
+  // https://stackoverflow.com/a/50196327/11571888 for the reason of such expansion
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange?.(e);
+    onValueChanged?.(e.target.value);
   };
 
-  return <TextField variant="outlined" margin="normal" required fullWidth {...props} onChange={onChange}/>;
+  return (
+    <TextField
+      value={value || ''} // Force the component to be a controlled input
+      variant="outlined"
+      margin="normal"
+      fullWidth
+      required={required || true}
+      onChange={onChangeHandler}
+      {...props}
+    />
+  );
 };
 
 export default UIInput;

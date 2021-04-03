@@ -9,7 +9,7 @@ const config: Config.InitialOptions = {
   },
   // Test setup - https://create-react-app.dev/docs/running-tests/#srcsetuptestsjs
   // setupFilesAfterEnv: ['./test/setup.ts'],
-  globalSetup: './test/setup.ts',
+  // globalSetup: './test/setup.ts',
   // Coverage
   collectCoverage: true,
   collectCoverageFrom: [

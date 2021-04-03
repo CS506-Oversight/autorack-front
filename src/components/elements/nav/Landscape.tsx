@@ -1,5 +1,7 @@
-import {makeStyles, Toolbar} from '@material-ui/core';
 import React from 'react';
+
+import {makeStyles, Toolbar} from '@material-ui/core';
+
 import AutoRackLogo from '../Logo';
 import {NavMenu} from './Menu';
 

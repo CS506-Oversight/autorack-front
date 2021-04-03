@@ -1,5 +1,7 @@
-import {AppBar, makeStyles, Theme} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
+
+import {AppBar, makeStyles, Theme} from '@material-ui/core';
+
 import {NavLandscape} from './Landscape';
 import {NavPortrait} from './Portrait';
 

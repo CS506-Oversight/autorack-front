@@ -1,11 +1,13 @@
-import {makeStyles, Typography} from '@material-ui/core';
 import React from 'react';
+
+import {makeStyles} from '@material-ui/core';
+
+import logo from '../../assets/logo.svg';
 
 const useStyles = makeStyles(() => ({
   logo: {
-    fontFamily: 'Work Sans, sans-serif',
-    fontWeight: 600,
-    color: '#FFFEFE',
+    paddingTop: '.7em',
+    width: '120px',
     textAlign: 'left',
   },
 }));
@@ -14,9 +16,7 @@ const AutoRackLogo = () => {
   const style = useStyles();
 
   return (
-    <Typography variant="h6" component="h1" className={style.logo}>
-      AutoRack
-    </Typography>
+    <img src={logo} className={style.logo} />
   );
 };
 

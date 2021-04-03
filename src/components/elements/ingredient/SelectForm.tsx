@@ -1,6 +1,7 @@
 import React, {} from 'react';
-import Select from 'react-select';
+
 import {Button} from '@material-ui/core';
+import Select from 'react-select';
 
 
 type FirstChoice = {

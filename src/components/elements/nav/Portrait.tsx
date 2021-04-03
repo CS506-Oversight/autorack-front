@@ -1,7 +1,9 @@
+import React from 'react';
+
 import {Drawer, IconButton, Toolbar} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import React from 'react';
+
 import AutoRackLogo from '../Logo';
 import {NavDrawer} from './Drawer';
 
@@ -29,7 +31,9 @@ export const NavPortrait = () => {
       </IconButton>
 
       <Drawer anchor="left" open={isDrawerOpened} onClose={() => setDrawerOpened(false)}>
-        <div className={style.drawerContainer}><NavDrawer onItemClicked={() => setDrawerOpened(false)}/></div>
+        <div className={style.drawerContainer}>
+          <NavDrawer onItemClicked={() => setDrawerOpened(false)}/>
+        </div>
       </Drawer>
 
       <div><AutoRackLogo/></div>

@@ -1,27 +1,29 @@
 import React, {useEffect} from 'react';
-import {SelectForm} from '../elements/ingredient/SelectForm';
-import {FormIngredient} from '../elements/ingredient/FormIngredient';
+
 import {Button, Grid, Paper} from '@material-ui/core';
-import {FormMenuAndIngredients} from '../elements/ingredient/FormMenuAndIngredients';
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import {FormShowMenu} from '../elements/ingredient/FormShowMenu';
-import {FormShowIngredient} from '../elements/ingredient/FormShowIngredient';
-import {FormEditIngredientPreload} from '../elements/ingredient/FormEditIngredientPreload';
-import {FormConfirmationMenu} from '../elements/ingredient/FormConfirmationMenu';
-import {FormConfirmationIngredient} from '../elements/ingredient/FormConfirmationIngredient';
+import {IconButton} from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ClearIcon from '@material-ui/icons/Clear';
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
-import {IconButton} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import ClearIcon from '@material-ui/icons/Clear';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import {FormConfirmationIngredient} from '../elements/ingredient/FormConfirmationIngredient';
+import {FormConfirmationMenu} from '../elements/ingredient/FormConfirmationMenu';
+import {FormEditIngredientPreload} from '../elements/ingredient/FormEditIngredientPreload';
 import {FormEditMenuItemPreload} from '../elements/ingredient/FormEditMenuItemPreload';
+import {FormIngredient} from '../elements/ingredient/FormIngredient';
+import {FormMenuAndIngredients} from '../elements/ingredient/FormMenuAndIngredients';
+import {FormShowIngredient} from '../elements/ingredient/FormShowIngredient';
+import {FormShowMenu} from '../elements/ingredient/FormShowMenu';
+import {SelectForm} from '../elements/ingredient/SelectForm';
 // Styling
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

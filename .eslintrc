@@ -9,8 +9,7 @@
     "plugin:react/recommended"
   ],
   "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+    "Atomics": "readonly"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -22,11 +21,15 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "react"
+    "react",
+    "eslint-plugin-import"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
-      "error"
+      "error",
+      {
+        "ignoreRestSiblings": true
+      }
     ],
     "indent": [
       "error",
@@ -55,6 +58,11 @@
         ]
       }
     ],
+    // TypeScript helps checking the properties of the React components
+    // https://stackoverflow.com/a/61229771/11571888
+    "react/prop-types": [
+      "off"
+    ],
     "spaced-comment": [
       "error",
       "always",
@@ -62,6 +70,31 @@
         "markers": [
           "/"
         ]
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "react"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
       }
     ]
   },

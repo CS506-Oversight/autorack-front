@@ -2,6 +2,7 @@
  * Class to send an API request and obtain its response.
  */
 import axios from 'axios';
+
 import ApiPaths from '../definitions/paths';
 import {RequestBase, SimpleAddRequest} from '../definitions/request';
 import {ResponseBase, RootResponse, SimpleAddResponse} from '../definitions/response';
