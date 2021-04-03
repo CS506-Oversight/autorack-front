@@ -10,10 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 
-// const options: Array<ConfirmationIngredient> = [
-//     {name: 'name here', unit: 'unit here', inv: 0, price: 0},
-//   ];
-
 type Ingredient = {
     name: string,
     inventory: number,
@@ -27,6 +23,7 @@ type ConfirmationFormProps = {
   backStep: number,
     ingredientItem:Ingredient,
     handleIngredient: (item: Ingredient) => void,
+    updateIngredientList: (placeArray:Ingredient) => void,
 }
 
 const useStyles = makeStyles({
@@ -36,7 +33,8 @@ const useStyles = makeStyles({
 });
 
 export const FormConfirmationIngredient = (props: React.PropsWithChildren<ConfirmationFormProps>) => {
-  const {nextStep, forStep, backStep, ingredientItem, handleIngredient} = props;
+  const {nextStep, forStep, backStep, ingredientItem, handleIngredient,
+    updateIngredientList} = props;
 
   const classes = useStyles();
   const setStep = () => {
@@ -86,11 +84,10 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
         onClick={function() {
           setStep();
           resetIngredient();
+          updateIngredientList(ingredientItem);
         }}>
               Confirm
       </Button>
-      {/* Here is where ingredient should be sent to
-            be added to database*/}
       <Button
         variant='contained'
         color='primary'

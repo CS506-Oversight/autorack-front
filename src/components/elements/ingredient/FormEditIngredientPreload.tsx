@@ -27,11 +27,6 @@ type Ingredient = {
     price: number,
 }
 
-/* const options: Array<FirstChoice> = [
-  {value: 'Menu', label: 'Create Menu Item', step: 2},
-  {value: 'Ingredient', label: 'Create Ingredient', step: 3},
-  {value: 'Edit', label: 'Edit Something?', step: 1},
-];*/
 
 type FormEditIngredientPreloadProps = {
     nextStep: (step:number) => void,
@@ -49,7 +44,7 @@ export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEdi
   const [ingredientItem, setIngredientItem] = React.useState<Ingredient>(ingredientItemFromSelect);
 
   const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log('here');
+    /*    console.log('here');*/
     setIngredientItem({...ingredientItem, [key]: e.target.value});
     handleIngredient(ingredientItem);
   };
@@ -111,13 +106,12 @@ export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEdi
               alert('Please fill in name field');
             } else if (isNaN(ingredientItem.inventory)) {
               alert('The inventory amount must be a number');
-              console.log(ingredientItem.inventory);
+              /*              console.log(ingredientItem.inventory);*/
             } else if (ingredientItem.unit === '') {
               alert('Please fill in unit field');
             } else if (isNaN(ingredientItem.price)) {
               alert('The price must be a number');
             } else {
-              // needs to bet set to confirm ingredient page
               nextStep(forStep);
               handleIngredient(ingredientItem);
             }

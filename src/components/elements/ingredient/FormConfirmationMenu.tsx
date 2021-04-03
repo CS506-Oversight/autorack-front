@@ -30,6 +30,8 @@ type ConfirmationFormProps = {
   backStep: number,
     menuIngredientArray: Array<MenuIngredient>,
     menuItemFinalArray: Array<MenuItem>,
+    updateMenuIngredientFinalArray: (placeArray:Array<MenuIngredient>) => void,
+    updateMenuList: (placeArray:Array<MenuItem>) => void,
 }
 
 const useStyles = makeStyles({
@@ -40,8 +42,8 @@ const useStyles = makeStyles({
 
 
 export const FormConfirmationMenu = (props: React.PropsWithChildren<ConfirmationFormProps>) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {nextStep, forStep, backStep, menuIngredientArray, menuItemFinalArray} = props;
+  const {nextStep, forStep, backStep, menuIngredientArray, menuItemFinalArray,
+    updateMenuIngredientFinalArray, updateMenuList} = props;
 
   const classes = useStyles();
   const setStep = () => {
@@ -113,11 +115,13 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
         variant='contained'
         color='primary'
         style={styles.button}
-        onClick={setStep}>
+        onClick={function() {
+          setStep();
+          updateMenuIngredientFinalArray(menuIngredientArray);
+          updateMenuList(menuItemFinalArray);
+        }}>
               Confirm
       </Button>
-      {/* Here is where both arrays should be sent to
-            be added to database*/}
       <Button
         variant='contained'
         color='primary'

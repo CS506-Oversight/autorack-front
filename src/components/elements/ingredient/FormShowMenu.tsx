@@ -14,19 +14,7 @@ type MenuChoice = {
  make a for loop for all of the value,label pairs
  and create new pages for them
 */
-/* const options: Array<MenuChoice> = [
-  {value: 'Chicken', label: 'Chicken', step: 1},
-  {value: 'Rice', label: 'Rice', step: 2},
-  {value: 'Steak', label: 'Steak', step: 3},
-  {value: 'Fries', label: 'Fries', step: 4},
-];*/
 
-const MenuList: Array<MenuItem> =[
-  {name: 'Chicken', description: 'chicken', price: 5},
-  {name: 'Rice', description: 'Rice', price: 3},
-  {name: 'Steak', description: 'steak', price: 4},
-  {name: 'Fries', description: 'Fries', price: 5},
-];
 
 type SelectFormProps = {
   nextStep: (step:number) => void,
@@ -34,31 +22,20 @@ type SelectFormProps = {
   backStep:number,
   selectMenu: MenuChoice,
   handleShowMenuItem: (selectMenu: MenuChoice | null) => void,
+  MenuList: Array<MenuItem>,
+
 }
 
 type MenuItem = {
   name: string,
   description: string,
-  /*  imageURl: string,*/
   price: number,
 }
 const options: Array<MenuChoice> = [];
 
 export const FormShowMenu = (props: React.PropsWithChildren<SelectFormProps>) => {
-  const {nextStep, forStep, backStep, selectMenu, handleShowMenuItem} = props;
+  const {nextStep, forStep, backStep, selectMenu, handleShowMenuItem, MenuList} = props;
 
-  /*  const [showMenuItem, setShowMenuItem] = React.useState<MenuChoice>({
-    value: '',
-    label: 'Select a Menu Item',
-    step: 4,
-  });
-
-  const hereHandleShowMenuItem = async (menuOption: MenuChoice | null): Promise<void> => {
-    if (!menuOption) {
-      return;
-    }
-    await setShowMenuItem(menuOption);
-  };*/
   const setStep = () => {
     if (selectMenu.value === '') {
 
@@ -71,7 +48,7 @@ export const FormShowMenu = (props: React.PropsWithChildren<SelectFormProps>) =>
     while (options.length != 0) {
       options.pop();
     }
-    // might mess up if menuList is updated from database
+
     for (const item of MenuList) {
       const option: MenuChoice = {
         value: item.name,
