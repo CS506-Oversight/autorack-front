@@ -1,17 +1,15 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import {ItemDataInfo} from '../../../state/restock/restockData';
+import UIButton from '../ui/Button';
 import PurchaseOverview from './PurchaseOverview';
 
-/**
- * TODO: CHECK W/ TEAM TO SEE IF CODE NEEDS REFACTORING
- */
 
 type PurchaseModelProps = {
     data: Array<ItemDataInfo>;
@@ -21,22 +19,18 @@ type PurchaseModelProps = {
 const PurchaseModal = ({data, orderId}: PurchaseModelProps) => {
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <div>
-      <Button color="primary" onClick={handleClickOpen}>
-          More Details
-      </Button>
+    <>
+      <UIButton
+        color="primary"
+        onClick={() => setOpen(true)}
+        text='More Details'
+        variant='text'
+        fullWidth={false}
+      />
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         maxWidth='xl'
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -46,12 +40,16 @@ const PurchaseModal = ({data, orderId}: PurchaseModelProps) => {
           <PurchaseOverview data={data}/>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-              Back
-          </Button>
+          <UIButton
+            onClick={() => setOpen(false)}
+            color='primary'
+            text='Back'
+            variant='text'
+            fullWidth={false}
+          />
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

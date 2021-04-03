@@ -5,10 +5,10 @@ import {RestockData} from './restockData';
 import {dummyData} from './restockDummyData';
 import {RESTOCK_STATE_NAME, RestockDispatcherName} from './restockName';
 
-export type RestockActionReturn<R> = R extends RestockData ? (R | null): R;
+export type RestockActionReturn<R> = R extends RestockData ? R: R;
 
 export const restockDispatchers = {
-  [RestockDispatcherName.FETCH_RESTOCK_DATA]: createAsyncThunk<RestockActionReturn<RestockData | null>>(
+  [RestockDispatcherName.FETCH_RESTOCK_DATA]: createAsyncThunk<RestockActionReturn<RestockData>>(
     `${RESTOCK_STATE_NAME}/${RestockDispatcherName.FETCH_RESTOCK_DATA}`,
     async () => {
       const data = dummyData;

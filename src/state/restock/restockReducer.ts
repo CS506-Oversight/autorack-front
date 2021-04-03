@@ -5,7 +5,7 @@ import {RESTOCK_STATE_NAME} from './restockName';
 import {RestockState} from './restockState';
 
 const initialState: RestockState = {
-  restockData: null,
+  restockData: [],
 };
 
 const restockSlice = createSlice({

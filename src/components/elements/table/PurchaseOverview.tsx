@@ -9,22 +9,22 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import AppValues from '../../../const/values';
 import {ItemDataInfo} from '../../../state/restock/restockData';
 
-/**
- * TODO: FIND A WAY TO REFACTOR CODE IF NECESSARY
- * TODO: SET A GLOBAL STYLE FOR TABLE COLORS (SHOULD BE EASY)
- */
-
-const TAX_RATE = 0.07;
 
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
   },
+  tableRow: {
+    backgroundColor: '#e3e3e3',
+  },
 });
 
-type RowData = ItemDataInfo & {price: number};
+type RowData = ItemDataInfo & {
+  price: number
+};
 
 type PurchaseOverviewProps = {
   data: Array<ItemDataInfo>;
@@ -33,37 +33,32 @@ type PurchaseOverviewProps = {
 const PurchaseOverview = ({data}: PurchaseOverviewProps) => {
   const classes = useStyles();
 
-  const ccyFormat = (num: number) => {
+  const formatCurrency = (num: number) => {
     return `${num.toFixed(2)}`;
   };
 
-  const priceRow = (quantity: number, unitPrice: number) => {
-    return quantity * unitPrice;
-  };
-
-  const createRow = (description: string, quantity: number, unitPrice: number) => {
-    const price = priceRow(quantity, unitPrice);
-    return {description, quantity, unitPrice, price};
-  };
-
-  const subtotal = (items: RowData[]) => {
+  const calcSubtotal = (items: RowData[]) => {
     return items.map(({price}) => price).reduce((sum, i) => sum + i, 0);
   };
 
-  const rows = [];
-  for (const elm of data) {
-    rows.push(createRow(elm.description, elm.quantity, elm.unitPrice));
-  }
+  const rows = data.map((elem) => {
+    return {
+      description: elem.description,
+      quantity: elem.quantity,
+      unitPrice: elem.unitPrice,
+      price: elem.quantity * elem.unitPrice,
+    };
+  });
 
-  const invoiceSubtotal = subtotal(rows);
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+  const invoiceSubtotal = calcSubtotal(rows);
+  const invoiceTaxes = AppValues.TAX_RATE * invoiceSubtotal;
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="spanning table">
+      <Table className={classes.table} aria-label="restock purchase overview">
         <TableHead>
-          <TableRow style={{backgroundColor: '#e3e3e3'}}>
+          <TableRow className={classes.tableRow}>
             <TableCell align="center" colSpan={3}>
               Details
             </TableCell>
@@ -82,22 +77,22 @@ const PurchaseOverview = ({data}: PurchaseOverviewProps) => {
               <TableCell>{row.description}</TableCell>
               <TableCell align="right">{row.quantity}</TableCell>
               <TableCell align="right">{row.unitPrice}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+              <TableCell align="right">{formatCurrency(row.price)}</TableCell>
             </TableRow>
           ))}
           <TableRow>
             <TableCell rowSpan={3} />
             <TableCell colSpan={2}>Subtotal</TableCell>
-            <TableCell align="right">{`$${ccyFormat(invoiceSubtotal)}`}</TableCell>
+            <TableCell align="right">{`$${formatCurrency(invoiceSubtotal)}`}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Tax</TableCell>
-            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
-            <TableCell align="right">{`$${ccyFormat(invoiceTaxes)}`}</TableCell>
+            <TableCell align="right">{`${(AppValues.TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+            <TableCell align="right">{`$${formatCurrency(invoiceTaxes)}`}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell colSpan={2}>Total</TableCell>
-            <TableCell align="right">{`$${ccyFormat(invoiceTotal)}`}</TableCell>
+            <TableCell align="right">{`$${formatCurrency(invoiceTotal)}`}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
