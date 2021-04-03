@@ -47,14 +47,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 // Premade arrays to simulate database data
-const MenuList: Array<MenuItem> =[
+const MenuListTemp: Array<MenuItem> =[
   {name: 'Chicken', description: 'chicken', price: 5},
   {name: 'Rice', description: 'Rice', price: 3},
   {name: 'Steak', description: 'steak', price: 4},
   {name: 'Fries', description: 'Fries', price: 5},
 ];
 
-const IngredientList: Array<Ingredient> = [
+const IngredientListTemp: Array<Ingredient> = [
   {name: 'Butter', inventory: 2, unit: 'Tbsp', price: 5.00},
   {name: 'Ham', inventory: 2, unit: 'Tbsp', price: 5.00},
   {name: 'Water', inventory: 2, unit: 'Tbsp', price: 5.00},
@@ -179,11 +179,9 @@ export const Menu = () => {
     if (expanded !== false) {
       updateAdjacentArray(+expanded);
       updateAdjacentIngredientArray(+expanded);
-      /*      updateAdjacentIngredientMap(+expanded);*/
     }
     handleMenuItem(menuItemAdjacentArray[+panel]);
     handleMenuIngredientList(ingredientListToPageArray[+panel]);
-    /*    handleIngredientObjectList(ingredientMapArray[+panel]);*/
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -194,12 +192,9 @@ export const Menu = () => {
       if (expanded !== false) {
         updateAdjacentArray(+expanded);
         updateAdjacentIngredientArray(+expanded);
-        /*        updateAdjacentIngredientMap(+expanded);*/
       }
-      /*      console.log(menuItemAdjacentArray);*/
       handleMenuItem(menuItemAdjacentArray[itemsToShow]);
       handleMenuIngredientList(ingredientListToPageArray[itemsToShow]);
-      /*      handleIngredientObjectList(ingredientMapArray[itemsToShow]);*/
       await setItemsToShow(itemsToShow+1);
     }
   };
@@ -208,7 +203,6 @@ export const Menu = () => {
     if (expanded !== false) {
       handleMenuItem(menuItemAdjacentArray[+expanded]);
       handleMenuIngredientList(ingredientListToPageArray[+expanded]);
-      /*      handleIngredientObjectList(ingredientMapArray[+expanded]);*/
     }
   }, [itemsToShow]);
 
@@ -243,6 +237,7 @@ export const Menu = () => {
   };
 
   const deleteFromAdjacentArray = (index: number) => {
+    setExpanded(false);
     const tempArray:Array<MenuItem> = ([]);
     const newMenuItem:MenuItem = {
       name: '',
@@ -270,15 +265,37 @@ export const Menu = () => {
     handleMenuItem(menuItemAdjacentArray[index]);
     setItemsToShow(itemsToShow-1);
   };
+
+  const [MenuList, setMenuList] = React.useState<Array<MenuItem>>(
+    MenuListTemp.sort((a, b) => (a.name > b.name) ? 1: -1));
+
+  const updateMenuList = (placeArray:Array<MenuItem>) => {
+    const tempFinalArray = [];
+    for (const item of MenuList) {
+      tempFinalArray.push(item);
+    }
+    for (const item of placeArray) {
+      let inArray = false;
+      for (let i = 0; i< tempFinalArray.length; i++) {
+        if (item.name === tempFinalArray[i].name) {
+          tempFinalArray[i] = item;
+          inArray= true;
+        }
+      }
+      if (!inArray) {
+        tempFinalArray.push(item);
+      }
+    }
+    tempFinalArray.sort((a, b) => (a.name > b.name) ? 1: -1);
+
+    setMenuList(tempFinalArray);
+  };
+
   // Final Array of Menu Items to go to database/Confirm
   const [menuItemFinalArray, setMenuItemFinalArray] = React.useState<Array<MenuItem>>([]);
 
   const updateFinalArray = () => {
-    /*    while (menuItemFinalArray.length != 0) {
-      menuItemFinalArray.pop();
-    }*/
     const tempArray:Array<MenuItem> = ([]);
-    /*    const tempArray = menuItemFinalArray;*/
     if (menuItemAdjacentArray.length!= 0) {
       for (let i = 0; i< itemsToShow; i++) {
         if (menuItemAdjacentArray[i].name !== '') {
@@ -356,21 +373,52 @@ export const Menu = () => {
     if (expanded !== false) {
       updateAdjacentArray(+expanded);
     }
-    if (progress.step == 4) {
+    if (progress.step == 4 || progress.step==1) {
       handleMenuIngredientList(makeIngredientListToPage());
+      updateAdjacentArray(0);
     }
-
-    /*    console.log(menuItem);*/
+    if (progress.step == 5) {
+      updateAdjacentArray(0);
+    }
   }, [menuItem]);
 
   useEffect(() => {
     updateFinalArray();
-    /*    console.log(menuItemAdjacentArray);*/
   }, [menuItemAdjacentArray]);
 
   useEffect(() => {
-    console.log(menuItemFinalArray);
-  }, [menuItemFinalArray]);
+    console.log(MenuList);
+  }, [MenuList]);
+
+
+  const [IngredientList, setIngredientList]= React.useState<Array<Ingredient>>(
+    IngredientListTemp.sort((a, b) => (a.name > b.name) ? 1: -1));
+
+
+  const updateIngredientList = (placeIngredient:Ingredient) => {
+    const tempFinalArray = [];
+    for (const item of IngredientList) {
+      tempFinalArray.push(item);
+    }
+    let inArray = false;
+    for (let i = 0; i< tempFinalArray.length; i++) {
+      if (placeIngredient.name === tempFinalArray[i].name) {
+        tempFinalArray[i] = placeIngredient;
+        inArray= true;
+      }
+    }
+    if (!inArray) {
+      tempFinalArray.push(placeIngredient);
+    }
+    tempFinalArray.sort((a, b) => (a.name > b.name) ? 1: -1);
+    setIngredientList(tempFinalArray);
+  };
+
+  useEffect(() => {
+    initializeAdjacentIngredientArray();
+    handleMenuIngredientList(makeIngredientListToPage());
+    console.log(IngredientList);
+  }, [IngredientList]);
 
 
   // Ingredient data/states
@@ -380,6 +428,9 @@ export const Menu = () => {
     unit: '',
     price: 0,
   });
+
+  useEffect(() => {
+  }, [ingredientItem]);
 
   const handleIngredient = (item: Ingredient) => {
     setIngredientItem(item);
@@ -397,13 +448,14 @@ export const Menu = () => {
       return;
     }
     setInitialized(false);
-    initializeAdjacentArray();
+    /*    initializeAdjacentArray();*/
     setShowMenuItem(menuOption);
     for (const listObj of MenuList) {
       if (menuOption.value === listObj.name) {
         setMenuItem(listObj);
       }
     }
+    updateAdjacentArray(0);
   };
 
   // selection of an ingredient
@@ -424,14 +476,44 @@ export const Menu = () => {
       }
     }
   };
+    // Final Menu Ingredient Array
+  const [menuIngredientFinalArray, setMenuIngredientFinalArray] = React.useState<
+      Array<MenuIngredient>>(MenuIngredientList.sort((a, b) => (a.name > b.name) ? 1: -1));
+
+  const updateMenuIngredientFinalArray = (placeArray:Array<MenuIngredient>) => {
+    const tempFinalArray = [];
+    for (const item of menuIngredientFinalArray) {
+      tempFinalArray.push(item);
+    }
+    for (const item of placeArray) {
+      let inArray = false;
+      for (let i = 0; i< tempFinalArray.length; i++) {
+        if (item.name === tempFinalArray[i].name &&
+              item.menuItem === tempFinalArray[i].menuItem) {
+          tempFinalArray[i] = item;
+          inArray= true;
+        }
+      }
+      if (!inArray) {
+        tempFinalArray.push(item);
+      }
+    }
+    tempFinalArray.sort((a, b) => (a.name > b.name) ? 1: -1);
+    setMenuIngredientFinalArray(tempFinalArray);
+  };
+
+  useEffect(() => {
+    console.log(menuIngredientFinalArray);
+  }, [menuIngredientFinalArray]);
 
 
-  // Final Menu-Ingredient Array
-  const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>(MenuIngredientList);
+  // Working Menu-Ingredient Array to be sent to DB
+  const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>([]);
 
 
   const handleMenuIngredientRelation = (placeArray:Array<MenuIngredient>) => {
     const tempArray:Array<MenuIngredient> = [];
+
     for (const item of placeArray) {
       tempArray.push(item);
     }
@@ -447,6 +529,7 @@ export const Menu = () => {
       tempArray.push(arrObj);
     }
     setIngredientListToPage(tempArray);
+    updateAdjacentIngredientArray(+expanded);
   };
 
 
@@ -454,7 +537,7 @@ export const Menu = () => {
     const tempArray:Array<MenuIngredientForForm> = [];
     for (const item of IngredientList) {
       let eqMenuItem = false;
-      for (const data of menuIngredientArray) {
+      for (const data of menuIngredientFinalArray) {
         if ((data.menuItem === menuItem.name) && (data.name === item.name)) {
           eqMenuItem = true;
           const toArray: MenuIngredientForForm = {
@@ -478,6 +561,7 @@ export const Menu = () => {
         tempArray.push(toArray);
       }
     }
+    tempArray.sort((a, b) => (a.name > b.name) ? 1: -1);
     return tempArray;
   };
 
@@ -516,7 +600,6 @@ export const Menu = () => {
     }
     tempArray[index] = ingredientListToPage;
     setIngredientListToPageArray(tempArray);
-    console.log(tempArray);
   };
 
 
@@ -540,31 +623,28 @@ export const Menu = () => {
       tempArray[i] = (ingredientListToPageArray[i+1]);
     }
     tempArray.push(innerArray);
-    console.log(Object.is(tempArray, ingredientListToPageArray));
     setIngredientListToPageArray(tempArray);
   };
-
-
-  useEffect(() => {
-    console.log(menuItem);
-    /*    handleMenuIngredientList(makeIngredientListToPage());*/
-  }, [menuItem]);
 
 
   useEffect(() => {
     if (!initialized) {
       initializeAdjacentIngredientArray();
     }
-    console.log(ingredientListToPage);
   }, [ingredientListToPage]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     console.log(ingredientListToPageArray);
   }, [ingredientListToPageArray]);
 
   useEffect(() => {
     console.log(menuIngredientArray);
   }, [menuIngredientArray]);
+
+  useEffect(() => {
+    /!*    checkIngredientFill();*!/
+    /!*    console.log(menuItemAdjacentArray);*!/
+  }, [menuItemAdjacentArray]);*/
 
 
   const checkIngredientFill = () => {
@@ -574,12 +654,13 @@ export const Menu = () => {
     while (tempArray.length != 0) {
       tempArray.pop();
     }
+
     for (let i = 0; i < itemsToShow; i++) {
       const item = ingredientListToPageArray[i];
       consoleLine += 'These ingredients need to be completed: \n';
       for (const value of item) {
         let isInArray = false;
-        /*      console.log(key, value);*/
+
         if (value.used) {
           if ((value.measurement === {value: '', label: 'Select...'}) || (value.amount == 0)) {
             isAccepted = false;
@@ -608,11 +689,9 @@ export const Menu = () => {
     if (!isAccepted) {
       alert(consoleLine);
     } else {
-      console.log(tempArray);
       updateFinalArray();
       handleMenuIngredientRelation(tempArray);
     }
-    /*    console.log(menuIngredientArray);*/
     return isAccepted;
   };
 
@@ -642,7 +721,6 @@ export const Menu = () => {
                   expanded={expanded === index.toString()}
                   onChange={handleAccordionChange(index.toString())}
                 >
-                  {/*                  {console.log(index)}*/}
 
                   <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel1bh-content"
@@ -656,8 +734,6 @@ export const Menu = () => {
 
                     <FormMenuAndIngredients
                       nextStep={nextStep}
-                      forStep={10}
-                      backStep={1}
                       newIng={6}
                       handleMenuItem={handleMenuItem}
                       menuItem={item}
@@ -706,13 +782,12 @@ export const Menu = () => {
           onClick={function() {
             if (menuItem.name === '') {
               alert('Please fill in name field');
-            } else if (menuItem.description === '') {
+            } else if (menuItem.description === '' && expanded !== false) {
               alert('Please fill in description field');
-            } else if (isNaN(menuItem.price)) {
-              alert('The price must be a number');
             } else if (!checkIngredientFill()) {
 
             } else {
+              updateAdjacentIngredientArray(+expanded);
               nextStep(10); // needs to be set
             }
           }}>
@@ -760,6 +835,7 @@ export const Menu = () => {
         backStep = {1}
         selectMenu = {showMenuItem}
         handleShowMenuItem={handleShowMenuItem}
+        MenuList={MenuList}
       />
     );
   case 5:
@@ -776,6 +852,8 @@ export const Menu = () => {
         handleMenuIngredientList={handleMenuIngredientList}
         checkIngredientFill={checkIngredientFill}
         updateAdjacentIngredientArray={ updateAdjacentIngredientArray}
+        updateAdjacentArray={updateAdjacentArray}
+
 
       />
     );
@@ -813,6 +891,7 @@ export const Menu = () => {
         backStep = {1}
         selectIngredient= {showIngredientItem}
         handleShowIngredientItem={handleShowIngredientItem}
+        IngredientList={IngredientList}
       />
     );
 
@@ -837,6 +916,8 @@ export const Menu = () => {
         backStep={2}
         menuIngredientArray={menuIngredientArray}
         menuItemFinalArray={menuItemFinalArray}
+        updateMenuIngredientFinalArray={updateMenuIngredientFinalArray}
+        updateMenuList={updateMenuList}
 
       />
     );
@@ -848,6 +929,8 @@ export const Menu = () => {
         backStep={5}
         menuIngredientArray={menuIngredientArray}
         menuItemFinalArray={menuItemFinalArray}
+        updateMenuIngredientFinalArray={updateMenuIngredientFinalArray}
+        updateMenuList={updateMenuList}
 
       />
     );
@@ -860,6 +943,7 @@ export const Menu = () => {
         backStep = {6}
         ingredientItem={ingredientItem}
         handleIngredient={handleIngredient}
+        updateIngredientList={updateIngredientList}
       />
     );
     // done
@@ -871,6 +955,7 @@ export const Menu = () => {
         backStep = {3}
         ingredientItem={ingredientItem}
         handleIngredient={handleIngredient}
+        updateIngredientList={updateIngredientList}
       />
     );
     // done
@@ -882,6 +967,7 @@ export const Menu = () => {
         backStep = {7}
         ingredientItem={ingredientItem}
         handleIngredient={handleIngredient}
+        updateIngredientList={updateIngredientList}
       />
     );
     // done
@@ -893,6 +979,7 @@ export const Menu = () => {
         backStep = {9}
         ingredientItem={ingredientItem}
         handleIngredient={handleIngredient}
+        updateIngredientList={updateIngredientList}
       />
     );
 

@@ -13,27 +13,7 @@ type IngredientChoice = {
  make a for loop for all of the value,label pairs
  and create new pages for them
  */
-/* const options: Array<MenuChoice> = [
-  {value: 'Chicken', label: 'Chicken', step: 1},
-  {value: 'Rice', label: 'Rice', step: 2},
-  {value: 'Steak', label: 'Steak', step: 3},
-  {value: 'Fries', label: 'Fries', step: 4},
-];*/
 
-/* const MenuList: Array<MenuItem> =[
-  {name: 'Chicken', description: 'chicken', price: 5},
-  {name: 'Rice', description: 'Rice', price: 3},
-  {name: 'Steak', description: 'steak', price: 4},
-  {name: 'Fries', description: 'Fries', price: 5},
-];*/
-
-const IngredientList: Array<Ingredient> = [
-  {name: 'Butter', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Ham', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Water', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Noodles', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Tomatoes', inventory: 2, unit: 'Tbsp', price: 5.00},
-];
 
 type FormShowIngredientProps = {
     nextStep: (step:number) => void,
@@ -41,6 +21,7 @@ type FormShowIngredientProps = {
     backStep:number,
     selectIngredient: IngredientChoice,
     handleShowIngredientItem: (selectIngredient: IngredientChoice | null) => void,
+    IngredientList: Array<Ingredient>,
 }
 
 type Ingredient = {
@@ -52,7 +33,8 @@ type Ingredient = {
 const options: Array<IngredientChoice> = [];
 
 export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngredientProps>) => {
-  const {nextStep, forStep, backStep, selectIngredient, handleShowIngredientItem} = props;
+  const {nextStep, forStep, backStep, selectIngredient, handleShowIngredientItem,
+    IngredientList} = props;
 
 
   const setStep = () => {
@@ -68,7 +50,6 @@ export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngred
       options.pop();
     }
 
-    // might mess up if menuList is updated from database
     for (const item of IngredientList) {
       const option: IngredientChoice = {
         value: item.name,

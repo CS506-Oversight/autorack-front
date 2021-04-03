@@ -72,14 +72,15 @@ type FormEditMenuItemPreloadProps = {
   handleMenuIngredientList: (item:Array<MenuIngredientForForm>) => void,
   checkIngredientFill: () => boolean,
   updateAdjacentIngredientArray:(index:number) => void,
+  updateAdjacentArray:(index:number) => void,
+
 }
 
 
 export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormEditMenuItemPreloadProps>) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {nextStep, forStep, backStep, newIng, handleMenuItem, menuItem,
     Measurements, IngredientListToPage, handleMenuIngredientList, checkIngredientFill,
-    updateAdjacentIngredientArray} = props;
+    updateAdjacentIngredientArray, updateAdjacentArray} = props;
 
   const classes = useStyles();
 
@@ -100,13 +101,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormEditM
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    /*    if (IngredientObjectList.has(e.target.value)) {
-      // @ts-ignore
-      IngredientObjectList.get(e.target.value).used = !IngredientObjectList.get(e.target.value).used;
-    }
-    handleIngredientObjectList(IngredientObjectList);*/
-    /*    console.log('here2');*/
-    handleMenuIngredientList(IngredientListToPage);
   };
 
   const handleSelect= (selectedOption: Measurement | null, name: string) => {
@@ -119,11 +113,6 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormEditM
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    /*    if (IngredientObjectList.has(name)) {
-      // @ts-ignore
-      IngredientObjectList.get(name).measurement = selectedOption;
-    }
-    handleIngredientObjectList(IngredientObjectList);*/
   };
 
   const handleAmount= (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -133,17 +122,7 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormEditM
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    /*    if (IngredientObjectList.has(name)) {
-      // @ts-ignore
-      IngredientObjectList.get(name).amount = e.target.value;
-    }*/
   };
-
-
-  /*  console.log(menuIngredientArray);*/
-
-
-  // @ts-ignore
 
   return (
     <React.Fragment>
@@ -202,8 +181,12 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormEditM
                     } else if (!checkIngredientFill()) {
 
                     } else {
-                      nextStep(forStep); // needs to be set
+                      handleMenuIngredientList(IngredientListToPage);
+
                       updateAdjacentIngredientArray(0);
+                      handleMenuIngredientList(IngredientListToPage);
+                      updateAdjacentArray(0);
+                      nextStep(forStep);
                     }
                   }}
                 >
@@ -289,13 +272,9 @@ export const FormEditMenuItemPreload = (props: React.PropsWithChildren<FormEditM
                   color='primary'
                   style={styles.button}
                   onClick={function() {
-                    /* if (checkIngredientFill()) {*/
                     if (true) {
                       nextStep(newIng);
-                      /*                      handleMenuIngredientRelation(menuIngredientArray);*/
-                    }// needs to be set
-
-                    /*                    handleMenuItem(menuItem);*/
+                    }
                   }}
                 >
 

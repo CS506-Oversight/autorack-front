@@ -27,12 +27,6 @@ type Ingredient = {
     price: number,
 }
 
-/* const options: Array<FirstChoice> = [
-  {value: 'Menu', label: 'Create Menu Item', step: 2},
-  {value: 'Ingredient', label: 'Create Ingredient', step: 3},
-  {value: 'Edit', label: 'Edit Something?', step: 1},
-];*/
-
 type FormIngredientProps = {
     nextStep: (step:number) => void,
     forStep:number,
@@ -111,13 +105,11 @@ export const FormIngredient = (props: React.PropsWithChildren<FormIngredientProp
               alert('Please fill in name field');
             } else if (isNaN(ingredientItem.inventory)) {
               alert('The inventory amount must be a number');
-              console.log(ingredientItem.inventory);
             } else if (ingredientItem.unit === '') {
               alert('Please fill in unit field');
             } else if (isNaN(ingredientItem.price)) {
               alert('The price must be a number');
             } else {
-              // needs to bet set to confirm ingredient page
               nextStep(forStep);
               handleIngredient(ingredientItem);
             }

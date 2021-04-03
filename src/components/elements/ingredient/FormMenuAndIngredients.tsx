@@ -62,8 +62,6 @@ type Measurement = {
 
 type FormMenuAndIngredientProps = {
   nextStep: (step:number) => void,
-  forStep:number,
-  backStep:number,
   newIng: number,
   handleMenuItem: (item: MenuItem) => void,
   menuItem: MenuItem,
@@ -74,8 +72,7 @@ type FormMenuAndIngredientProps = {
 
 
 export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAndIngredientProps>) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {nextStep, forStep, backStep, newIng, handleMenuItem, menuItem,
+  const {nextStep, newIng, handleMenuItem, menuItem,
     Measurements, IngredientListToPage, handleMenuIngredientList} = props;
 
   const classes = useStyles();
@@ -97,12 +94,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    /*    if (IngredientObjectList.has(e.target.value)) {
-      // @ts-ignore
-      IngredientObjectList.get(e.target.value).used = !IngredientObjectList.get(e.target.value).used;
-    }
-    handleIngredientObjectList(IngredientObjectList);*/
-    /*    console.log('here2');*/
     handleMenuIngredientList(IngredientListToPage);
   };
 
@@ -116,11 +107,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    /*    if (IngredientObjectList.has(name)) {
-      // @ts-ignore
-      IngredientObjectList.get(name).measurement = selectedOption;
-    }
-    handleIngredientObjectList(IngredientObjectList);*/
   };
 
   const handleAmount= (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -130,18 +116,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    /*    if (IngredientObjectList.has(name)) {
-      // @ts-ignore
-      IngredientObjectList.get(name).amount = e.target.value;
-    }*/
   };
-
-
-  /*  console.log(menuIngredientArray);*/
-
-
-  // @ts-ignore
-
   return (
     <React.Fragment>
       <div>
@@ -183,40 +158,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
                 </FormControl>
-
-                {/*                <Button
-                  variant='contained'
-                  color='primary'
-                  style={styles.button}
-                  onClick={function() {
-                    if (menuItem.name === '') {
-                      alert('Please fill in name field');
-                    } else if (menuItem.description === '') {
-                      alert('Please fill in description field');
-                    } else if (isNaN(menuItem.price)) {
-                      alert('The price must be a number');
-                    } else if (!checkIngredientFill()) {
-
-                    } else {
-                                            console.log(menuItem.price);
-                                            nextStep(forStep); // needs to be set
-                      handleMenuItem(menuItem);
-                      handleMenuIngredientRelation(menuIngredientArray);
-                      updateFinalArray();
-                    }
-                  }}>
-                    Add
-                </Button>*/}
-
-                {/*                <Button
-                  variant='contained'
-                  color='primary'
-                  style={styles.button}
-                  onClick={function() {
-                    nextStep(backStep);
-                  }}>
-                    Back
-                </Button>*/}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={8}>
@@ -247,7 +188,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                               defaultChecked={item.used}
                               checked={item.used}
                               value = {item.name}
-                              /*                              checked={item.used}*/
                               onChange={() => {
                                 handleCheck(item.name);
                               }}
@@ -259,7 +199,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                         <Grid item xs={12} sm={4}>
                           <Select
                             defaultValue={item.measurement}
-                            // @ts-ignore
                             value = {item.measurement}
                             onChange={(option) => handleSelect(option, item.name)}
                             options={Measurements}
@@ -287,16 +226,11 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   color='primary'
                   style={styles.button}
                   onClick={function() {
-                    /* if (checkIngredientFill()) {*/
                     if (true) {
                       nextStep(newIng);
-                      /*                      handleMenuIngredientRelation(menuIngredientArray);*/
-                    }// needs to be set
-
-                    /*                    handleMenuItem(menuItem);*/
+                    }
                   }}
                 >
-
                     Add Ingredient
                 </Button>
 
