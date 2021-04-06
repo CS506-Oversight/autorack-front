@@ -1,8 +1,6 @@
 import React, {ChangeEvent} from 'react';
 
-/* import Select from 'react-select';*/
 import {
-  Button,
   FormControl,
   FormLabel,
   FormGroup,
@@ -18,7 +16,9 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import Select from 'react-select';
 
+import UIButton from '../ui/Button';
 
+// Define Styles
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// Declare Types
 type MenuItem = {
   name: string,
   description: string,
@@ -78,16 +78,17 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
 
   const classes = useStyles();
 
-
+  // Updates menu item on EditMenu.tsx
   const updateMenuItem = (key: string)=> (e: ChangeEvent<HTMLTextAreaElement>) => {
     handleMenuItem({...menuItem, [key]: e.target.value});
   };
 
-
+  // Updates menu item price on EditMenu.tsx
   const updateMenuPrice = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
     handleMenuItem({...menuItem, [key]: +e.target.value});
   };
 
+  // Handles checkbox changes and updates
   const handleCheck = (name:string) => {
     for (let i = 0; i<IngredientListToPage.length; i++) {
       if (name == IngredientListToPage[i].name) {
@@ -95,9 +96,9 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
       }
     }
     handleMenuIngredientList(IngredientListToPage);
-    handleMenuIngredientList(IngredientListToPage);
   };
 
+  // Handles Select changes and updates
   const handleSelect= (selectedOption: Measurement | null, name: string) => {
     if (!selectedOption) {
       return;
@@ -110,6 +111,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
     handleMenuIngredientList(IngredientListToPage);
   };
 
+  // Handles amount input changes and updates
   const handleAmount= (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
     for (let i = 0; i<IngredientListToPage.length; i++) {
       if (name == IngredientListToPage[i].name) {
@@ -119,14 +121,14 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
     handleMenuIngredientList(IngredientListToPage);
   };
   return (
-    <React.Fragment>
+    <>
       <div>
         <Paper elevation={3}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={4}>
 
               <FormControl fullWidth={false} className={classes.margin} variant="filled">
-                <h3>Fill in Menu Item Things and change this line</h3>
+                <h3>Fill in to create a new menu item.</h3>
                 <TextField
                   id="Name"
                   label="Name"
@@ -163,8 +165,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
             </Grid>
             <Grid item xs={12} sm={8}>
               <div>
-
-
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend"></FormLabel>
                   <Grid container spacing={3}>
@@ -181,7 +181,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   {IngredientListToPage.map((item:MenuIngredientForForm, index:number) =>
                     <FormGroup key = {index}>
                       <Grid container spacing={3}>
-
                         <Grid item xs={12} sm={4}>
                           <FormControlLabel
                             control={<
@@ -192,7 +191,6 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                               onChange={() => {
                                 handleCheck(item.name);
                               }}
-
                               name="gilad" />}
                             label={item.name}
                           />
@@ -216,32 +214,27 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                             variant="filled"
                           />
                         </Grid>
-
                       </Grid>
                     </FormGroup>,
                   )}
 
                 </FormControl>
-                <Button
+                <UIButton
+                  text = 'Add Ingredient'
                   variant='contained'
                   color='primary'
                   style={styles.button}
                   onClick={function() {
-                    if (true) {
-                      nextStep(newIng);
-                    }
+                    nextStep(newIng);
                   }}
                 >
-                    Add Ingredient
-                </Button>
-
+                </UIButton>
               </div>
-
             </Grid>
           </Grid>
         </Paper>
       </div>
-    </React.Fragment>
+    </>
 
   );
 };

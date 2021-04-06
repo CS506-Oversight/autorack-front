@@ -11,9 +11,9 @@ import {Navigation} from './components/elements/nav/Main';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {Authenticated} from './components/pages/Authenticated';
+import {EditMenu} from './components/pages/EditMenu';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
-import {Menu} from './components/pages/Menu';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
 import AppPaths from './const/paths';
@@ -59,8 +59,8 @@ const PageContent = () => {
       </PublicRoute>
 
       {/* Authentication needed */}
-      <PrivateRoute path={AppPaths.MENU}>
-        <Menu />
+      <PrivateRoute path={AppPaths.EDIT_MENU}>
+        <EditMenu />
       </PrivateRoute>
 
       <PrivateRoute path={AppPaths.AUTHENTICATED}>

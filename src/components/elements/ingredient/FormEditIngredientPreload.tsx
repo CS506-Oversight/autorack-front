@@ -1,9 +1,11 @@
 import React, {ChangeEvent} from 'react';
 
-/* import Select from 'react-select';*/
-import {Button, FormControl, InputAdornment, FilledInput, TextField, InputLabel} from '@material-ui/core';
+import {FormControl, InputAdornment, FilledInput, TextField, InputLabel} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
+import UIButton from '../ui/Button';
+
+// define styles
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// define types
 type Ingredient = {
     name: string,
     inventory: number,
@@ -30,9 +32,9 @@ type Ingredient = {
 
 
 type FormEditIngredientPreloadProps = {
-    nextStep: (step:number) => void,
-    forStep:number,
-    backStep:number,
+    nextStep: (step: number) => void,
+    forStep: number,
+    backStep: number,
     handleIngredient: (item: Ingredient) => void,
     ingredientItemFromSelect: Ingredient,
 }
@@ -42,20 +44,39 @@ export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEdi
   const {nextStep, forStep, backStep, handleIngredient, ingredientItemFromSelect} = props;
   const classes = useStyles();
 
+  // local state of ingredient being edited
   const [ingredientItem, setIngredientItem] = React.useState<Ingredient>(ingredientItemFromSelect);
 
+  // updates state of local ingredient and its parent in EditMenu.tsx
   const updateIngredientItem = (key: string) => (e: ChangeEvent<HTMLTextAreaElement>) => {
-    /*    console.log('here');*/
     setIngredientItem({...ingredientItem, [key]: e.target.value});
     handleIngredient(ingredientItem);
   };
+
+  // updates the number fields of local ingredient and it's parent in EditMenu.tsx
   const updateIngredientNum = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
     setIngredientItem({...ingredientItem, [key]: +e.target.value});
     handleIngredient(ingredientItem);
   };
 
+  // Handles continue, checks if forms are filled correctly
+  const handleContinueClick = () => {
+    if (ingredientItem.name === '') {
+      alert('Please fill in name field');
+    } else if (isNaN(ingredientItem.inventory)) {
+      alert('The inventory amount must be a number');
+    } else if (ingredientItem.unit === '') {
+      alert('Please fill in unit field');
+    } else if (isNaN(ingredientItem.price)) {
+      alert('The price must be a number');
+    } else {
+      nextStep(forStep);
+      handleIngredient(ingredientItem);
+    }
+  };
+
   return (
-    <React.Fragment>
+    <>
       <FormControl fullWidth={false} className={classes.margin} variant="filled">
         <h3>Fill in Ingredient Item Things and change this line</h3>
         <TextField
@@ -98,38 +119,24 @@ export const FormEditIngredientPreload = (props: React.PropsWithChildren<FormEdi
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
         </FormControl>
-        <Button
+        <UIButton
+          text = 'Continue'
           variant='contained'
           color='primary'
           style={styles.button}
-          onClick={function() {
-            if (ingredientItem.name === '') {
-              alert('Please fill in name field');
-            } else if (isNaN(ingredientItem.inventory)) {
-              alert('The inventory amount must be a number');
-              /*              console.log(ingredientItem.inventory);*/
-            } else if (ingredientItem.unit === '') {
-              alert('Please fill in unit field');
-            } else if (isNaN(ingredientItem.price)) {
-              alert('The price must be a number');
-            } else {
-              nextStep(forStep);
-              handleIngredient(ingredientItem);
-            }
-          }}>
-                    Continue
-        </Button>
-        <Button
+          onClick={handleContinueClick}>
+        </UIButton>
+        <UIButton
+          text = 'Back'
           variant='contained'
           color='primary'
           style={styles.button}
           onClick={function() {
             nextStep(backStep);
           }}>
-                    Back
-        </Button>
+        </UIButton>
       </FormControl>
-    </React.Fragment>
+    </>
 
   );
 };

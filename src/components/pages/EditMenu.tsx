@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {Button, Grid, Paper} from '@material-ui/core';
+import {Grid, Paper} from '@material-ui/core';
 import {IconButton} from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -24,6 +24,7 @@ import {FormMenuAndIngredients} from '../elements/ingredient/FormMenuAndIngredie
 import {FormShowIngredient} from '../elements/ingredient/FormShowIngredient';
 import {FormShowMenu} from '../elements/ingredient/FormShowMenu';
 import {SelectForm} from '../elements/ingredient/SelectForm';
+import UIButton from '../elements/ui/Button';
 // Styling
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -160,7 +161,7 @@ type MenuIngredientForForm = {
 
 const maxAccordions = 10;
 
-export const Menu = () => {
+export const EditMenu = () => {
   const classes = useStyles();
 
   // Step Data/Functions
@@ -201,6 +202,7 @@ export const Menu = () => {
     }
   };
 
+  // updates arrays when another accordion is added
   useEffect(() => {
     if (expanded !== false) {
       handleMenuItem(menuItemAdjacentArray[+expanded]);
@@ -212,6 +214,7 @@ export const Menu = () => {
 
   const [menuItemAdjacentArray, setMenuItemAdjacentArray] = React.useState<Array<MenuItem>>([]);
 
+  // initialize array
   const initializeAdjacentArray = async (): Promise<void> => {
     setItemsToShow(1);
     while (menuItemAdjacentArray.length != 0) {
@@ -229,6 +232,7 @@ export const Menu = () => {
     setMenuItemAdjacentArray(tempArray);
   };
 
+  // update array
   const updateAdjacentArray = (index: number) => {
     const tempArray:Array<MenuItem> = ([]);
     for (const item of menuItemAdjacentArray) {
@@ -238,6 +242,7 @@ export const Menu = () => {
     setMenuItemAdjacentArray(tempArray);
   };
 
+  // delete item from array
   const deleteFromAdjacentArray = (index: number) => {
     setExpanded(false);
     const tempArray:Array<MenuItem> = ([]);
@@ -268,9 +273,11 @@ export const Menu = () => {
     setItemsToShow(itemsToShow-1);
   };
 
+  // List of menuItems to working functions, alphabetically sorted
   const [MenuList, setMenuList] = React.useState<Array<MenuItem>>(
     MenuListTemp.sort((a, b) => (a.name > b.name) ? 1: -1));
 
+  // updates final list
   const updateMenuList = (placeArray:Array<MenuItem>) => {
     const tempFinalArray = [];
     for (const item of MenuList) {
@@ -309,14 +316,13 @@ export const Menu = () => {
   };
 
   // State for first option
-
   const [selected, setSelected] = React.useState<FirstChoice>({
     value: '',
     label: 'Select Option',
     step: progress.step,
   });
 
-
+  // Function for updating states and initializing pages after first select
   const handleSelect = (selectedOption: FirstChoice | null) => {
     if (!selectedOption) {
       return;
@@ -359,13 +365,14 @@ export const Menu = () => {
     }
   };
 
+  // States of working menu item -- frequently updated
   const [menuItem, setMenuItem] = React.useState<MenuItem>({
     name: '',
     description: '',
     price: 0,
   });
 
-
+  // Sets state of menu item
   const handleMenuItem = (item: MenuItem) => {
     setMenuItem(item);
   };
@@ -392,11 +399,11 @@ export const Menu = () => {
     console.log(MenuList);
   }, [MenuList]);
 
-
+  // Array of total working ingredient list, alphabetically sorted
   const [IngredientList, setIngredientList]= React.useState<Array<Ingredient>>(
     IngredientListTemp.sort((a, b) => (a.name > b.name) ? 1: -1));
 
-
+  // update working ingredient list
   const updateIngredientList = (placeIngredient:Ingredient) => {
     const tempFinalArray = [];
     for (const item of IngredientList) {
@@ -416,6 +423,7 @@ export const Menu = () => {
     setIngredientList(tempFinalArray);
   };
 
+  // updated all pages and reinitialize when new ingredient is added
   useEffect(() => {
     initializeAdjacentIngredientArray();
     handleMenuIngredientList(makeIngredientListToPage());
@@ -431,9 +439,7 @@ export const Menu = () => {
     price: 0,
   });
 
-  useEffect(() => {
-  }, [ingredientItem]);
-
+  // function to update current working ingredient
   const handleIngredient = (item: Ingredient) => {
     setIngredientItem(item);
   };
@@ -445,6 +451,7 @@ export const Menu = () => {
     step: 4,
   });
 
+  // Handles selection from edit menu item
   const handleShowMenuItem = (menuOption: MenuChoice | null) => {
     if (!menuOption) {
       return;
@@ -466,6 +473,7 @@ export const Menu = () => {
     label: 'Select an Ingredient',
   });
 
+  // handles selection from edit ingredient
   const handleShowIngredientItem = async (ingredientOption: IngredientChoice | null): Promise<void> => {
     if (!ingredientOption) {
       return;
@@ -478,13 +486,16 @@ export const Menu = () => {
       }
     }
   };
-    // Final Menu Ingredient Array
-  const [menuIngredientFinalArray, setMenuIngredientFinalArray] = React.useState<
+
+
+  // Final Menu Ingredient Array ofr working with in pages
+  const [menuIngredientWorkingArray, setMenuIngredientWorkingArray] = React.useState<
       Array<MenuIngredient>>(MenuIngredientList.sort((a, b) => (a.name > b.name) ? 1: -1));
 
+  // update working array of menu-ingredients
   const updateMenuIngredientFinalArray = (placeArray:Array<MenuIngredient>) => {
     const tempFinalArray = [];
-    for (const item of menuIngredientFinalArray) {
+    for (const item of menuIngredientWorkingArray) {
       tempFinalArray.push(item);
     }
     for (const item of placeArray) {
@@ -501,18 +512,18 @@ export const Menu = () => {
       }
     }
     tempFinalArray.sort((a, b) => (a.name > b.name) ? 1: -1);
-    setMenuIngredientFinalArray(tempFinalArray);
+    setMenuIngredientWorkingArray(tempFinalArray);
   };
 
   useEffect(() => {
-    console.log(menuIngredientFinalArray);
-  }, [menuIngredientFinalArray]);
+    console.log(menuIngredientWorkingArray);
+  }, [menuIngredientWorkingArray]);
 
 
-  // Working Menu-Ingredient Array to be sent to DB
+  // Final Menu-Ingredient Array to be sent to DB
   const [menuIngredientArray, setMenuIngredientArray] = React.useState<Array<MenuIngredient>>([]);
 
-
+  // Update DB array of menu ingredients
   const handleMenuIngredientRelation = (placeArray:Array<MenuIngredient>) => {
     const tempArray:Array<MenuIngredient> = [];
 
@@ -522,9 +533,11 @@ export const Menu = () => {
     setMenuIngredientArray(tempArray);
   };
 
-
+  // Ingredient array to fill out for a given page
   const [ingredientListToPage, setIngredientListToPage] = React.useState<Array<MenuIngredientForForm>>([]);
 
+
+  // update ingredient list for current menu item and set it in adjacent array
   const handleMenuIngredientList = (item:Array<MenuIngredientForForm>) => {
     const tempArray:Array<MenuIngredientForForm> = [];
     for (const arrObj of item) {
@@ -534,12 +547,12 @@ export const Menu = () => {
     updateAdjacentIngredientArray(+expanded);
   };
 
-
+  // Creates a list of ingredients for a page and preloads if menu-item is already created
   const makeIngredientListToPage = () => {
     const tempArray:Array<MenuIngredientForForm> = [];
     for (const item of IngredientList) {
       let eqMenuItem = false;
-      for (const data of menuIngredientFinalArray) {
+      for (const data of menuIngredientWorkingArray) {
         if ((data.menuItem === menuItem.name) && (data.name === item.name)) {
           eqMenuItem = true;
           const toArray: MenuIngredientForForm = {
@@ -568,14 +581,14 @@ export const Menu = () => {
   };
 
 
-  // constant data types - need to be turned into states
-
+  // Adjacent array of arrays of menu_ingredients for each menu item
   const [ingredientListToPageArray, setIngredientListToPageArray] =
       React.useState<Array<Array<MenuIngredientForForm>>>([]);
 
+  // Variable for saying if arrays have been initialized
   const [initialized, setInitialized] = React.useState<boolean>(false);
 
-
+  // Initialize Adjacent array of arrays of menu_ingredients
   const initializeAdjacentIngredientArray = () => {
     setInitialized(true);
 
@@ -591,6 +604,7 @@ export const Menu = () => {
     setIngredientListToPageArray(tempArray);
   };
 
+  // Update Adjacent array of arrays of menu_ingredients
   const updateAdjacentIngredientArray = (index: number) => {
     const tempArray:Array<Array<MenuIngredientForForm>> = ([]);
     for (const item of ingredientListToPageArray) {
@@ -604,7 +618,7 @@ export const Menu = () => {
     setIngredientListToPageArray(tempArray);
   };
 
-
+  // Delete Adjacent array of arrays of menu_ingredients
   const deleteFromIngredientArray = (index: number) => {
     const tempArray:Array<Array<MenuIngredientForForm>> = [];
     const innerArray:Array<MenuIngredientForForm> =[];
@@ -628,27 +642,15 @@ export const Menu = () => {
     setIngredientListToPageArray(tempArray);
   };
 
-
+  // Initialize array if it hasn't been whenever ingredients on page change
   useEffect(() => {
     if (!initialized) {
       initializeAdjacentIngredientArray();
     }
   }, [ingredientListToPage]);
 
-  /*  useEffect(() => {
-    console.log(ingredientListToPageArray);
-  }, [ingredientListToPageArray]);
-
-  useEffect(() => {
-    console.log(menuIngredientArray);
-  }, [menuIngredientArray]);
-
-  useEffect(() => {
-    /!*    checkIngredientFill();*!/
-    /!*    console.log(menuItemAdjacentArray);*!/
-  }, [menuItemAdjacentArray]);*/
-
-
+  // function to check if ingredients have been filled in and makes arrays to go to database
+  // sends alert to user for which ingredients need to be completed
   const checkIngredientFill = () => {
     let consoleLine = '';
     let isAccepted = true;
@@ -697,7 +699,19 @@ export const Menu = () => {
     return isAccepted;
   };
 
+  const handleContinueMenuItem = () => {
+    if (menuItem.name === '') {
+      alert('Please fill in name field');
+    } else if (menuItem.description === '' && expanded !== false) {
+      alert('Please fill in description field');
+    } else if (!checkIngredientFill()) {
+    } else {
+      updateAdjacentIngredientArray(+expanded);
+      nextStep(10);
+    }
+  };
 
+  // Page switching and loading html
   switch (progress.step) {
   case 1:
     return (
@@ -710,30 +724,25 @@ export const Menu = () => {
       </Paper>
     );
   case 2:
-
     return (
-      <div>
+      <>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={10}>
             {menuItemAdjacentArray.map((item:MenuItem, index:number) =>
-
               (index < itemsToShow) ?
                 <Accordion
                   key={index}
                   expanded={expanded === index.toString()}
                   onChange={handleAccordionChange(index.toString())}
                 >
-
                   <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header">
                     <Typography className={classes.heading}></Typography>
                     <Typography className={classes.heading}>{(item.name === '') ?
                       'New Menu Item' : item.name}</Typography>
-
                   </AccordionSummary>
                   <AccordionDetails>
-
                     <FormMenuAndIngredients
                       nextStep={nextStep}
                       newIng={6}
@@ -742,10 +751,8 @@ export const Menu = () => {
                       Measurements={Measurements}
                       IngredientListToPage={ingredientListToPage}
                       handleMenuIngredientList={handleMenuIngredientList}
-
                     />
                   </AccordionDetails>
-
                 </Accordion> : null,
             )}
           </Grid>
@@ -772,39 +779,28 @@ export const Menu = () => {
                     </TableRow>
                   </TableBody>,
                 )}
-
               </Table>
             </Paper>
           </Grid>
         </Grid>
-        <Button
+        <UIButton
+          text='Continue'
           variant='contained'
           color='primary'
           style={styles.button}
-          onClick={function() {
-            if (menuItem.name === '') {
-              alert('Please fill in name field');
-            } else if (menuItem.description === '' && expanded !== false) {
-              alert('Please fill in description field');
-            } else if (!checkIngredientFill()) {
-
-            } else {
-              updateAdjacentIngredientArray(+expanded);
-              nextStep(10); // needs to be set
-            }
-          }}>
-          Continue
-        </Button>
-        <Button
+          onClick={handleContinueMenuItem}>
+        </UIButton>
+        <UIButton
+          text='Back'
           variant='contained'
           color='primary'
           style={styles.button}
           onClick={function() {
             nextStep(1);
           }}>
-          Back
-        </Button>
-        <Button
+        </UIButton>
+        <UIButton
+          text={'Add Another'}
           variant='contained'
           color='primary'
           style={styles.button}
@@ -812,9 +808,8 @@ export const Menu = () => {
             addItemToShow();
           }}>
           Add Another
-        </Button>
-      </div>
-
+        </UIButton>
+      </>
     );
   case 3:
     return (
@@ -827,7 +822,6 @@ export const Menu = () => {
           ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
-
     );
   case 4:
     return (
@@ -855,8 +849,6 @@ export const Menu = () => {
         checkIngredientFill={checkIngredientFill}
         updateAdjacentIngredientArray={ updateAdjacentIngredientArray}
         updateAdjacentArray={updateAdjacentArray}
-
-
       />
     );
   case 6:
@@ -870,7 +862,6 @@ export const Menu = () => {
           ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
-
     );
   case 7:
     return (
@@ -883,7 +874,6 @@ export const Menu = () => {
           ingredientItemFromSelect={ingredientItem}
         />
       </Paper>
-
     );
   case 8:
     return (
@@ -920,7 +910,6 @@ export const Menu = () => {
         menuItemFinalArray={menuItemFinalArray}
         updateMenuIngredientFinalArray={updateMenuIngredientFinalArray}
         updateMenuList={updateMenuList}
-
       />
     );
   case 11:
@@ -936,7 +925,6 @@ export const Menu = () => {
 
       />
     );
-    // done
   case 12:
     return (
       <FormConfirmationIngredient
@@ -948,7 +936,6 @@ export const Menu = () => {
         updateIngredientList={updateIngredientList}
       />
     );
-    // done
   case 13:
     return (
       <FormConfirmationIngredient
@@ -960,7 +947,6 @@ export const Menu = () => {
         updateIngredientList={updateIngredientList}
       />
     );
-    // done
   case 14:
     return (
       <FormConfirmationIngredient
@@ -972,7 +958,6 @@ export const Menu = () => {
         updateIngredientList={updateIngredientList}
       />
     );
-    // done
   case 15:
     return (
       <FormConfirmationIngredient
@@ -984,11 +969,9 @@ export const Menu = () => {
         updateIngredientList={updateIngredientList}
       />
     );
-
   default:
     return (
-      <div>
-      </div>
+      <></>
     );
   }
 };

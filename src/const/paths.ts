@@ -10,7 +10,5 @@ export default class AppPaths {
   static FORGOT_PASSWORD = '/forgot-password';
   // Authenticated Routes
   static AUTHENTICATED = '/authed';
-
-  // Menu
-  static MENU = '/menu'
+  static EDIT_MENU = '/menu'
 }
