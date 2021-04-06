@@ -17,6 +17,7 @@ import {restockDispatchers} from '../../../state/restock/restockDispatchers';
 import {useRestockSelector} from '../../../state/restock/restockSelector';
 import {useDispatch} from '../../../state/store';
 import {stableSort, getComparator, Order} from '../../../utils/Sort';
+import {NoData} from './NoData';
 import PurchaseModal from './PurchaseModal';
 import Status from './Status';
 
@@ -148,8 +149,8 @@ const RestockPurchasesTable = () => {
     setPage(0);
   };
 
-  if (!restockData) {
-    return <h1>No content to show.</h1>;
+  if (!restockData.length) {
+    return <NoData />;
   }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, restockData.length - page * rowsPerPage);
