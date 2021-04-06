@@ -1,8 +1,9 @@
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import Enzyme, {mount, ReactWrapper} from 'enzyme';
 import React from 'react';
 
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, {mount, ReactWrapper} from 'enzyme';
 import {MemoryRouter} from 'react-router-dom';
+
 import App from '../src/App';
 import AppPaths from '../src/const/paths';
 import {PartialReduxState} from '../src/state/state';
