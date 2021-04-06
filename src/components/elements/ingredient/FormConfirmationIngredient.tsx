@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, {useState} from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import {makeStyles} from '@material-ui/core/styles';
@@ -8,7 +8,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import {unwrapResult} from '@reduxjs/toolkit';
 
+import {FetchStatus} from '../../../api/definitions/misc';
+import {alertDispatchers} from '../../../state/alert/dispatchers';
+import {menuDispatchers} from '../../../state/menu/menu_dispatchers';
+import {useDispatch} from '../../../state/store';
 import UIButton from '../ui/Button';
 
 // Declare all types
@@ -56,6 +61,38 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
     handleIngredient(temp);
   };
 
+
+  // Dispatch Stuff
+  const dispatch = useDispatch();
+
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({
+    fetched: false,
+    fetching: false,
+  });
+
+  const onSubmitIngredient = () => {
+    setFetchStatus({
+      fetching: true,
+      fetched: false,
+    });
+    dispatch(menuDispatchers.sendIngredient(ingredientItem))
+      .then(unwrapResult)
+      .catch((error) => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
+      })
+      .finally(() => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+      },
+      );
+  };
+
   return (
 
     <>
@@ -83,7 +120,7 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
         </Table>
       </TableContainer>
       <UIButton
-        text = 'Confirm'
+        text = {fetchStatus.fetching ? 'Loading...' : 'Continue'}
         variant='contained'
         color='primary'
         style={styles.button}
@@ -91,6 +128,7 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
           setStep();
           resetIngredient();
           updateIngredientList(ingredientItem);
+          onSubmitIngredient();
         }}>
       </UIButton>
       <UIButton

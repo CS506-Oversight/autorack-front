@@ -14,7 +14,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {unwrapResult} from '@reduxjs/toolkit';
 
+import {menuDispatchers} from '../../state/menu/menu_dispatchers';
+import {useDispatch} from '../../state/store';
 import {FormConfirmationIngredient} from '../elements/ingredient/FormConfirmationIngredient';
 import {FormConfirmationMenu} from '../elements/ingredient/FormConfirmationMenu';
 import {FormEditIngredientPreload} from '../elements/ingredient/FormEditIngredientPreload';
@@ -25,6 +28,7 @@ import {FormShowIngredient} from '../elements/ingredient/FormShowIngredient';
 import {FormShowMenu} from '../elements/ingredient/FormShowMenu';
 import {SelectForm} from '../elements/ingredient/SelectForm';
 import UIButton from '../elements/ui/Button';
+
 // Styling
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,21 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-// Premade arrays to simulate database data
-const MenuListTemp: Array<MenuItem> =[
-  {name: 'Chicken', description: 'chicken', price: 5},
-  {name: 'Rice', description: 'Rice', price: 3},
-  {name: 'Steak', description: 'steak', price: 4},
-  {name: 'Fries', description: 'Fries', price: 5},
-];
-
-const IngredientListTemp: Array<Ingredient> = [
-  {name: 'Butter', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Ham', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Water', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Noodles', inventory: 2, unit: 'Tbsp', price: 5.00},
-  {name: 'Tomatoes', inventory: 2, unit: 'Tbsp', price: 5.00},
-];
 
 const Measurements: Array<Measurement> = [
   {value: 'tsp', label: 'tsp'},
@@ -75,40 +64,6 @@ const Measurements: Array<Measurement> = [
 ];
 
 
-const butter:MenuIngredient = {
-  name: 'Butter',
-  measurement: 'Tbsp',
-  amount: 5,
-  menuItem: 'Chicken',
-};
-
-const ham:MenuIngredient = {
-  name: 'Ham',
-  measurement: 'Tbsp',
-  amount: 4,
-  menuItem: 'Chicken',
-};
-
-const water:MenuIngredient = {
-  name: 'Water',
-  measurement: 'oz',
-  amount: 3,
-  menuItem: 'Chicken',
-};
-
-const steak:MenuIngredient = {
-  name: 'Water',
-  measurement: 'oz',
-  amount: 3,
-  menuItem: 'Steak',
-};
-
-const MenuIngredientList: Array<MenuIngredient> = [
-  butter,
-  ham,
-  water,
-  steak,
-];
 // Types need to be put in another file
 type FirstChoice = {
   value: string,
@@ -163,6 +118,7 @@ const maxAccordions = 10;
 
 export const EditMenu = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   // Step Data/Functions
   const [progress, setProgress] = React.useState({
@@ -273,9 +229,30 @@ export const EditMenu = () => {
     setItemsToShow(itemsToShow-1);
   };
 
+
+  const initialMenuListLoad = () => {
+    dispatch(menuDispatchers.getMenuItems(MenuList))
+      .then(unwrapResult)
+      .then((result) => {
+        if (!result) {
+
+        } else {
+          setMenuList(result.sort((a, b) => (a.name > b.name) ? 1: -1));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      },
+      );
+  };
+
+  useEffect(() => {
+    initialMenuListLoad();
+  }, []);
+
+
   // List of menuItems to working functions, alphabetically sorted
-  const [MenuList, setMenuList] = React.useState<Array<MenuItem>>(
-    MenuListTemp.sort((a, b) => (a.name > b.name) ? 1: -1));
+  const [MenuList, setMenuList] = React.useState<Array<MenuItem>>([]);
 
   // updates final list
   const updateMenuList = (placeArray:Array<MenuItem>) => {
@@ -399,9 +376,29 @@ export const EditMenu = () => {
     console.log(MenuList);
   }, [MenuList]);
 
+
+  const initialIngredientLoad = () => {
+    dispatch(menuDispatchers.getIngredients(IngredientList))
+      .then(unwrapResult)
+      .then((result) => {
+        if (!result) {
+
+        } else {
+          setIngredientList(result.sort((a, b) => (a.name > b.name) ? 1: -1));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      },
+      );
+  };
+
+  useEffect(() => {
+    initialIngredientLoad();
+  }, []);
+
   // Array of total working ingredient list, alphabetically sorted
-  const [IngredientList, setIngredientList]= React.useState<Array<Ingredient>>(
-    IngredientListTemp.sort((a, b) => (a.name > b.name) ? 1: -1));
+  const [IngredientList, setIngredientList]= React.useState<Array<Ingredient>>([]);
 
   // update working ingredient list
   const updateIngredientList = (placeIngredient:Ingredient) => {
@@ -488,9 +485,30 @@ export const EditMenu = () => {
   };
 
 
+  const initialMenuIngredientLoad = () => {
+    dispatch(menuDispatchers.getMenuIngredients(menuIngredientWorkingArray))
+      .then(unwrapResult)
+      .then((result) => {
+        if (!result) {
+
+        } else {
+          setMenuIngredientWorkingArray(result.sort((a, b) => (a.name > b.name) ? 1: -1));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      },
+      );
+  };
+
+  useEffect(() => {
+    initialMenuIngredientLoad();
+  }, []);
+
+
   // Final Menu Ingredient Array ofr working with in pages
   const [menuIngredientWorkingArray, setMenuIngredientWorkingArray] = React.useState<
-      Array<MenuIngredient>>(MenuIngredientList.sort((a, b) => (a.name > b.name) ? 1: -1));
+      Array<MenuIngredient>>([]);
 
   // update working array of menu-ingredients
   const updateMenuIngredientFinalArray = (placeArray:Array<MenuIngredient>) => {
