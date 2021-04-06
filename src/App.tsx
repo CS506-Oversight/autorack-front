@@ -10,9 +10,9 @@ import {AnonymousRoute} from './components/elements/routes/AnonymousRoute';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {Authenticated} from './components/pages/Authenticated';
+import {EditMenu} from './components/pages/EditMenu';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
-import {Menu} from './components/pages/Menu';
 import {RestockPurchases} from './components/pages/RestockPurchases';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
@@ -69,8 +69,8 @@ const PageContent = () => {
       <PrivateRoute path={AppPaths.RESTOCK_PURCHASES}>
         <RestockPurchases/>
       </PrivateRoute>
-      <PrivateRoute path={AppPaths.MENU}>
-        <Menu/>
+      <PrivateRoute path={AppPaths.EDIT_MENU}>
+        <EditMenu/>
       </PrivateRoute>
 
       <Copyright/>

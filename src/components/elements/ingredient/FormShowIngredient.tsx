@@ -1,19 +1,15 @@
 import React, {} from 'react';
+
+import {Paper} from '@material-ui/core';
 import Select from 'react-select';
-import {Button, Paper} from '@material-ui/core';
 
+import UIButton from '../ui/Button';
 
+// declare types
 type IngredientChoice = {
     value: string,
     label: string,
 }
-
-/**
- TODO figure out how to generalize these inputs
- make a for loop for all of the value,label pairs
- and create new pages for them
- */
-
 
 type FormShowIngredientProps = {
     nextStep: (step:number) => void,
@@ -36,7 +32,7 @@ export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngred
   const {nextStep, forStep, backStep, selectIngredient, handleShowIngredientItem,
     IngredientList} = props;
 
-
+  // Set next step
   const setStep = () => {
     if (selectIngredient.value === '') {
 
@@ -45,6 +41,7 @@ export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngred
     }
   };
 
+  // function to make selectable ingredients in Select
   const makeOptionsArray = () => {
     while (options.length != 0) {
       options.pop();
@@ -59,37 +56,36 @@ export const FormShowIngredient = (props: React.PropsWithChildren<FormShowIngred
     }
   };
 
+  // initialize array on page load
   makeOptionsArray();
 
   return (
-
     <Paper elevation={3}>
-      <React.Fragment>
+      <>
         <h3>Select a Menu Item</h3>
         <Select
           value={selectIngredient}
           onChange={(option) => handleShowIngredientItem(option)}
           options={options}
         />
-        <Button
+        <UIButton
+          text = 'Continue'
           variant='contained'
           color='primary'
           style={styles.button}
           onClick={setStep}>
-                    Continue
-        </Button>
-        <Button
+        </UIButton>
+        <UIButton
+          text = 'Back'
           variant='contained'
           color='primary'
           style={styles.button}
           onClick={function() {
             nextStep(backStep);
           }}>
-                    Back
-        </Button>
-      </React.Fragment>
+        </UIButton>
+      </>
     </Paper>
-
   );
 };
 

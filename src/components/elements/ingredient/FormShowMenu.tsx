@@ -1,6 +1,9 @@
 import React, {} from 'react';
+
+import {Paper} from '@material-ui/core';
 import Select from 'react-select';
-import {Button, Paper} from '@material-ui/core';
+
+import UIButton from '../ui/Button';
 
 
 type MenuChoice = {
@@ -62,23 +65,24 @@ export const FormShowMenu = (props: React.PropsWithChildren<SelectFormProps>) =>
   makeOptionsArray();
 
   return (
-
     <Paper elevation={3}>
-      <React.Fragment>
+      <>
         <h3>Select a Menu Item</h3>
         <Select
           value={selectMenu}
           onChange={(option) => handleShowMenuItem(option)}
           options={options}
         />
-        <Button
+        <UIButton
+          text = 'Continue'
           variant='contained'
           color='primary'
           style={styles.button}
           onClick={setStep}>
               Continue
-        </Button>
-        <Button
+        </UIButton>
+        <UIButton
+          text = 'Back'
           variant='contained'
           color='primary'
           style={styles.button}
@@ -86,10 +90,9 @@ export const FormShowMenu = (props: React.PropsWithChildren<SelectFormProps>) =>
             nextStep(backStep);
           }}>
               Back
-        </Button>
-      </React.Fragment>
+        </UIButton>
+      </>
     </Paper>
-
   );
 };
 

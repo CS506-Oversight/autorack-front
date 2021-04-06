@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-/* import Select from 'react-select';*/
-import {Button} from '@material-ui/core';
+
+import Paper from '@material-ui/core/Paper';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,9 +8,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 
+import UIButton from '../ui/Button';
 
+// Define all types
 type MenuIngredient = {
     name: string,
     measurement: string,
@@ -33,7 +34,7 @@ type ConfirmationFormProps = {
     updateMenuIngredientFinalArray: (placeArray:Array<MenuIngredient>) => void,
     updateMenuList: (placeArray:Array<MenuItem>) => void,
 }
-
+// basic styling
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -46,24 +47,31 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
     updateMenuIngredientFinalArray, updateMenuList} = props;
 
   const classes = useStyles();
+
+  // function for updating the step
   const setStep = () => {
     nextStep(forStep);
   };
 
+  // anytime final array of menu items is updated update rows in confirmation page
   useEffect(() => {
     makeTableRows();
   }, [menuItemFinalArray]);
 
+  // anytime final array of ingredients is updated update rows in confirmation page
   useEffect(() => {
     makeTableRows();
   }, [menuIngredientArray]);
 
+  // define array for holding # of ingredients per row
   const rowNums: Array<number> = [];
+
+  // function for filling rowNums, always empties array to start
   const makeTableRows = () => {
     while (rowNums.length != 0) {
       rowNums.pop();
     }
-    for (let i = 0; i<menuItemFinalArray.length; i++) {
+    for (let i = 0; i < menuItemFinalArray.length; i++) {
       let num = 0;
       for (const item of menuIngredientArray) {
         if (item.menuItem === menuItemFinalArray[i].name) {
@@ -73,10 +81,14 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
       rowNums.push(num+1);
     }
   };
+
+  // Fill array at start first time the page loads
   makeTableRows();
+
+
   return (
 
-    <React.Fragment>
+    <>
       <h3>Your New Menu Item</h3>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="caption table">
@@ -90,11 +102,9 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
               <TableCell align="right">Unit</TableCell>
             </TableRow>
           </TableHead>
-
           {menuItemFinalArray.map((row:MenuItem, index:number) =>
             <TableBody key={row.name}>
               <TableRow>
-
                 <TableCell component="th" scope="row" rowSpan={rowNums[index]}>{row.name}</TableCell>
                 <TableCell align="right" rowSpan={rowNums[index]}>{row.description}</TableCell>
                 <TableCell align="right" rowSpan={rowNums[index]}>${row.price}</TableCell>
@@ -111,7 +121,8 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
           )}
         </Table>
       </TableContainer>
-      <Button
+      <UIButton
+        text = 'Confirm'
         variant='contained'
         color='primary'
         style={styles.button}
@@ -120,9 +131,9 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
           updateMenuIngredientFinalArray(menuIngredientArray);
           updateMenuList(menuItemFinalArray);
         }}>
-              Confirm
-      </Button>
-      <Button
+      </UIButton>
+      <UIButton
+        text = 'Back'
         variant='contained'
         color='primary'
         style={styles.button}
@@ -130,8 +141,8 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
           nextStep(backStep);
         }}>
         Back
-      </Button>
-    </React.Fragment>
+      </UIButton>
+    </>
 
   );
 };
@@ -140,4 +151,5 @@ const styles = {
   button: {
     margin: 15,
   },
+
 };

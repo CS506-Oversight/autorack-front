@@ -1,5 +1,6 @@
 import React, {} from 'react';
-import {Button} from '@material-ui/core';
+
+import Paper from '@material-ui/core/Paper';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,9 +8,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 
+import UIButton from '../ui/Button';
 
+// Declare all types
 type Ingredient = {
     name: string,
     inventory: number,
@@ -18,14 +20,14 @@ type Ingredient = {
 }
 
 type ConfirmationFormProps = {
-  nextStep: (step:number) => void,
+  nextStep: (step: number) => void,
   forStep: number,
   backStep: number,
-    ingredientItem:Ingredient,
+    ingredientItem: Ingredient,
     handleIngredient: (item: Ingredient) => void,
-    updateIngredientList: (placeArray:Ingredient) => void,
+    updateIngredientList: (placeArray: Ingredient) => void,
 }
-
+// define styles
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -37,10 +39,13 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
     updateIngredientList} = props;
 
   const classes = useStyles();
+
+  // function for setting next step
   const setStep = () => {
     nextStep(forStep);
   };
 
+  // sets ingredient back to original state
   const resetIngredient = () => {
     const temp:Ingredient = {
       name: '',
@@ -53,7 +58,7 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
 
   return (
 
-    <React.Fragment>
+    <>
       <h3>Your New Ingredient</h3>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="caption table">
@@ -77,7 +82,8 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
           </TableBody>
         </Table>
       </TableContainer>
-      <Button
+      <UIButton
+        text = 'Confirm'
         variant='contained'
         color='primary'
         style={styles.button}
@@ -86,18 +92,17 @@ export const FormConfirmationIngredient = (props: React.PropsWithChildren<Confir
           resetIngredient();
           updateIngredientList(ingredientItem);
         }}>
-              Confirm
-      </Button>
-      <Button
+      </UIButton>
+      <UIButton
+        text = 'Back'
         variant='contained'
         color='primary'
         style={styles.button}
         onClick={function() {
           nextStep(backStep);
         }}>
-        Back
-      </Button>
-    </React.Fragment>
+      </UIButton>
+    </>
 
   );
 };
