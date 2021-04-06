@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import {makeStyles} from '@material-ui/core/styles';
@@ -8,7 +8,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import {unwrapResult} from '@reduxjs/toolkit';
 
+import {FetchStatus} from '../../../api/definitions/misc';
+import {alertDispatchers} from '../../../state/alert/dispatchers';
+import {menuDispatchers} from '../../../state/menu/menu_dispatchers';
+import {useDispatch} from '../../../state/store';
 import UIButton from '../ui/Button';
 
 // Define all types
@@ -82,6 +87,53 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
     }
   };
 
+  // Dispatch Stuff
+  const dispatch = useDispatch();
+
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({
+    fetched: false,
+    fetching: false,
+  });
+
+  const onSubmitMenuItems = () => {
+    setFetchStatus({
+      fetching: true,
+      fetched: false,
+    });
+    dispatch(menuDispatchers.sendMenuItems(menuItemFinalArray))
+      .then(unwrapResult)
+      .catch((error) => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
+      })
+      .finally(() => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+      },
+      );
+    dispatch(menuDispatchers.sendMenuIngredients(menuIngredientArray))
+      .then(unwrapResult)
+      .catch((error) => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
+      })
+      .finally(() => {
+        setFetchStatus({
+          fetching: false,
+          fetched: true,
+        });
+      },
+      );
+  };
+
   // Fill array at start first time the page loads
   makeTableRows();
 
@@ -122,7 +174,7 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
         </Table>
       </TableContainer>
       <UIButton
-        text = 'Confirm'
+        text = {fetchStatus.fetching ? 'Loading...' : 'Continue'}
         variant='contained'
         color='primary'
         style={styles.button}
@@ -130,6 +182,7 @@ export const FormConfirmationMenu = (props: React.PropsWithChildren<Confirmation
           setStep();
           updateMenuIngredientFinalArray(menuIngredientArray);
           updateMenuList(menuItemFinalArray);
+          onSubmitMenuItems();
         }}>
       </UIButton>
       <UIButton
