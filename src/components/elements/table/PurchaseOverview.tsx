@@ -37,7 +37,7 @@ const PurchaseOverview = ({data}: PurchaseOverviewProps) => {
     return `${num.toFixed(2)}`;
   };
 
-  const calcSubtotal = (items: RowData[]) => {
+  const calcSubtotal = (items: Array<RowData>) => {
     return items.map(({price}) => price).reduce((sum, i) => sum + i, 0);
   };
 

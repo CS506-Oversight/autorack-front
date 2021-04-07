@@ -6,20 +6,20 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+import {unwrapResult} from '@reduxjs/toolkit';
 
-import {RestockDataEntry} from '../../../state/restock/restockData';
+import {alertDispatchers} from '../../../state/alert/dispatchers';
+import {RestockData, RestockDataEntry} from '../../../state/restock/restockData';
 import {RestockStatusType} from '../../../state/restock/restockData';
 import {restockDispatchers} from '../../../state/restock/restockDispatchers';
-import {useRestockSelector} from '../../../state/restock/restockSelector';
 import {useDispatch} from '../../../state/store';
 import {stableSort, getComparator, Order} from '../../../utils/Sort';
 import {NoData} from './NoData';
 import PurchaseModal from './PurchaseModal';
 import Status from './Status';
+import SortableTableHead from './TableHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,101 +33,43 @@ const useStyles = makeStyles((theme: Theme) =>
     table: {
       minWidth: 750,
     },
-    visuallyHidden: {
-      border: 0,
-      clip: 'rect(0 0 0 0)',
-      height: 1,
-      margin: -1,
-      overflow: 'hidden',
-      padding: 0,
-      position: 'absolute',
-      top: 20,
-      width: 1,
-    },
-    tableRow: {
-      backgroundColor: '#e3e3e3',
-    },
     tablePagination: {
       backgroundColor: '#e3e3e3',
     },
   }),
 );
 
-const statusColors: { [key in RestockStatusType]: any } = {
+const statusColors: { [key in RestockStatusType]: string } = {
   completed: 'success',
   processing: 'info',
   shipped: 'danger',
 };
 
-type HeadCell = {
-  columnName: keyof RestockDataEntry;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: Array<HeadCell> = [
-  {columnName: 'id', numeric: false, label: 'Order #'},
-  {columnName: 'purchaseDate', numeric: false, label: 'Purchase Date'},
-  {columnName: 'status', numeric: false, label: 'Status'},
-  {columnName: 'type', numeric: false, label: 'Type'},
-  {columnName: 'totalPrice', numeric: true, label: 'Total Price ($)'},
-];
-
-type EnhancedTableProps = {
-  classes: ReturnType<typeof useStyles>;
-  onRequestSort: (event: React.MouseEvent<HTMLSpanElement>, property: keyof RestockDataEntry) => void;
+type PageState = {
+  page: number;
+  rowsPerPage: number;
   order: Order;
-  orderBy: string;
+  orderBy: keyof RestockDataEntry;
 }
-
-const EnhancedTableHead = (props: EnhancedTableProps) => {
-  const {classes, order, orderBy, onRequestSort} = props;
-  const handleSort = (property: keyof RestockDataEntry) => (event: React.MouseEvent<HTMLSpanElement>) => {
-    onRequestSort(event, property);
-  };
-
-  const tableClasses = useStyles();
-
-  return (
-    <TableHead>
-      <TableRow className={tableClasses.tableRow}>
-        {headCells.map((headCell) =>
-          <TableCell
-            key={headCell.columnName}
-            sortDirection={orderBy === headCell.columnName ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.columnName}
-              direction={orderBy === headCell.columnName ? order : 'asc'}
-              onClick={handleSort(headCell.columnName)}
-            >
-              {headCell.label}
-              {orderBy === headCell.columnName ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>,
-        )}
-        <TableCell>Purchase Info</TableCell>
-      </TableRow>
-    </TableHead>
-  );
-};
 
 const RestockPurchasesTable = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const {restockData} = useRestockSelector();
-
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof RestockDataEntry>('id');
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [restockData, setRestockData] = React.useState<RestockData>([]);
+  const [pageState, setPageState] = React.useState<PageState>({
+    page: 0,
+    rowsPerPage: 10,
+    order: 'asc',
+    orderBy: 'id',
+  });
 
   const getData = () => {
-    dispatch(restockDispatchers.fetchRestockData());
+    dispatch(restockDispatchers.fetchRestockData())
+      .then(unwrapResult)
+      .then((result) => setRestockData(result))
+      .catch((error) => {
+        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
+      });
   };
 
   useEffect(() => {
@@ -135,25 +77,32 @@ const RestockPurchasesTable = () => {
   }, []);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof RestockDataEntry) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    const isAsc = pageState.orderBy === property && pageState.order === 'asc';
+    setPageState({
+      ...pageState,
+      order: isAsc ? 'desc' : 'asc',
+      orderBy: property,
+    });
   };
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
-    setPage(newPage);
+    setPageState({...pageState, page: newPage});
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPageState({
+      ...pageState,
+      rowsPerPage: parseInt(event.target.value, 10),
+      page: 0,
+    });
   };
 
   if (!restockData.length) {
     return <NoData />;
   }
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, restockData.length - page * rowsPerPage);
+  const emptyRows = pageState.rowsPerPage - Math.min(pageState.rowsPerPage,
+    restockData.length - pageState.page * pageState.rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -164,15 +113,17 @@ const RestockPurchasesTable = () => {
             aria-labelledby="RestockPurchasesTable"
             aria-label="restock purchases table"
           >
-            <EnhancedTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
+            <SortableTableHead
+              order={pageState.order}
+              orderBy={pageState.orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {stableSort(restockData, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {stableSort(restockData, getComparator(pageState.order, pageState.orderBy))
+                .slice(
+                  pageState.page * pageState.rowsPerPage,
+                  pageState.page * pageState.rowsPerPage + pageState.rowsPerPage,
+                )
                 .map((row) => {
                   return <TableRow
                     hover
@@ -206,8 +157,8 @@ const RestockPurchasesTable = () => {
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
           count={restockData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
+          rowsPerPage={pageState.rowsPerPage}
+          page={pageState.page}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
           className={classes.tablePagination}

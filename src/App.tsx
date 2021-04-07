@@ -9,10 +9,10 @@ import {Navigation} from './components/elements/nav/Main';
 import {AnonymousRoute} from './components/elements/routes/AnonymousRoute';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
-import RestockPurchasesTable from './components/elements/table/RestockPurchasesTable';
 import {Authenticated} from './components/pages/Authenticated';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
+import {RestockPurchases} from './components/pages/RestockPurchases';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
 import AppPaths from './const/paths';
@@ -66,7 +66,7 @@ const PageContent = () => {
         <Authenticated/>
       </PrivateRoute>
       <PrivateRoute path={AppPaths.RESTOCK_PURCHASES}>
-        <RestockPurchasesTable/>
+        <RestockPurchases/>
       </PrivateRoute>
 
       <Copyright/>

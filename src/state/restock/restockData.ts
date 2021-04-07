@@ -6,11 +6,11 @@ export type RestockStatusType = 'processing' | 'shipped' | 'completed';
  * The base fields for every restock purchase.
  */
 export type RestockItemInfo = {
-    id: string;
-    status: RestockStatusType;
-    purchaseDate: string;
-    totalPrice: number;
-    type: RestockType;
+  id: string;
+  status: RestockStatusType;
+  purchaseDate: string;
+  totalPrice: number;
+  type: RestockType;
 }
 
 /**
@@ -18,17 +18,17 @@ export type RestockItemInfo = {
  * a restock purchase.
  */
 export type ItemDataInfo = {
-    description: string;
-    unitPrice: number;
-    quantity: number;
+  description: string;
+  unitPrice: number;
+  quantity: number;
 }
 
 /**
  * A collection of all the items purchased during a
- * restock purchase
+ * restock purchase.
  */
 export type Items = {
-    itemsData: Array<ItemDataInfo>
+  itemsData: Array<ItemDataInfo>
 }
 
 export type RestockDataEntry = RestockItemInfo & Items;
