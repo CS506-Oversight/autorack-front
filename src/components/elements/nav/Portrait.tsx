@@ -36,7 +36,7 @@ export const NavPortrait = () => {
         </div>
       </Drawer>
 
-      <div><AutoRackLogo/></div>
+      <AutoRackLogo/>
     </Toolbar>
   );
 };
