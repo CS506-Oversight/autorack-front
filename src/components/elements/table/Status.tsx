@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {Color} from '@material-ui/lab/Alert';
 import {makeStyles} from '@material-ui/styles';
 
 
@@ -15,25 +16,18 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type StatusColor = {
-    [key: string]: any; // Must accommodate all members
-    primary: {};
-    info: {};
-    warning: {};
-    danger: {};
-    success: {};
-}
+export type StatusColor = Color | 'primary';
 
-const colors: StatusColor = {
+const statusColorMap: {[color in StatusColor]: string} = {
   'primary': '#ccc',
   'info': '#3cc',
   'warning': '#cc3',
-  'danger': '#c33',
+  'error': '#c33',
   'success': '#3c3',
 };
 
 type StatusProps = {
-    color: string;
+  color: StatusColor;
 }
 
 const Status = ({color, ...rest}: StatusProps) => {
@@ -43,7 +37,7 @@ const Status = ({color, ...rest}: StatusProps) => {
     <span
       {...rest}
       className={classes.root}
-      style={{backgroundColor: colors[color]}}
+      style={{backgroundColor: statusColorMap[color]}}
     />
   );
 };

@@ -18,7 +18,7 @@ import {useDispatch} from '../../../state/store';
 import {Order, sort} from '../../../utils/sort';
 import {NoData} from './NoData';
 import PurchaseModal from './PurchaseModal';
-import Status from './Status';
+import Status, {StatusColor} from './Status';
 import SortableTableHead from './TableHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,10 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const statusColors: { [key in RestockStatusType]: string } = {
+const statusColorMap: {[key in RestockStatusType]: StatusColor} = {
   completed: 'success',
   processing: 'info',
-  shipped: 'danger',
+  shipped: 'error',
 };
 
 type PageState = {
@@ -153,7 +153,7 @@ const RestockPurchasesTable = () => {
                       <TableCell>{row.purchaseDate}</TableCell>
                       <TableCell>
                         <Status
-                          color={statusColors[row.status]}
+                          color={statusColorMap[row.status]}
                         />
                         {row.status}
                       </TableCell>
