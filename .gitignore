@@ -4,6 +4,9 @@
 # scss files - these should be compiled to css before commmit
 *.scss
 
+# code quality assurance
+coverage/
+
 # production
 /build
 
