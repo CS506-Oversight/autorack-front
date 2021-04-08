@@ -84,7 +84,13 @@ jobs:
       - name: npm test
         run: |
           python3 autorack-back/run.py &
-          npm test -- --watchAll=false
+          npm run test:coverage
+
+      - name: Send Coverage report
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage/clover.xml
 
       - name: npm build
         run: npm run build

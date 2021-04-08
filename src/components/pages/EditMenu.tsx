@@ -373,7 +373,7 @@ export const EditMenu = () => {
   }, [menuItemAdjacentArray]);
 
   useEffect(() => {
-    console.log(MenuList);
+    /*    console.log(MenuList);*/
   }, [MenuList]);
 
 
@@ -424,7 +424,7 @@ export const EditMenu = () => {
   useEffect(() => {
     initializeAdjacentIngredientArray();
     handleMenuIngredientList(makeIngredientListToPage());
-    console.log(IngredientList);
+    /*    console.log(IngredientList);*/
   }, [IngredientList]);
 
 
@@ -534,7 +534,7 @@ export const EditMenu = () => {
   };
 
   useEffect(() => {
-    console.log(menuIngredientWorkingArray);
+    /*    console.log(menuIngredientWorkingArray);*/
   }, [menuIngredientWorkingArray]);
 
 

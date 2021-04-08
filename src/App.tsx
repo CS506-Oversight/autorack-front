@@ -1,19 +1,19 @@
 import React from 'react';
 
-import {Container} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {BrowserRouter} from 'react-router-dom';
+import {Container, makeStyles} from '@material-ui/core';
 
 import './App.css';
 import Copyright from './components/elements/Copyright';
 import {GlobalAlert} from './components/elements/GlobalAlert';
 import {Navigation} from './components/elements/nav/Main';
+import {AnonymousRoute} from './components/elements/routes/AnonymousRoute';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {Authenticated} from './components/pages/Authenticated';
 import {EditMenu} from './components/pages/EditMenu';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
+import {RestockPurchases} from './components/pages/RestockPurchases';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
 import AppPaths from './const/paths';
@@ -43,31 +43,36 @@ const PageContent = () => {
     <Container className={classes.root}>
       <GlobalAlert/>
 
-      {/* Anonymous users only */}
+      {/* Accessible regardless the login status */}
 
       <PublicRoute path={AppPaths.HOME}>
         <Homepage/>
       </PublicRoute>
-      <PublicRoute path={AppPaths.SIGN_UP}>
+
+      {/* Anonymous users only */}
+
+      <AnonymousRoute path={AppPaths.SIGN_UP}>
         <SignUp/>
-      </PublicRoute>
-      <PublicRoute path={AppPaths.SIGN_IN}>
+      </AnonymousRoute>
+      <AnonymousRoute path={AppPaths.SIGN_IN}>
         <SignIn/>
-      </PublicRoute>
-      <PublicRoute path={AppPaths.FORGOT_PASSWORD}>
+      </AnonymousRoute>
+      <AnonymousRoute path={AppPaths.FORGOT_PASSWORD}>
         <ForgotPassword/>
-      </PublicRoute>
+      </AnonymousRoute>
 
       {/* Authentication needed */}
-      <PrivateRoute path={AppPaths.EDIT_MENU}>
-        <EditMenu />
-      </PrivateRoute>
 
       <PrivateRoute path={AppPaths.AUTHENTICATED}>
         <Authenticated/>
       </PrivateRoute>
+      <PrivateRoute path={AppPaths.RESTOCK_PURCHASES}>
+        <RestockPurchases/>
+      </PrivateRoute>
+      <PrivateRoute path={AppPaths.EDIT_MENU}>
+        <EditMenu/>
+      </PrivateRoute>
 
-      {/* Common routes */}
       <Copyright/>
     </Container>
   );
@@ -97,9 +102,7 @@ const AppPage = () => {
 const App = (props: ReduxProviderProps) => {
   return (
     <ReduxProvider {...props}>
-      <BrowserRouter>
-        <AppPage/>
-      </BrowserRouter>
+      <AppPage/>
     </ReduxProvider>
   );
 };

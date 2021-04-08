@@ -4,6 +4,8 @@ import storage from 'redux-persist/lib/storage';
 
 import alertReducer from './alert/reducer';
 import authReducer from './auth/reducer';
+// eslint-disable-next-line camelcase
+import menu_reducer from './menu/menu_reducer';
 
 const persistConfig = {
   key: 'root',
@@ -11,6 +13,12 @@ const persistConfig = {
   whitelist: ['auth', 'alert'],
 };
 
-const rootReducer = combineReducers({auth: authReducer, alert: alertReducer});
+const rootReducer = combineReducers(
+  {
+    auth: authReducer,
+    alert: alertReducer,
+    menu: menu_reducer,
+  },
+);
 
 export default persistReducer(persistConfig, rootReducer);

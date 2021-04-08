@@ -13,7 +13,6 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
-    "react-router-global-history": "^1.1.0",
     "react-scripts": "4.0.2",
     "react-select": "^4.3.0",
     "redux": "^4.0.5",
@@ -21,6 +20,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "typescript": "^4.2.3",
+    "ts-node": "^9.1.1",
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
@@ -35,7 +35,7 @@
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
-    "@types/react-select": "^4.0.14",
+    "@types/react-select": "^4.0.13",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1",
@@ -44,12 +44,14 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.23.0",
     "stylelint": "^13.12.0",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint-config-standard": "^20.0.0",
+    "ts-jest": "^26.5.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "npm test a -- --coverage",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --fix --ext .ts,.tsx",
     "lint:css": "stylelint \"src/**/*.{css,scss,sass}\""
