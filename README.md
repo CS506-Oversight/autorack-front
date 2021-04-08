@@ -1,7 +1,8 @@
 # autorack-front
 
 [![badge-ci]][badge-ci-link]
-[![badge-cq-badge]][badge-cq-link]
+[![badge-cq]][badge-cq-link]
+[![badge-coverage]][badge-cq-link]
 
 Frontend of AutoRack.
 
@@ -83,10 +84,12 @@ Lint the TypeScript code located in `src` via `eslint`.
 Add buildpack `https://buildpack-registry.s3.amazonaws.com/buildpacks/mars/create-react-app.tgz`
 to the Heroku app, then deploy the code. The app should be available after building and releasing the app.
 
-[badge-cq-link]: https://www.codacy.com/gh/CS506-Oversight/autorack-front/dashboard
-
-[badge-cq-badge]: https://app.codacy.com/project/badge/Grade/6e097d0fb8864550bc4f952a843514af
-
 [badge-ci]: https://github.com/CS506-Oversight/autorack-front/workflows/Node%20CI/badge.svg
 
 [badge-ci-link]: https://github.com/CS506-Oversight/autorack-front/actions?query=workflow%3A%22Node+CI%22
+
+[badge-cq-link]: https://www.codacy.com/gh/CS506-Oversight/autorack-front/dashboard
+
+[badge-cq]: https://app.codacy.com/project/badge/Grade/6e097d0fb8864550bc4f952a843514af
+
+[badge-coverage]: https://app.codacy.com/project/badge/Coverage/6e097d0fb8864550bc4f952a843514af
