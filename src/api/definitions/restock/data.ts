@@ -3,9 +3,9 @@ export type RestockType = 'Manual' | 'Auto';
 export type RestockStatusType = 'processing' | 'shipped' | 'completed';
 
 /**
- * The base fields for every restock purchase.
+ * Information of a restock.
  */
-export type RestockItemInfo = {
+export type RestockInfo = {
   id: string;
   status: RestockStatusType;
   purchaseDate: string;
@@ -14,23 +14,31 @@ export type RestockItemInfo = {
 }
 
 /**
- * The base fields for every item purchased during
- * a restock purchase.
+ * Info of a purchased item during a restock.
+ *
+ * This will be directly returned from the backend.
  */
-export type ItemDataInfo = {
+export type PurchaseItemInfo = {
   description: string;
   unitPrice: number;
   quantity: number;
 }
 
 /**
- * A collection of all the items purchased during a
- * restock purchase.
+ * Info of a purchased item during a restock **with calculated fields**.
+ *
+ * The fields in this type should be calculated at the frontend,
+ * **not the backend**.
  */
-export type Items = {
-  itemsData: Array<ItemDataInfo>
+export type PurchaseItemInfoCalculated = PurchaseItemInfo & {
+  price: number;
 }
 
-export type RestockDataEntry = RestockItemInfo & Items;
+/**
+ * Data entry of a restock.
+ */
+export type RestockDataEntry = RestockInfo & {
+  purchasedItems: Array<PurchaseItemInfo>
+};
 
 export type RestockData = Array<RestockDataEntry>;

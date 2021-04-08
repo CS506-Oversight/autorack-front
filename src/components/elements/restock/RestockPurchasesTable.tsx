@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
 import {FetchStatus} from '../../../api/definitions/misc';
-import {RestockData, RestockItemInfo} from '../../../api/definitions/restock/data';
+import {RestockData, RestockInfo} from '../../../api/definitions/restock/data';
 import {RestockStatusType} from '../../../api/definitions/restock/data';
 import {mockFetchRestockData} from '../../../api/mock/restock/utils';
 import {alertDispatchers} from '../../../state/alert/dispatchers';
@@ -19,7 +19,7 @@ import {Order, sort} from '../../../utils/sort';
 import {NoData} from '../table/NoData';
 import SortableTableHeader, {SortableTableHeaderCell} from '../table/SortableTableHeader';
 import Status, {StatusColor} from '../ui/Status';
-import PurchaseModal from './PurchaseModal';
+import PurchaseModal from './purchase/Modal';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +45,7 @@ const statusColorMap: {[key in RestockStatusType]: StatusColor} = {
   shipped: 'error',
 };
 
-const headCells: Array<SortableTableHeaderCell<keyof RestockItemInfo>> = [
+const headCells: Array<SortableTableHeaderCell<keyof RestockInfo>> = [
   {columnName: 'id', numeric: false, label: 'Order #'},
   {columnName: 'purchaseDate', numeric: false, label: 'Purchase Date'},
   {columnName: 'status', numeric: false, label: 'Status'},
@@ -57,7 +57,7 @@ type PageState = {
   page: number;
   rowsPerPage: number;
   order: Order;
-  orderBy: keyof RestockItemInfo;
+  orderBy: keyof RestockInfo;
 }
 
 const RestockPurchasesTable = () => {
@@ -95,7 +95,7 @@ const RestockPurchasesTable = () => {
       });
   }
 
-  const onHeaderSort = (event: React.MouseEvent<HTMLSpanElement>, columnName: keyof RestockItemInfo) => {
+  const onHeaderSort = (event: React.MouseEvent<HTMLSpanElement>, columnName: keyof RestockInfo) => {
     const isAsc = pageState.orderBy === columnName && pageState.order === 'asc';
     setPageState({
       ...pageState,
@@ -170,7 +170,7 @@ const RestockPurchasesTable = () => {
                       <TableCell>{row.type}</TableCell>
                       <TableCell>{row.totalPrice}</TableCell>
                       <TableCell>
-                        <PurchaseModal data={row.itemsData} orderId={row.id}/>
+                        <PurchaseModal data={row.purchasedItems} orderId={row.id}/>
                       </TableCell>
                     </TableRow>
                   );
