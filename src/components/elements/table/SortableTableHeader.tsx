@@ -9,7 +9,6 @@ import {
   TableSortLabel,
 } from '@material-ui/core';
 
-import {RestockItemInfo} from '../../../api/definitions/restock/data';
 import {Order} from '../../../utils/sort';
 
 const useStyles = makeStyles(() =>
@@ -31,31 +30,25 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-type HeadCell = {
-  columnName: keyof RestockItemInfo;
+export type SortableTableHeaderCell<T extends string> = {
+  columnName: T;
   label: string;
   numeric: boolean;
 }
 
-const headCells: Array<HeadCell> = [
-  {columnName: 'id', numeric: false, label: 'Order #'},
-  {columnName: 'purchaseDate', numeric: false, label: 'Purchase Date'},
-  {columnName: 'status', numeric: false, label: 'Status'},
-  {columnName: 'type', numeric: false, label: 'Type'},
-  {columnName: 'totalPrice', numeric: true, label: 'Total Price ($)'},
-];
-
-type SortableTableProps = {
-  onRequestSort: (event: React.MouseEvent<HTMLSpanElement>, property: keyof RestockItemInfo) => void;
-  order: Order;
-  orderBy: string;
+type SortableTableHeaderProps<T extends string> = {
+  onSort: (event: React.MouseEvent<HTMLSpanElement>, property: T) => void,
+  order: Order,
+  orderBy: string,
+  title: string,
+  headCells: Array<SortableTableHeaderCell<T>>,
 }
 
-const SortableTableHead = (props: SortableTableProps) => {
+const SortableTableHeader = <T extends string>(props: SortableTableHeaderProps<T>) => {
   const classes = useStyles();
-  const {order, orderBy, onRequestSort} = props;
-  const handleSort = (property: keyof RestockItemInfo) => (event: React.MouseEvent<HTMLSpanElement>) => {
-    onRequestSort(event, property);
+  const {order, orderBy, title, headCells, onSort} = props;
+  const handleSort = (columnName: T) => (event: React.MouseEvent<HTMLSpanElement>) => {
+    onSort(event, columnName);
   };
 
   return (
@@ -72,18 +65,22 @@ const SortableTableHead = (props: SortableTableProps) => {
               onClick={handleSort(headCell.columnName)}
             >
               {headCell.label}
-              {orderBy === headCell.columnName ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
+              {
+                orderBy === headCell.columnName ?
+                  (
+                    <span className={classes.visuallyHidden}>
+                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </span>
+                  ) :
+                  null
+              }
             </TableSortLabel>
           </TableCell>,
         )}
-        <TableCell>Purchase Info</TableCell>
+        <TableCell>{title}</TableCell>
       </TableRow>
     </TableHead>
   );
 };
 
-export default SortableTableHead;
+export default SortableTableHeader;

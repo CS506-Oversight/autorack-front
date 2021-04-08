@@ -16,10 +16,10 @@ import {mockFetchRestockData} from '../../../api/mock/restock/utils';
 import {alertDispatchers} from '../../../state/alert/dispatchers';
 import {useDispatch} from '../../../state/store';
 import {Order, sort} from '../../../utils/sort';
-import {NoData} from './NoData';
+import {NoData} from '../table/NoData';
+import SortableTableHeader, {SortableTableHeaderCell} from '../table/SortableTableHeader';
+import Status, {StatusColor} from '../ui/Status';
 import PurchaseModal from './PurchaseModal';
-import Status, {StatusColor} from './Status';
-import SortableTableHead from './TableHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +44,14 @@ const statusColorMap: {[key in RestockStatusType]: StatusColor} = {
   processing: 'info',
   shipped: 'error',
 };
+
+const headCells: Array<SortableTableHeaderCell<keyof RestockItemInfo>> = [
+  {columnName: 'id', numeric: false, label: 'Order #'},
+  {columnName: 'purchaseDate', numeric: false, label: 'Purchase Date'},
+  {columnName: 'status', numeric: false, label: 'Status'},
+  {columnName: 'type', numeric: false, label: 'Type'},
+  {columnName: 'totalPrice', numeric: true, label: 'Total Price ($)'},
+];
 
 type PageState = {
   page: number;
@@ -87,20 +95,20 @@ const RestockPurchasesTable = () => {
       });
   }
 
-  const handleRequestSort = (event: React.MouseEvent<HTMLSpanElement>, property: keyof RestockItemInfo) => {
-    const isAsc = pageState.orderBy === property && pageState.order === 'asc';
+  const onHeaderSort = (event: React.MouseEvent<HTMLSpanElement>, columnName: keyof RestockItemInfo) => {
+    const isAsc = pageState.orderBy === columnName && pageState.order === 'asc';
     setPageState({
       ...pageState,
       order: isAsc ? 'desc' : 'asc',
-      orderBy: property,
+      orderBy: columnName,
     });
   };
 
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
+  const onPageChanged = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
     setPageState({...pageState, page: newPage});
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onRowsPerPageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPageState({
       ...pageState,
       rowsPerPage: parseInt(event.target.value, 10),
@@ -126,10 +134,12 @@ const RestockPurchasesTable = () => {
             aria-labelledby="RestockPurchasesTable"
             aria-label="restock purchases table"
           >
-            <SortableTableHead
+            <SortableTableHeader
               order={pageState.order}
               orderBy={pageState.orderBy}
-              onRequestSort={handleRequestSort}
+              onSort={onHeaderSort}
+              headCells={headCells}
+              title="Purchase Info"
             />
             <TableBody>
               {sort(restockData.response, {
@@ -177,8 +187,8 @@ const RestockPurchasesTable = () => {
           count={restockData.response.length}
           rowsPerPage={pageState.rowsPerPage}
           page={pageState.page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onChangePage={onPageChanged}
+          onChangeRowsPerPage={onRowsPerPageChanged}
           className={classes.tablePagination}
         />
       </Paper>
