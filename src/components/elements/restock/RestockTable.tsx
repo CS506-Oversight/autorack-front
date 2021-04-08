@@ -4,22 +4,19 @@ import Paper from '@material-ui/core/Paper';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
 
 import {FetchStatus} from '../../../api/definitions/misc';
 import {RestockData, RestockInfo} from '../../../api/definitions/restock/data';
-import {RestockStatusType} from '../../../api/definitions/restock/data';
 import {mockFetchRestockData} from '../../../api/mock/restock/utils';
 import {alertDispatchers} from '../../../state/alert/dispatchers';
 import {useDispatch} from '../../../state/store';
-import {Order, sort} from '../../../utils/sort';
+import {Order} from '../../../utils/sort';
 import {NoData} from '../table/NoData';
 import SortableTableHeader, {SortableTableHeaderCell} from '../table/SortableTableHeader';
-import Status, {StatusColor} from '../ui/Status';
-import PurchaseModal from './purchase/Modal';
+import {RestockEmptyRows} from './RestockEmptyRows';
+import {RestockEntries} from './RestockEntries';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,12 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const statusColorMap: {[key in RestockStatusType]: StatusColor} = {
-  completed: 'success',
-  processing: 'info',
-  shipped: 'error',
-};
-
 const headCells: Array<SortableTableHeaderCell<keyof RestockInfo>> = [
   {columnName: 'id', numeric: false, label: 'Order #'},
   {columnName: 'purchaseDate', numeric: false, label: 'Purchase Date'},
@@ -53,16 +44,17 @@ const headCells: Array<SortableTableHeaderCell<keyof RestockInfo>> = [
   {columnName: 'totalPrice', numeric: true, label: 'Total Price ($)'},
 ];
 
-type PageState = {
+export type PageState = {
   page: number;
   rowsPerPage: number;
   order: Order;
   orderBy: keyof RestockInfo;
 }
 
-const RestockPurchasesTable = () => {
+const RestockTable = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [restockData, setRestockData] = React.useState<FetchStatus<RestockData>>({
     fetched: false,
     fetching: false,
@@ -142,42 +134,8 @@ const RestockPurchasesTable = () => {
               title="Purchase Info"
             />
             <TableBody>
-              {sort(restockData.response, {
-                order: pageState.order,
-                sortKey: (item) => item[pageState.orderBy],
-              })
-                .slice(
-                  pageState.page * pageState.rowsPerPage,
-                  pageState.page * pageState.rowsPerPage + pageState.rowsPerPage,
-                )
-                .map((row) => {
-                  return (
-                    <TableRow
-                      hover
-                      tabIndex={-1}
-                      key={row.id}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.id}
-                      </TableCell>
-                      <TableCell>{row.purchaseDate}</TableCell>
-                      <TableCell>
-                        <Status
-                          color={statusColorMap[row.status]}
-                        />
-                        {row.status}
-                      </TableCell>
-                      <TableCell>{row.type}</TableCell>
-                      <TableCell>{row.totalPrice}</TableCell>
-                      <TableCell>
-                        <PurchaseModal data={row.purchasedItems} orderId={row.id}/>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && <TableRow style={{height: 53 * emptyRows}}>
-                <TableCell colSpan={6}/>
-              </TableRow>}
+              <RestockEntries data={restockData.response} pageState={pageState}/>
+              <RestockEmptyRows count={emptyRows}/>
             </TableBody>
           </Table>
         </TableContainer>
@@ -196,4 +154,4 @@ const RestockPurchasesTable = () => {
   );
 };
 
-export default RestockPurchasesTable;
+export default RestockTable;

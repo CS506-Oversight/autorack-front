@@ -1,7 +1,7 @@
 import React from 'react';
 
-import RestockPurchasesTable from '../elements/restock/RestockPurchasesTable';
+import RestockTable from '../elements/restock/RestockTable';
 
 export const RestockPurchases = () => {
-  return <RestockPurchasesTable />;
+  return <RestockTable />;
 };
