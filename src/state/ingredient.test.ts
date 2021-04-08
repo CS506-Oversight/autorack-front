@@ -6,7 +6,7 @@ describe('ingredient reducer behavior', () => {
   const ingredient: IngredientData = {
     id: 'aaa',
     name: 'test',
-    measurement: volumeMeasureData[VolumeMeasure.FL_OZ],
+    measure: volumeMeasureData[VolumeMeasure.FL_OZ],
     unit: 1,
     unitPrice: 7,
   };

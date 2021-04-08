@@ -9,7 +9,7 @@ const initialState: IngredientState = {
   ingredients: [{
     id: 'axpeax',
     name: 'sample ingredient',
-    measurement: volumeMeasureData.ml,
+    measure: volumeMeasureData.ml,
     unit: 10,
     unitPrice: 87,
   }],

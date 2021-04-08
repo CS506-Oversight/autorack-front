@@ -17,7 +17,7 @@ export enum VolumeMeasure {
   FL_OZ = 'fl. oz',
 }
 
-export const volumeMeasureData: Record<VolumeMeasure, Measure> = {
+export const volumeMeasureData: {[key in VolumeMeasure]: Measure} = {
   [VolumeMeasure.ML]: {
     name: VolumeMeasure.ML,
     equivalentMetric: 0.001,
@@ -46,7 +46,7 @@ export enum MassMeasure {
   OZ = 'oz',
 }
 
-export const massMeasureData: Record<MassMeasure, Measure> = {
+export const massMeasureData: {[key in MassMeasure]: Measure} = {
   [MassMeasure.G]: {
     name: MassMeasure.G,
     equivalentMetric: 1,
@@ -64,6 +64,13 @@ export const massMeasureData: Record<MassMeasure, Measure> = {
   },
 };
 
+export const measureData: {[key in MassMeasure | VolumeMeasure]: Measure} = {
+  ...volumeMeasureData,
+  ...massMeasureData,
+};
+
+export const defaultMeasure = measureData.g;
+
 /**
  * Viewable ingredient data.
  *
@@ -71,7 +78,7 @@ export const massMeasureData: Record<MassMeasure, Measure> = {
  */
 export type Ingredient = {
   name: string,
-  measurement: Measure,
+  measure: Measure,
   unit: number,
   unitPrice: number,
 }
