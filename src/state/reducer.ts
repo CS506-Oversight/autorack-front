@@ -11,6 +11,11 @@ const persistConfig = {
   whitelist: ['auth', 'alert'],
 };
 
-const rootReducer = combineReducers({auth: authReducer, alert: alertReducer});
+const rootReducer = combineReducers(
+  {
+    auth: authReducer,
+    alert: alertReducer,
+  },
+);
 
 export default persistReducer(persistConfig, rootReducer);
