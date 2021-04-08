@@ -1,0 +1,86 @@
+export enum MeasureType {
+  VOLUME,
+  MASS,
+}
+
+export type Measure = {
+  name: string,
+  type: MeasureType,
+  // `L` for volume; `g` for mass
+  equivalentMetric: number,
+}
+
+export enum VolumeMeasure {
+  ML = 'ml',
+  TBSP = 'tbsp',
+  CUP = 'cup',
+  FL_OZ = 'fl. oz',
+}
+
+export const volumeMeasureData: Record<VolumeMeasure, Measure> = {
+  [VolumeMeasure.ML]: {
+    name: VolumeMeasure.ML,
+    equivalentMetric: 0.001,
+    type: MeasureType.VOLUME,
+  },
+  [VolumeMeasure.TBSP]: {
+    name: VolumeMeasure.TBSP,
+    equivalentMetric: 0.0147868,
+    type: MeasureType.VOLUME,
+  },
+  [VolumeMeasure.CUP]: {
+    name: VolumeMeasure.CUP,
+    equivalentMetric: 0.24,
+    type: MeasureType.VOLUME,
+  },
+  [VolumeMeasure.FL_OZ]: {
+    name: VolumeMeasure.FL_OZ,
+    equivalentMetric: 0.0295735,
+    type: MeasureType.VOLUME,
+  },
+};
+
+export enum MassMeasure {
+  G = 'g',
+  LB = 'lb',
+  OZ = 'oz',
+}
+
+export const massMeasureData: Record<MassMeasure, Measure> = {
+  [MassMeasure.G]: {
+    name: MassMeasure.G,
+    equivalentMetric: 1,
+    type: MeasureType.MASS,
+  },
+  [MassMeasure.LB]: {
+    name: MassMeasure.LB,
+    equivalentMetric: 453.592,
+    type: MeasureType.MASS,
+  },
+  [MassMeasure.OZ]: {
+    name: MassMeasure.OZ,
+    equivalentMetric: 28.3495,
+    type: MeasureType.MASS,
+  },
+};
+
+/**
+ * Viewable ingredient data.
+ *
+ * These fields are commonly seen and editable.
+ */
+export type Ingredient = {
+  name: string,
+  measurement: Measure,
+  unit: number,
+  unitPrice: number,
+}
+
+/**
+ * The actual ingredient data.
+ *
+ * This includes some auto-generated fields, such as `id`.
+ */
+export type IngredientData = Ingredient & {
+  id: string,
+}

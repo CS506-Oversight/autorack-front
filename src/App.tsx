@@ -12,6 +12,7 @@ import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {Authenticated} from './components/pages/Authenticated';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
+import {IngredientManagement} from './components/pages/IngredientManagement';
 import {RestockPurchases} from './components/pages/RestockPurchases';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
@@ -67,6 +68,9 @@ const PageContent = () => {
       </PrivateRoute>
       <PrivateRoute path={AppPaths.RESTOCK_PURCHASES}>
         <RestockPurchases/>
+      </PrivateRoute>
+      <PrivateRoute path={AppPaths.INGREDIENT_MANAGEMENT}>
+        <IngredientManagement/>
       </PrivateRoute>
 
       <Copyright/>

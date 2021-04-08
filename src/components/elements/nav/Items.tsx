@@ -41,6 +41,12 @@ const navBarItems: Array<NavItemEntry> = [
     displayWhenAnonymous: true,
   },
   {
+    label: 'Manage Ingredients',
+    link: AppPaths.INGREDIENT_MANAGEMENT,
+    displayWhenLoggedIn: true,
+    displayWhenAnonymous: false,
+  },
+  {
     label: 'Sign Out',
     link: AppPaths.HOME,
     buttonVariant: 'outlined',
