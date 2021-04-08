@@ -9,7 +9,7 @@ import {
   TableSortLabel,
 } from '@material-ui/core';
 
-import {RestockItemInfo} from '../../../state/restock/restockData';
+import {RestockItemInfo} from '../../../api/definitions/restock/data';
 import {Order} from '../../../utils/sort';
 
 const useStyles = makeStyles(() =>

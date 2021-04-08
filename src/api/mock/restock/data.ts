@@ -1,6 +1,6 @@
-import {RestockData} from './restockData';
+import {RestockData} from '../../definitions/restock/data';
 
-export const dummyData: RestockData = [
+export const dummyRestockData: RestockData = [
   {
     id: '2918769218',
     status: 'completed',

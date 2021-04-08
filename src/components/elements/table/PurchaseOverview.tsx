@@ -9,8 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import {ItemDataInfo} from '../../../api/definitions/restock/data';
 import AppValues from '../../../const/values';
-import {ItemDataInfo} from '../../../state/restock/restockData';
 
 
 const useStyles = makeStyles({
