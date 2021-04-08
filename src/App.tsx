@@ -1,12 +1,12 @@
 import React from 'react';
 
 import {Container, makeStyles} from '@material-ui/core';
-import {BrowserRouter} from 'react-router-dom';
 
 import './App.css';
 import Copyright from './components/elements/Copyright';
 import {GlobalAlert} from './components/elements/GlobalAlert';
 import {Navigation} from './components/elements/nav/Main';
+import {AnonymousRoute} from './components/elements/routes/AnonymousRoute';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {Authenticated} from './components/pages/Authenticated';
@@ -41,20 +41,23 @@ const PageContent = () => {
     <Container className={classes.root}>
       <GlobalAlert/>
 
-      {/* Anonymous users only */}
+      {/* Accessible regardless the login status */}
 
       <PublicRoute path={AppPaths.HOME}>
         <Homepage/>
       </PublicRoute>
-      <PublicRoute path={AppPaths.SIGN_UP}>
+
+      {/* Anonymous users only */}
+
+      <AnonymousRoute path={AppPaths.SIGN_UP}>
         <SignUp/>
-      </PublicRoute>
-      <PublicRoute path={AppPaths.SIGN_IN}>
+      </AnonymousRoute>
+      <AnonymousRoute path={AppPaths.SIGN_IN}>
         <SignIn/>
-      </PublicRoute>
-      <PublicRoute path={AppPaths.FORGOT_PASSWORD}>
+      </AnonymousRoute>
+      <AnonymousRoute path={AppPaths.FORGOT_PASSWORD}>
         <ForgotPassword/>
-      </PublicRoute>
+      </AnonymousRoute>
 
       {/* Authentication needed */}
 
@@ -62,7 +65,6 @@ const PageContent = () => {
         <Authenticated/>
       </PrivateRoute>
 
-      {/* Common routes */}
       <Copyright/>
     </Container>
   );
@@ -92,9 +94,7 @@ const AppPage = () => {
 const App = (props: ReduxProviderProps) => {
   return (
     <ReduxProvider {...props}>
-      <BrowserRouter>
-        <AppPage/>
-      </BrowserRouter>
+      <AppPage/>
     </ReduxProvider>
   );
 };

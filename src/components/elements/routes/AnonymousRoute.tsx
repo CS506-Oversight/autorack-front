@@ -1,18 +1,23 @@
 import React from 'react';
 
-import {Route} from 'react-router-dom';
+import {Redirect, Route} from 'react-router-dom';
 
+import AppPaths from '../../../const/paths';
 import {User} from '../../../state/auth/data';
 import {useAuthSelector} from '../../../state/auth/selector';
 import {RouteCommonProps} from './props';
 
-type PublicRouteProps = RouteCommonProps;
+type UnauthedRouteProps = RouteCommonProps;
 
-const renderRoute = (user: User | null, {children}: React.PropsWithChildren<PublicRouteProps>) => () => {
+const renderRoute = (user: User | null, {children}: React.PropsWithChildren<UnauthedRouteProps>) => () => {
+  if (user != null) { // `==` for checking `null` or `undefined`
+    return <Redirect to={AppPaths.AUTHENTICATED}/>;
+  }
+
   return children;
 };
 
-export const PublicRoute = (props: React.PropsWithChildren<PublicRouteProps>) => {
+export const AnonymousRoute = (props: React.PropsWithChildren<UnauthedRouteProps>) => {
   // Do not move this `useSelector` inside `renderRoute`, it causes an invalid use of hook
   // https://reactjs.org/warnings/invalid-hook-call-warning.html
   const {user} = useAuthSelector();
