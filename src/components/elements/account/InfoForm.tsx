@@ -83,9 +83,7 @@ export const AccountInfoForm = <T extends PublicUserAuthInfo, R>({
           fetching: false,
           fetched: true,
         });
-      },
-
-      );
+      });
   };
 
   const classes = useStyles();
