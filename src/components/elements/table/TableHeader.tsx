@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 
 import {RestockItemInfo} from '../../../state/restock/restockData';
-import {Order} from '../../../utils/Sort';
+import {Order} from '../../../utils/sort';
 
 const useStyles = makeStyles(() =>
   createStyles({

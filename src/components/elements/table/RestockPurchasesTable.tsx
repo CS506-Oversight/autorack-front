@@ -15,7 +15,7 @@ import {RestockData, RestockItemInfo} from '../../../state/restock/restockData';
 import {RestockStatusType} from '../../../state/restock/restockData';
 import {restockDispatchers} from '../../../state/restock/restockDispatchers';
 import {useDispatch} from '../../../state/store';
-import {stableSort, getComparator, Order} from '../../../utils/Sort';
+import {Order, sort} from '../../../utils/sort';
 import {NoData} from './NoData';
 import PurchaseModal from './PurchaseModal';
 import Status from './Status';
@@ -119,7 +119,10 @@ const RestockPurchasesTable = () => {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {stableSort(restockData, getComparator(pageState.order, pageState.orderBy))
+              {sort(restockData, {
+                order: pageState.order,
+                sortKey: (item) => item[pageState.orderBy],
+              })
                 .slice(
                   pageState.page * pageState.rowsPerPage,
                   pageState.page * pageState.rowsPerPage + pageState.rowsPerPage,
