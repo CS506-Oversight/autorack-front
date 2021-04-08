@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import {unwrapResult} from '@reduxjs/toolkit';
 
 import {alertDispatchers} from '../../../state/alert/dispatchers';
-import {RestockData, RestockDataEntry} from '../../../state/restock/restockData';
+import {RestockData, RestockItemInfo} from '../../../state/restock/restockData';
 import {RestockStatusType} from '../../../state/restock/restockData';
 import {restockDispatchers} from '../../../state/restock/restockDispatchers';
 import {useDispatch} from '../../../state/store';
@@ -49,7 +49,7 @@ type PageState = {
   page: number;
   rowsPerPage: number;
   order: Order;
-  orderBy: keyof RestockDataEntry;
+  orderBy: keyof RestockItemInfo;
 }
 
 const RestockPurchasesTable = () => {
@@ -76,7 +76,7 @@ const RestockPurchasesTable = () => {
     getData();
   }, []);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof RestockDataEntry) => {
+  const handleRequestSort = (event: React.MouseEvent<HTMLSpanElement>, property: keyof RestockItemInfo) => {
     const isAsc = pageState.orderBy === property && pageState.order === 'asc';
     setPageState({
       ...pageState,
@@ -98,7 +98,7 @@ const RestockPurchasesTable = () => {
   };
 
   if (!restockData.length) {
-    return <NoData />;
+    return <NoData/>;
   }
 
   const emptyRows = pageState.rowsPerPage - Math.min(pageState.rowsPerPage,

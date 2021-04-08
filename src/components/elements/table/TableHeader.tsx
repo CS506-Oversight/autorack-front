@@ -1,8 +1,15 @@
 import React from 'react';
 
-import {createStyles, makeStyles, TableCell, TableHead, TableRow, TableSortLabel} from '@material-ui/core';
+import {
+  createStyles,
+  makeStyles,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@material-ui/core';
 
-import {RestockDataEntry} from '../../../state/restock/restockData';
+import {RestockItemInfo} from '../../../state/restock/restockData';
 import {Order} from '../../../utils/Sort';
 
 const useStyles = makeStyles(() =>
@@ -25,7 +32,7 @@ const useStyles = makeStyles(() =>
 );
 
 type HeadCell = {
-  columnName: keyof RestockDataEntry;
+  columnName: keyof RestockItemInfo;
   label: string;
   numeric: boolean;
 }
@@ -39,7 +46,7 @@ const headCells: Array<HeadCell> = [
 ];
 
 type SortableTableProps = {
-  onRequestSort: (event: React.MouseEvent<HTMLSpanElement>, property: keyof RestockDataEntry) => void;
+  onRequestSort: (event: React.MouseEvent<HTMLSpanElement>, property: keyof RestockItemInfo) => void;
   order: Order;
   orderBy: string;
 }
@@ -47,7 +54,7 @@ type SortableTableProps = {
 const SortableTableHead = (props: SortableTableProps) => {
   const classes = useStyles();
   const {order, orderBy, onRequestSort} = props;
-  const handleSort = (property: keyof RestockDataEntry) => (event: React.MouseEvent<HTMLSpanElement>) => {
+  const handleSort = (property: keyof RestockItemInfo) => (event: React.MouseEvent<HTMLSpanElement>) => {
     onRequestSort(event, property);
   };
 
