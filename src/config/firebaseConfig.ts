@@ -14,5 +14,4 @@ const firebaseConfig = {
 // About import: https://stackoverflow.com/q/50707211/11571888
 export const fireAuth = firebase.initializeApp(firebaseConfig).auth();
 
-
 export default fireAuth;

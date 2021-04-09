@@ -41,8 +41,8 @@ const navBarItems: Array<NavItemEntry> = [
     displayWhenAnonymous: true,
   },
   {
-    label: 'Settings',
-    link: AppPaths.SETTINGS,
+    label: 'Account Settings',
+    link: AppPaths.ACCOUNT_SETTINGS,
     displayWhenLoggedIn: true,
     displayWhenAnonymous: false,
   },

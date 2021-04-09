@@ -42,10 +42,6 @@ export type UserInfo = {
   lastName: string,
 }
 
-export type UserUpdatedPassword = {
-  newPassword: string,
-}
-
 /**
  * All info (auto-generated & changeable) of an user.
  */
@@ -66,16 +62,10 @@ export type SignInData = UserAuthInfo;
  */
 export type ResetPasswordData = PublicUserAuthInfo;
 
-
 /**
- * Data needed for user to update account password
+ * Data needed for user to update account password.
  */
-export type UpdateUserPassword = PrivateUserAuthInfo & UserUpdatedPassword &
-{
+export type UpdatePasswordData = PrivateUserAuthInfo & {
+  newPassword: string,
   originalUser: User
 };
-
-/**
- * Data needed for user to update account email
- */
-export type UpdateUserEmail = PublicUserAuthInfo;

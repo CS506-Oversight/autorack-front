@@ -7,5 +7,4 @@ export enum AuthDispatcherName {
   SIGN_OUT = 'signOut',
   FORGOT_PASSWORD = 'forgotPassword',
   UPDATE_PASSWORD = 'updatePassword',
-  UPDATE_EMAIL = 'updateEmail',
 }

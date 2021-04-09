@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 
 import {Container, Grid, Paper} from '@material-ui/core';
-// import {alertDispatchers} from '../../state/alert/dispatchers';
 import {makeStyles} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import {unwrapResult} from '@reduxjs/toolkit';
@@ -9,7 +8,7 @@ import {Redirect} from 'react-router-dom';
 
 import AppPaths from '../../const/paths';
 import {alertDispatchers} from '../../state/alert/dispatchers';
-import {UpdateUserPassword} from '../../state/auth/data';
+import {UpdatePasswordData} from '../../state/auth/data';
 import {authDispatchers} from '../../state/auth/dispatchers';
 import {useAuthSelector} from '../../state/auth/selector';
 import {useDispatch} from '../../state/store';
@@ -33,7 +32,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const Settings = () => {
+export const AccountSettings = () => {
   const classes = useStyles();
   const {user} = useAuthSelector();
   const dispatch = useDispatch();
@@ -42,18 +41,18 @@ export const Settings = () => {
     return <Redirect to={AppPaths.SIGN_IN}/>;
   }
 
-  const [newAccountPassword, setNewAccountPassword] = useState<UpdateUserPassword>({
+  const [newPassword, setNewPassword] = useState<UpdatePasswordData>({
     originalUser: user,
     password: '',
     newPassword: '',
   });
 
-  const updateCurrentAccountPassword = (key: string) => (newValue: string) =>{
-    setNewAccountPassword({...newAccountPassword, [key]: newValue});
+  const updateAccountPassword = (key: keyof UpdatePasswordData) => (newValue: string) => {
+    setNewPassword({...newPassword, [key]: newValue});
   };
 
-  const fireUpdatePassword = async () => {
-    dispatch(authDispatchers.updatePassword(newAccountPassword))
+  const onSubmit = async () => {
+    dispatch(authDispatchers.updatePassword(newPassword))
       .then(unwrapResult)
       .then(() =>
         dispatch(alertDispatchers.showAlert({
@@ -70,42 +69,40 @@ export const Settings = () => {
   };
 
   return (
-    <>
-      <Container className={classes.root} >
-        <Paper elevation={3} className={classes.paper} >
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Typography component="h1" variant="h3" className={classes.heading}>Settings</Typography>
-            <Grid item xs={6}>
-              <Typography variant="h5">Update Password</Typography>
-              <InputPassword
-                password={newAccountPassword.password}
-                onValueChanged={updateCurrentAccountPassword('password')}
-                placeholder={'Current Password'}
-                label='Old Password'
-              />
-              <InputPassword placeholder={'New password'}
-                password={newAccountPassword.newPassword}
-                onValueChanged={updateCurrentAccountPassword('newPassword')}
-                label='New Password'
-              />
-              <UIButton
-                text='Update Password'
-                type="submit"
-                color="primary"
-                variant="contained"
-                onClick={fireUpdatePassword}
-                className={classes.button}
-              />
-            </Grid>
-            <br/>
+    <Container className={classes.root}>
+      <Paper elevation={3} className={classes.paper}>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Typography component="h1" variant="h3" className={classes.heading}>Settings</Typography>
+          <Grid item xs={6}>
+            <Typography variant="h5">Update Password</Typography>
+            <InputPassword
+              password={newPassword.password}
+              placeholder="Current Password"
+              label="Old Password"
+              onValueChanged={updateAccountPassword('password')}
+            />
+            <InputPassword
+              password={newPassword.newPassword}
+              placeholder="New password"
+              label="New Password"
+              onValueChanged={updateAccountPassword('newPassword')}
+            />
+            <UIButton
+              className={classes.button}
+              text="Update Password"
+              type="submit"
+              color="primary"
+              variant="contained"
+              onClick={onSubmit}
+            />
           </Grid>
-        </Paper>
-      </Container>
-    </>
+        </Grid>
+      </Paper>
+    </Container>
   );
 };

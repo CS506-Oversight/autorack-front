@@ -9,7 +9,7 @@ import {GlobalAlert} from './components/elements/GlobalAlert';
 import {Navigation} from './components/elements/nav/Main';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
-import {Settings} from './components/pages/AccountSettings';
+import {AccountSettings} from './components/pages/AccountSettings';
 import {Authenticated} from './components/pages/Authenticated';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
@@ -62,8 +62,8 @@ const PageContent = () => {
       <PrivateRoute path={AppPaths.AUTHENTICATED}>
         <Authenticated/>
       </PrivateRoute>
-      <PrivateRoute path={AppPaths.SETTINGS}>
-        <Settings/>
+      <PrivateRoute path={AppPaths.ACCOUNT_SETTINGS}>
+        <AccountSettings/>
       </PrivateRoute>
 
       {/* Common routes */}
