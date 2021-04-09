@@ -37,6 +37,7 @@ export const SelectForm = (props: React.PropsWithChildren<SelectFormProps>) => {
     <>
       <h3>Select an Option</h3>
       <Select
+        classNamePrefix='firstSelect'
         value={selection}
         onChange={(option) => handleSelect(option)}
         options={options}

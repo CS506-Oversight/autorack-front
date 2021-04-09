@@ -134,7 +134,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   label="Name"
                   onChange={updateMenuItem('name')}
                   value = {menuItem.name}
-                  defaultValue={menuItem.name}
+                  /*                  defaultValue={menuItem.name}*/
                   variant="filled"
                 />
                 <br/>
@@ -145,7 +145,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                   rowsMax={10}
                   value = {menuItem.description}
                   onChange={updateMenuItem('description')}
-                  defaultValue={menuItem.description}
+                  /*                  defaultValue={menuItem.description}*/
                   variant="filled"
                 />
 
@@ -156,7 +156,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                     type = 'number'
                     onChange={updateMenuPrice('price')}
                     value = {menuItem.price}
-                    defaultValue={menuItem.price}
+                    /*                    defaultValue={menuItem.price}*/
                     id="filled-adornment-password"
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
@@ -185,7 +185,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                           <FormControlLabel
                             control={<
                               Checkbox
-                              defaultChecked={item.used}
+                              /*                              defaultChecked={item.used}*/
                               checked={item.used}
                               value = {item.name}
                               onChange={() => {
@@ -197,7 +197,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                         </Grid>
                         <Grid item xs={12} sm={4}>
                           <Select
-                            defaultValue={item.measurement}
+                            /*                            defaultValue={item.measurement}*/
                             value = {item.measurement}
                             onChange={(option) => handleSelect(option, item.name)}
                             options={Measurements}
@@ -205,7 +205,7 @@ export const FormMenuAndIngredients = (props: React.PropsWithChildren<FormMenuAn
                         </Grid>
                         <Grid item xs={12} sm={4}>
                           <TextField
-                            defaultValue={item.amount}
+                            /*                            defaultValue={item.amount}*/
                             value = {item.amount}
                             type = 'number'
                             id="Unit"

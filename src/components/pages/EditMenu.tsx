@@ -131,6 +131,7 @@ export const EditMenu = () => {
     });
   };
 
+
   // Accordion Data/Functions
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
@@ -246,13 +247,14 @@ export const EditMenu = () => {
       );
   };
 
-  useEffect(() => {
-    initialMenuListLoad();
-  }, []);
-
 
   // List of menuItems to working functions, alphabetically sorted
   const [MenuList, setMenuList] = React.useState<Array<MenuItem>>([]);
+
+
+  useEffect(() => {
+    initialMenuListLoad();
+  }, []);
 
   // updates final list
   const updateMenuList = (placeArray:Array<MenuItem>) => {
