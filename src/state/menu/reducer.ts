@@ -5,7 +5,7 @@ import {MENU_STATE_NAME} from './name';
 import {MenuState} from './state';
 
 const initialState: MenuState = {
-  menu: [],
+  menus: [],
   lastFetch: 0,
 };
 
@@ -14,23 +14,19 @@ const menuSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      menuDispatchers.upsertMenu.fulfilled,
-      (state, {payload}) => {
-        state.menu = payload;
-      },
-    );
-    builder.addCase(
-      menuDispatchers.loadMenu.fulfilled,
-      (state, {payload}) => {
-        state.menu = payload;
-        state.lastFetch = Date.now();
-      },
-    );
+    [menuDispatchers.loadMenu.fulfilled, menuDispatchers.upsertMenu.fulfilled].forEach((thunkCase) => {
+      builder.addCase(
+        thunkCase,
+        (state, {payload}) => {
+          state.menus = payload;
+          state.lastFetch = Date.now();
+        },
+      );
+    });
     builder.addCase(
       menuDispatchers.removeMenu.fulfilled,
       (state, {payload}) => {
-        state.menu = state.menu.filter((x) => x.id !== payload);
+        state.menus = state.menus.filter((x) => x.id !== payload);
       },
     );
   },

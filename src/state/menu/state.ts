@@ -3,5 +3,5 @@ import {Menu} from './data';
 
 
 export type MenuState = SynchronizedState & {
-  menu: Array<Menu>,
+  menus: Array<Menu>,
 }

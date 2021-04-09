@@ -21,11 +21,11 @@ export const MenuManagement = () => {
   return (
     <ItemManagement
       newItemSentinel={sentinelNewMenu}
-      initialOptions={menuState.menu}
+      initialOptions={menuState.menus}
       initialState={menuState}
       loadDispatcher={menuDispatchers.loadMenu}
       upsertDispatcher={menuDispatchers.upsertMenu}
-      getInitialStateItems={(state) => state.menu}
+      getInitialStateItems={(state) => state.menus}
       messageOnSuccess="Menu Updated/Added."
       selectLabel="Menu to Add/Edit"
       renderItemList={(managementState, setItemByIndex, onDelete, onSubmit) => (

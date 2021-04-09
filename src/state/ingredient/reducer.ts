@@ -14,19 +14,18 @@ const ingredientSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
+    [
       ingredientDispatchers.loadIngredient.fulfilled,
-      (state, {payload}) => {
-        state.ingredients = payload;
-        state.lastFetch = Date.now();
-      },
-    );
-    builder.addCase(
       ingredientDispatchers.upsertIngredient.fulfilled,
-      (state, {payload}) => {
-        state.ingredients = payload;
-      },
-    );
+    ].forEach((thunkCase) => {
+      builder.addCase(
+        thunkCase,
+        (state, {payload}) => {
+          state.ingredients = payload;
+          state.lastFetch = Date.now();
+        },
+      );
+    });
     builder.addCase(
       ingredientDispatchers.removeIngredient.fulfilled,
       (state, {payload}) => {
