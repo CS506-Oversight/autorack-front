@@ -9,6 +9,7 @@ import {Navigation} from './components/elements/nav/Main';
 import {AnonymousRoute} from './components/elements/routes/AnonymousRoute';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
+import {AccountSettings} from './components/pages/AccountSettings';
 import {Authenticated} from './components/pages/Authenticated';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
@@ -67,6 +68,9 @@ const PageContent = () => {
       <PrivateRoute path={AppPaths.AUTHENTICATED}>
         <Authenticated/>
       </PrivateRoute>
+      <PrivateRoute path={AppPaths.ACCOUNT_SETTINGS}>
+        <AccountSettings/>
+      </PrivateRoute>
       <PrivateRoute path={AppPaths.RESTOCK_PURCHASES}>
         <RestockPurchases/>
       </PrivateRoute>
@@ -76,7 +80,6 @@ const PageContent = () => {
       <PrivateRoute path={AppPaths.MENU_MANAGEMENT}>
         <MenuManagement/>
       </PrivateRoute>
-
       <Copyright/>
     </Container>
   );

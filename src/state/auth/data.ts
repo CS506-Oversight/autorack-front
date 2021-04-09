@@ -61,3 +61,11 @@ export type SignInData = UserAuthInfo;
  * Data needed for forgot password.
  */
 export type ResetPasswordData = PublicUserAuthInfo;
+
+/**
+ * Data needed for user to update account password.
+ */
+export type UpdatePasswordData = PrivateUserAuthInfo & {
+  newPassword: string,
+  originalUser: User
+};

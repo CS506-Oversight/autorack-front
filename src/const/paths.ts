@@ -11,6 +11,7 @@ export default class AppPaths {
 
   // Authenticated Routes
   static AUTHENTICATED = '/authed';
+  static ACCOUNT_SETTINGS = '/settings';
   static RESTOCK_PURCHASES = '/restock-purchases';
 
   // Ingredient Management

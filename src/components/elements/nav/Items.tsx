@@ -54,6 +54,12 @@ const navBarItems: Array<NavItemEntry> = [
     displayWhenAnonymous: false,
   },
   {
+    label: 'Account Settings',
+    link: AppPaths.ACCOUNT_SETTINGS,
+    displayWhenLoggedIn: true,
+    displayWhenAnonymous: false,
+  },
+  {
     label: 'Sign Out',
     link: AppPaths.HOME,
     buttonVariant: 'outlined',

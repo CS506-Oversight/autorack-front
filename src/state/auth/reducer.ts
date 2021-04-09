@@ -13,8 +13,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // Set user on either sign-in and sign-up succeed
-    [authDispatchers.signUp.fulfilled, authDispatchers.signIn.fulfilled].forEach((thunkCase) => {
+    // Set user on either sign-in / sign-up / update password
+    [
+      authDispatchers.signUp.fulfilled,
+      authDispatchers.signIn.fulfilled,
+      authDispatchers.updatePassword.fulfilled,
+    ].forEach((thunkCase) => {
       builder.addCase(
         thunkCase,
         (state, {payload}) => {
