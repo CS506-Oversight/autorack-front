@@ -15,4 +15,5 @@ export default class AppPaths {
 
   // Ingredient Management
   static INGREDIENT_MANAGEMENT = '/ingredient';
+  static MENU_MANAGEMENT = '/menu';
 }

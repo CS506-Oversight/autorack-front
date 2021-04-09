@@ -1,7 +1,8 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import {mockUpsertIngredients, mockFetchIngredient} from '../../api/mock/ingredient/utils';
-import {Ingredient, UpsertIngredientPayload} from './data';
+import {UpsertListPayload} from '../base/payload';
+import {Ingredient} from './data';
 import {INGREDIENT_STATE_NAME, IngredientDispatcherName} from './name';
 
 export const ingredientDispatchers = {
@@ -12,11 +13,11 @@ export const ingredientDispatchers = {
       return await mockFetchIngredient();
     },
   ),
-  [IngredientDispatcherName.UPSERT_INGREDIENT]: createAsyncThunk<Array<Ingredient>, UpsertIngredientPayload>(
+  [IngredientDispatcherName.UPSERT_INGREDIENT]: createAsyncThunk<Array<Ingredient>, UpsertListPayload<Ingredient>>(
     `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.UPSERT_INGREDIENT}`,
-    async ({originalIngredients, updatedIngredients}: UpsertIngredientPayload) => {
+    async ({original, updated}: UpsertListPayload<Ingredient>) => {
       // TODO: Add ingredient to the database
-      return await mockUpsertIngredients(originalIngredients, updatedIngredients);
+      return await mockUpsertIngredients(original, updated);
     },
   ),
   [IngredientDispatcherName.REMOVE_INGREDIENT]: createAsyncThunk<string, string>(

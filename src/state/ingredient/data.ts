@@ -1,3 +1,5 @@
+import {NamedData} from '../base/data';
+
 export enum MeasureType {
   VOLUME,
   MASS,
@@ -74,20 +76,13 @@ export const defaultMeasure = measureData.g;
 /**
  * Ingredient data.
  */
-export type Ingredient = {
-  name: string,
+export type Ingredient = NamedData & {
   measure: Measure,
   unit: number,
   unitPrice: number,
-  id: string,
 }
 
 /**
  * ID that means the ingredient is to be newly added.
  */
 export const newIngredientId = '(new)';
-
-export type UpsertIngredientPayload = {
-  originalIngredients: Array<Ingredient>,
-  updatedIngredients: Array<Ingredient>,
-}
