@@ -1,7 +1,8 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import {mockFetchMenu, mockUpsertMenu} from '../../api/mock/menu/utils';
-import {Menu, UpsertMenuPayload} from './data';
+import {UpsertListPayload} from '../base/payload';
+import {Menu} from './data';
 import {MENU_STATE_NAME, MenuDispatcherName} from './name';
 
 export const menuDispatchers = {
@@ -12,11 +13,11 @@ export const menuDispatchers = {
       return await mockFetchMenu();
     },
   ),
-  [MenuDispatcherName.UPSERT_MENU]: createAsyncThunk<Array<Menu>, UpsertMenuPayload>(
+  [MenuDispatcherName.UPSERT_MENU]: createAsyncThunk<Array<Menu>, UpsertListPayload<Menu>>(
     `${MENU_STATE_NAME}/${MenuDispatcherName.UPSERT_MENU}`,
-    async ({originalMenu, updatedMenu}: UpsertMenuPayload) => {
+    async ({original, updated}: UpsertListPayload<Menu>) => {
       // TODO: Add ingredient to the database
-      return await mockUpsertMenu(originalMenu, updatedMenu);
+      return await mockUpsertMenu(original, updated);
     },
   ),
   [MenuDispatcherName.REMOVE_MENU]: createAsyncThunk<string, string>(
