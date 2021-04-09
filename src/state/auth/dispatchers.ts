@@ -1,8 +1,10 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
+import firebase from 'firebase/app';
 
 import fireAuth from '../../config/firebaseConfig';
-import {ResetPasswordData, SignInData, SignUpData, User} from './data';
+import {ResetPasswordData, SignInData, SignUpData, User, UpdateUserPassword} from './data';
 import {AUTH_STATE_NAME, AuthDispatcherName} from './name';
+
 
 export type AuthActionReturn<R> = R extends User ? (R | null): R;
 
@@ -70,4 +72,20 @@ export const authDispatchers = {
       return null;
     },
   ),
+  [AuthDispatcherName.UPDATE_PASSWORD]:
+    createAsyncThunk<AuthActionReturn<User | null>, UpdateUserPassword>(
+      `${AUTH_STATE_NAME}/${AuthDispatcherName.UPDATE_PASSWORD}`,
+      async (payload: UpdateUserPassword, {rejectWithValue}) => {
+        const cred = firebase.auth.EmailAuthProvider.credential(payload.originalUser.email, payload.password);
+        await fireAuth.currentUser?.reauthenticateWithCredential(cred);
+
+        try {
+          await fireAuth.currentUser?.updatePassword(payload.newPassword);
+        } catch (error) {
+          rejectWithValue(error.message);
+        }
+
+        return payload.originalUser;
+      },
+    ),
 };

@@ -14,7 +14,9 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     // Set user on either sign-in and sign-up succeed
-    [authDispatchers.signUp.fulfilled, authDispatchers.signIn.fulfilled].forEach((thunkCase) => {
+    [authDispatchers.signUp.fulfilled,
+      authDispatchers.signIn.fulfilled,
+      authDispatchers.updatePassword.fulfilled].forEach((thunkCase) => {
       builder.addCase(
         thunkCase,
         (state, {payload}) => {
