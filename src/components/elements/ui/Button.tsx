@@ -12,7 +12,7 @@ type ButtonProps = MaterialButtonProps & Partial<LinkProps> & {
 }
 
 const UIButton = (props: ButtonProps) => {
-  return <Button fullWidth {...props}>{props.text}</Button>;
+  return <Button {...props}>{props.text}</Button>;
 };
 
 export default UIButton;

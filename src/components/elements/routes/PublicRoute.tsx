@@ -1,8 +1,7 @@
 import React from 'react';
 
-import {Redirect, Route} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 
-import AppPaths from '../../../const/paths';
 import {User} from '../../../state/auth/data';
 import {useAuthSelector} from '../../../state/auth/selector';
 import {RouteCommonProps} from './props';
@@ -10,10 +9,6 @@ import {RouteCommonProps} from './props';
 type PublicRouteProps = RouteCommonProps;
 
 const renderRoute = (user: User | null, {children}: React.PropsWithChildren<PublicRouteProps>) => () => {
-  if (user != null) { // `==` for checking `null` or `undefined`
-    return <Redirect to={AppPaths.AUTHENTICATED}/>;
-  }
-
   return children;
 };
 

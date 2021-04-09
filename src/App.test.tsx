@@ -1,4 +1,4 @@
-import {renderApp} from '../test/utils';
+import {renderApp} from '../test/utils/render';
 import RequestSender from './api/utils/requestSender';
 import {Authenticated} from './components/pages/Authenticated';
 import {Homepage} from './components/pages/Homepage';
@@ -15,37 +15,51 @@ describe('auth redirect behavior', () => {
     id: 'id',
   };
 
-  test('anonymous user is redirected to sign-in from authenticated', async () => {
-    const {app, store} = renderApp(AppPaths.AUTHENTICATED);
-
-    // FIXME: For some reason, all pages are not rendered in enzyme (correctly rendered IRL)
-    //  Expected: `SignIn` should be found.
-    expect(store.getState().auth.user).toBeNull();
-    expect(app.find(Authenticated)).toHaveLength(0);
-    expect(app.find(SignIn)).toHaveLength(0);
-  });
-
   test('anonymous user can go to the home page', () => {
     const {app, store} = renderApp(AppPaths.HOME);
 
     expect(store.getState().auth.user).toBeNull();
-    expect(app.find(SignUp)).toHaveLength(0);
-    expect(app.find(Homepage)).toHaveLength(1);
+    expect(app.find(SignUp).exists()).toBeFalsy();
+    expect(app.find(Homepage).exists()).toBeTruthy();
+  });
+
+  test('anonymous user is redirected to sign-in from authenticated', async () => {
+    const {app, store} = renderApp(AppPaths.AUTHENTICATED);
+
+    expect(store.getState().auth.user).toBeNull();
+    expect(app.find(Authenticated).exists()).toBeFalsy();
+    expect(app.find(SignIn).exists()).toBeTruthy();
+  });
+
+  test('anonymous user can go to the sign-in page', () => {
+    const {app, store} = renderApp(AppPaths.SIGN_IN);
+
+    expect(store.getState().auth.user).toBeNull();
+    expect(app.find(Homepage).exists()).toBeFalsy();
+    expect(app.find(SignIn).exists()).toBeTruthy();
+  });
+
+  test('logged in user can go to the home page', () => {
+    const {app, store} = renderApp(AppPaths.HOME);
+
+    expect(store.getState().auth.user).toBeNull();
+    expect(app.find(SignUp).exists()).toBeFalsy();
+    expect(app.find(Homepage).exists()).toBeTruthy();
   });
 
   test('logged in user is redirected from sign-in to authenticated', () => {
     const {app, store} = renderApp(AppPaths.SIGN_IN, {auth: {user: testUser}});
 
-    expect(app.find(SignUp)).toHaveLength(0);
-    expect(app.find(Authenticated)).toHaveLength(1);
+    expect(app.find(SignIn).exists()).toBeFalsy();
+    expect(app.find(Authenticated).exists()).toBeTruthy();
     expect(store.getState().auth.user).toBe(testUser);
   });
 
-  test('logged in user can go to authenticated', () => {
+  test('logged in user can go to authenticated page', () => {
     const {app, store} = renderApp(AppPaths.AUTHENTICATED, {auth: {user: testUser}});
 
-    expect(app.find(SignUp)).toHaveLength(0);
-    expect(app.find(Authenticated)).toHaveLength(1);
+    expect(app.find(SignIn).exists()).toBeFalsy();
+    expect(app.find(Authenticated).exists()).toBeTruthy();
     expect(store.getState().auth.user).toBe(testUser);
   });
 });

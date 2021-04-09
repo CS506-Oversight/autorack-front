@@ -1,25 +1,23 @@
 import type {Config} from '@jest/types';
 
 const config: Config.InitialOptions = {
-  // Basic options
+  // # Basic options
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
   },
-  // Test setup - https://create-react-app.dev/docs/running-tests/#srcsetuptestsjs
-  // setupFilesAfterEnv: ['./test/setup.ts'],
-  // globalSetup: './test/setup.ts',
-  // Coverage
+  // # Coverage - https://create-react-app.dev/docs/running-tests/#coverage-reporting
+  // `coverageDirectory` Does not work
   collectCoverage: true,
   collectCoverageFrom: [
+    // All files in `src` recursive
     './src/**/*.ts',
-    // Node environment files
+    // NOT Node environment files
     '!**/node_modules/**',
-    // Testing files
+    // NOT Testing files
     '!./src/**/*.test.ts',
   ],
-  coverageDirectory: '.',
   coverageReporters: ['clover'],
 };
 // noinspection JSUnusedGlobalSymbols

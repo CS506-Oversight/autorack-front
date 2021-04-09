@@ -18,7 +18,7 @@ export const NavLandscape = () => {
   return (
     <Toolbar className={toolbar}>
       <AutoRackLogo/>
-      <div><NavMenu/></div>
+      <NavMenu/>
     </Toolbar>
   );
 };

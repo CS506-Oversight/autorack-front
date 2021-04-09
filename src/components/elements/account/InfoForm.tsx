@@ -83,9 +83,7 @@ export const AccountInfoForm = <T extends PublicUserAuthInfo, R>({
           fetching: false,
           fetched: true,
         });
-      },
-
-      );
+      });
   };
 
   const classes = useStyles();
@@ -107,6 +105,7 @@ export const AccountInfoForm = <T extends PublicUserAuthInfo, R>({
             color="primary"
             className={classes.submit}
             variant="contained"
+            fullWidth
           />
           {footer}
         </form>
