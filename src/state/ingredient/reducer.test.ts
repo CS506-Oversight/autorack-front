@@ -40,12 +40,7 @@ describe('ingredient reducer behavior', () => {
     };
 
     const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
-    expect(
-      newState
-        .ingredients
-        .some((ingredient) => ingredient.unitPrice === 90),
-    )
-      .toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.unitPrice === 90)).toBeTruthy();
     expect(newState.ingredients.length).toBe(1);
   });
 
@@ -61,30 +56,10 @@ describe('ingredient reducer behavior', () => {
     };
 
     const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
-    expect(
-      newState
-        .ingredients
-        .some((ingredient) => ingredient.unitPrice === 90),
-    )
-      .toBeTruthy();
-    expect(
-      newState
-        .ingredients
-        .some((ingredient) => ingredient.id === 'bbb'),
-    )
-      .toBeTruthy();
-    expect(
-      newState
-        .ingredients
-        .some((ingredient) => ingredient.id === 'ccc'),
-    )
-      .toBeTruthy();
-    expect(
-      newState
-        .ingredients
-        .some((ingredient) => ingredient.id === 'ddd'),
-    )
-      .toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.unitPrice === 90)).toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.id === 'bbb')).toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.id === 'ccc')).toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.id === 'ddd')).toBeTruthy();
     expect(newState.ingredients.length).toBe(4);
   });
 
