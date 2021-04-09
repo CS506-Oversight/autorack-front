@@ -2,7 +2,7 @@ import {renderAppAsync} from '../../../test/utils/renderAsync';
 import {dummyIngredientData} from '../../api/mock/ingredient/data';
 import AppPaths from '../../const/paths';
 import {User} from '../../state/auth/data';
-import {IngredientForm} from '../elements/ingredient/Form';
+import {IngredientList} from '../elements/ingredient/List';
 import {IngredientManagement} from './IngredientManagement';
 
 
@@ -35,7 +35,7 @@ describe('ingredient management behavior', () => {
       waitToPaint: true,
     });
 
-    expect(app.find(IngredientForm).exists()).toBeTruthy();
+    expect(app.find(IngredientList).exists()).toBeTruthy();
     expect(store.getState().ingredient.ingredients.length).toBeGreaterThan(0);
     expect(Date.now() - store.getState().ingredient.lastFetch).toBeLessThan(1000);
   });
@@ -48,7 +48,7 @@ describe('ingredient management behavior', () => {
       waitToPaint: true,
     });
 
-    expect(app.find(IngredientForm).exists()).toBeTruthy();
+    expect(app.find(IngredientList).exists()).toBeTruthy();
     expect(store.getState().ingredient.lastFetch).not.toBe(current);
   });
 
@@ -60,27 +60,37 @@ describe('ingredient management behavior', () => {
       waitToPaint: true,
     });
 
-    expect(app.find(IngredientForm).exists()).toBeTruthy();
+    expect(app.find(IngredientList).exists()).toBeTruthy();
     expect(store.getState().ingredient.lastFetch).toBe(current);
   });
 
-  test('adds new ingredient', async () => {
-    // TODO: Implement test: adds new ingredient
-    console.warn('Test "adds new ingredient" not implemented');
+  it('adds 1 ingredient', async () => {
+    // TODO: Implement test: adds 1 ingredient
+    console.warn('Test "adds 1 ingredient" not implemented');
   });
 
-  it('disallows new ingredient with insufficient data', () => {
-    // TODO: Implement test: disallows new ingredient with insufficient data
-    console.warn('Test "disallows new ingredient with insufficient data" not implemented');
+  it('adds 3 ingredients', async () => {
+    // TODO: Implement test: adds 3 ingredients
+    console.warn('Test "adds 3 ingredients" not implemented');
   });
 
-  it('edits an existing ingredient', () => {
-    // TODO: Implement test: edits an existing ingredient
-    console.warn('Test "edits an existing ingredient" not implemented');
+  it('adds 1 + update 3 ingredients', async () => {
+    // TODO: Implement test: adds 1 + update 3 ingredients
+    console.warn('Test "adds 1 + update 3 ingredients" not implemented');
   });
 
-  it('disallows editing with empty value', () => {
-    // TODO: Implement test: disallows editing with empty value
-    console.warn('Test "disallows editing with empty value" not implemented');
+  it('adds 3 + update 1 ingredient', async () => {
+    // TODO: Implement test: adds 3 + update 1 ingredient
+    console.warn('Test "adds 3 + update 1 ingredient" not implemented');
+  });
+
+  it('can delete an ingredient entry', async () => {
+    // TODO: Implement test: can delete an ingredient entry
+    console.warn('Test "can delete an ingredient entry" not implemented');
+  });
+
+  it('disallows adding ingredient with insufficient data', () => {
+    // TODO: Implement test: disallows adding ingredient with insufficient data
+    console.warn('Test "disallows adding ingredient with insufficient data" not implemented');
   });
 });

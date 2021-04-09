@@ -6,16 +6,17 @@ import UIInput from './Input';
 
 type UISelectProps<T> = {
   label: string,
-  value: T,
+  value: T | null,
   options: Array<T>,
   getOptionLabel: (option: T) => string,
   getOptionSelected?: (option: T, value: T) => boolean,
+  getOptionDisabled?: (option: T) => boolean,
   onOptionSelected: (option: T) => void,
   name?: string,
 };
 
 export const UISelect = <T, >(props: UISelectProps<T>) => {
-  const {label, value, options, getOptionLabel, getOptionSelected, onOptionSelected} = props;
+  const {label, value, options, getOptionLabel, getOptionSelected, getOptionDisabled, onOptionSelected} = props;
 
   return (
     <Autocomplete
@@ -23,13 +24,16 @@ export const UISelect = <T, >(props: UISelectProps<T>) => {
       options={options}
       getOptionLabel={getOptionLabel}
       getOptionSelected={getOptionSelected}
+      getOptionDisabled={getOptionDisabled}
       onChange={(_, option) => {
         if (!option) {
           return;
         }
         onOptionSelected(option);
       }}
-      renderInput={(params) => <UIInput {...params} label={label}/>}
+      renderInput={(params) => {
+        return <UIInput {...params} label={label}/>;
+      }}
     />
   );
 };

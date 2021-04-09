@@ -9,10 +9,10 @@ import {defaultMeasure, IngredientData} from '../../state/ingredient/data';
 import {ingredientDispatchers} from '../../state/ingredient/dispatchers';
 import {useIngredientSelector} from '../../state/ingredient/selector';
 import {useDispatch} from '../../state/store';
-import {IngredientForm} from '../elements/ingredient/Form';
+import {IngredientList} from '../elements/ingredient/List';
 import {UISelect} from '../elements/ui/Select';
 
-const newIngredientSentinel = {
+const sentinelNewIngredient = {
   id: 'new',
   name: '',
   measure: defaultMeasure,
@@ -20,9 +20,9 @@ const newIngredientSentinel = {
   unitPrice: 0.0,
 };
 
-type IngredientInForm = {
+type IngredientsInForm = {
   options: Array<IngredientData>,
-  onForm: IngredientData,
+  onForm: Array<IngredientData>,
   selected: IngredientData,
 }
 
@@ -30,13 +30,13 @@ export const IngredientManagement = () => {
   const dispatch = useDispatch();
   const ingredientState = useIngredientSelector();
 
-  const [ingredient, setIngredient] = React.useState<IngredientInForm>({
+  const [ingredients, setIngredients] = React.useState<IngredientsInForm>({
     options: [
-      {...newIngredientSentinel},
+      {...sentinelNewIngredient},
       ...ingredientState.ingredients,
     ],
-    onForm: {...newIngredientSentinel},
-    selected: {...newIngredientSentinel},
+    onForm: [],
+    selected: {...sentinelNewIngredient},
   });
   const [fetchStatus, setFetchStatus] = React.useState<FetchStatus>({
     fetched: false,
@@ -68,29 +68,29 @@ export const IngredientManagement = () => {
 
   const reset = () => {
     // Refresh the options and reset the selected and onForm ingredients to be the new one
-    setIngredient({
+    setIngredients({
       options: [
-        {...newIngredientSentinel},
+        {...sentinelNewIngredient},
         ...ingredientState.ingredients,
       ],
-      onForm: {...newIngredientSentinel},
-      selected: {...newIngredientSentinel},
+      onForm: [],
+      selected: {...sentinelNewIngredient},
     });
   };
 
   const onSubmit = () => {
     let action;
 
-    if (ingredient.onForm.id === newIngredientSentinel.id) {
-      // Handle new ingredient
-      action = dispatch(ingredientDispatchers.addIngredient(ingredient.onForm))
+    if (ingredients.onForm[0].id === sentinelNewIngredient.id) {
+      // Handle new ingredients
+      action = dispatch(ingredientDispatchers.addIngredient(ingredients.onForm[0]))
         .then(() => {
           dispatch(alertDispatchers.showAlert({severity: 'success', message: 'Ingredient Added.'}));
           reset();
         });
     } else {
-      // Handle update ingredient
-      action = dispatch(ingredientDispatchers.updateIngredient(ingredient.onForm))
+      // Handle update ingredients
+      action = dispatch(ingredientDispatchers.updateIngredient(ingredients.onForm[0]))
         .then(() => {
           dispatch(alertDispatchers.showAlert({severity: 'success', message: 'Ingredient Updated.'}));
           reset();
@@ -104,32 +104,68 @@ export const IngredientManagement = () => {
       });
   };
 
+  const onDelete = (index: number) => () => {
+    ingredients.onForm.splice(index, 1);
+
+    setIngredients({
+      ...ingredients,
+    });
+  };
+
   const onIngredientSelected = (selectedIngredient: IngredientData) => {
-    setIngredient({
-      ...ingredient,
-      onForm: {...selectedIngredient},
+    if (
+      selectedIngredient.id !== sentinelNewIngredient.id &&
+      ingredients.onForm.some((ingredient) => ingredient.id === selectedIngredient.id)
+    ) {
+      // Only change the selected option because the selected one is already queued
+      setIngredients({
+        ...ingredients,
+        selected: selectedIngredient,
+      });
+      return;
+    }
+
+    setIngredients({
+      ...ingredients,
+      onForm: ingredients.onForm.concat({...selectedIngredient}),
       selected: selectedIngredient,
     });
   };
 
+  const onListSetIngredient = (ingredientData: IngredientData, index: number) => {
+    const newOnForm = [...ingredients.onForm];
+
+    newOnForm[index] = ingredientData;
+
+    setIngredients({
+      ...ingredients,
+      onForm: newOnForm,
+    });
+  };
+
+  // TODO: Clear the select value right after the user selected an ingredient (currently users need to focus out)
+
+  // Force set `UISelect` value to `null` to clear it everytime the element being unfocused
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <UISelect
           label="Ingredient to Add/Edit"
-          value={ingredient.selected}
-          options={ingredient.options}
+          value={null}
+          options={ingredients.options}
           getOptionSelected={(option, value) => option.id === value.id}
-          getOptionLabel={(ingredient) => ingredient.id === newIngredientSentinel.id ? '(Add New)' : ingredient.name}
+          getOptionLabel={(option) => option.id === sentinelNewIngredient.id ? '(Add New)' : option.name}
+          getOptionDisabled={(option) => ingredients.onForm.some((ingredient) => ingredient.id === option.id)}
           onOptionSelected={onIngredientSelected}
         />
       </Grid>
       {
         fetchStatus.fetched &&
-        <IngredientForm
-          ingredient={ingredient.onForm}
-          setIngredient={(data) => setIngredient({...ingredient, onForm: {...data}})}
+        <IngredientList
+          ingredients={ingredients.onForm}
+          setIngredients={onListSetIngredient}
           onSubmit={onSubmit}
+          onDelete={onDelete}
         />
       }
     </Grid>
