@@ -7,9 +7,6 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
   },
-  // # Test setup - https://create-react-app.dev/docs/running-tests/#srcsetuptestsjs
-  // setupFilesAfterEnv: ['./test/setup.ts'],
-  // globalSetup: './test/setup.ts',
   // # Coverage - https://create-react-app.dev/docs/running-tests/#coverage-reporting
   // `coverageDirectory` Does not work
   collectCoverage: true,

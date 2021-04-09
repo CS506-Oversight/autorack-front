@@ -4,15 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-// TODO: For some reason, this is only working if the test "checks API is up" exists
-//   Find a way to not to rely on the aforementioned test
-// import RequestSender from './api/utils/requestSender';
-// (async () => {
-//   const available = await RequestSender.isApiAvailable();
-//
-//   console.log(available);
-//
-//   if (!available) {
-//     throw new Error('Backend API is not available. Make sure you correctly configured the URL and started it.');
-//   }
-// })();
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme from 'enzyme';
+
+Enzyme.configure({adapter: new Adapter()});

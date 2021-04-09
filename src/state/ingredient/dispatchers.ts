@@ -1,10 +1,17 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
-import {mockAddIngredient} from '../../api/mock/ingredient/utils';
+import {mockAddIngredient, mockFetchIngredient} from '../../api/mock/ingredient/utils';
 import {Ingredient, IngredientData} from './data';
 import {INGREDIENT_STATE_NAME, IngredientDispatcherName} from './name';
 
 export const ingredientDispatchers = {
+  [IngredientDispatcherName.LOAD_INGREDIENT]: createAsyncThunk<Array<IngredientData>>(
+    `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.LOAD_INGREDIENT}`,
+    async () => {
+      // TODO: Load ingredient from the database
+      return await mockFetchIngredient();
+    },
+  ),
   [IngredientDispatcherName.ADD_INGREDIENT]: createAsyncThunk<IngredientData, Ingredient>(
     `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.ADD_INGREDIENT}`,
     async (ingredient: Ingredient) => {
