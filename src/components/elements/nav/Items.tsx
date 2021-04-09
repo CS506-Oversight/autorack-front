@@ -36,6 +36,12 @@ const navBarItems: Array<NavItemEntry> = [
     displayWhenAnonymous: true,
   },
   {
+    label: 'Manage Menu',
+    link: AppPaths.MENU_MANAGEMENT,
+    displayWhenLoggedIn: true,
+    displayWhenAnonymous: false,
+  },
+  {
     label: 'Manage Ingredients',
     link: AppPaths.INGREDIENT_MANAGEMENT,
     displayWhenLoggedIn: true,

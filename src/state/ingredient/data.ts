@@ -75,11 +75,11 @@ export const defaultMeasure = measureData.g;
  * Ingredient data.
  */
 export type Ingredient = {
+  id: string,
   name: string,
   measure: Measure,
   unit: number,
   unitPrice: number,
-  id: string,
 }
 
 /**

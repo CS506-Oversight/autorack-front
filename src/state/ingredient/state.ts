@@ -1,9 +1,7 @@
-import {StateBase} from '../base';
+import {SynchronizedState} from '../base';
 import {Ingredient} from './data';
 
 
-export type IngredientState = StateBase & {
+export type IngredientState = SynchronizedState & {
   ingredients: Array<Ingredient>,
-  // Epoch time
-  lastFetch: number,
 }
