@@ -1,4 +1,4 @@
-import {renderApp} from '../test/utils';
+import {renderApp} from '../test/utils/render';
 import RequestSender from './api/utils/requestSender';
 import {Authenticated} from './components/pages/Authenticated';
 import {Homepage} from './components/pages/Homepage';

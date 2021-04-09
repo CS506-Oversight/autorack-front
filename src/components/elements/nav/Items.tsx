@@ -31,14 +31,15 @@ const navBarItems: Array<NavItemEntry> = [
   {
     label: 'Login',
     link: AppPaths.SIGN_IN,
+    buttonVariant: 'outlined',
     displayWhenLoggedIn: false,
     displayWhenAnonymous: true,
   },
   {
-    label: 'Sign Up',
-    link: AppPaths.SIGN_UP,
-    displayWhenLoggedIn: false,
-    displayWhenAnonymous: true,
+    label: 'Manage Ingredients',
+    link: AppPaths.INGREDIENT_MANAGEMENT,
+    displayWhenLoggedIn: true,
+    displayWhenAnonymous: false,
   },
   {
     label: 'Sign Out',
