@@ -1,6 +1,7 @@
-import {Ingredient, VolumeMeasure, volumeMeasureData} from './ingredient/data';
-import {ingredientDispatchers} from './ingredient/dispatchers';
-import ingredientReducer from './ingredient/reducer';
+import {dummyIngredientData} from '../../api/mock/ingredient/data';
+import {Ingredient, VolumeMeasure, volumeMeasureData} from './data';
+import {ingredientDispatchers} from './dispatchers';
+import ingredientReducer from './reducer';
 
 describe('ingredient reducer behavior', () => {
   const ingredient: Ingredient = {
@@ -10,6 +11,17 @@ describe('ingredient reducer behavior', () => {
     unit: 1,
     unitPrice: 7,
   };
+
+  it('loads dummy ingredients', () => {
+    const action = {
+      type: ingredientDispatchers.loadIngredient.fulfilled,
+      payload: dummyIngredientData,
+    };
+
+    const newState = ingredientReducer({ingredients: [], lastFetch: 0}, action);
+    expect(newState.ingredients.length).toBe(3);
+    expect(newState.ingredients).toBe(dummyIngredientData);
+  });
 
   it('adds a new ingredient', () => {
     const action = {
