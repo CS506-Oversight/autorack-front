@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import {Container, Grid, Paper} from '@material-ui/core';
 // import {alertDispatchers} from '../../state/alert/dispatchers';
+import {makeStyles} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {Redirect} from 'react-router-dom';
@@ -14,7 +15,26 @@ import {useAuthSelector} from '../../state/auth/selector';
 import {useDispatch} from '../../state/store';
 import InputPassword from '../elements/account/InputPassword';
 import UIButton from '../elements/ui/Button';
+
+const useStyles = makeStyles(() => ({
+  root: {
+    marginTop: '15%',
+  },
+  paper: {
+    padding: '5em 0',
+    marginLeft: '10em',
+    marginRight: '10em',
+  },
+  heading: {
+    paddingBottom: '1em',
+  },
+  button: {
+    marginTop: '1em',
+  },
+}));
+
 export const Settings = () => {
+  const classes = useStyles();
   const {user} = useAuthSelector();
   const dispatch = useDispatch();
 
@@ -51,17 +71,15 @@ export const Settings = () => {
 
   return (
     <>
-      <Container>
-        <Paper elevation={3}>
+      <Container className={classes.root} >
+        <Paper elevation={3} className={classes.paper} >
           <Grid
             container
             direction="column"
             justify="center"
             alignItems="center"
-
           >
-            <br/>
-            <Typography component="h1" variant="h3">Settings</Typography>
+            <Typography component="h1" variant="h3" className={classes.heading}>Settings</Typography>
             <Grid item xs={6}>
               <Typography variant="h5">Update Password</Typography>
               <InputPassword
@@ -81,6 +99,7 @@ export const Settings = () => {
                 color="primary"
                 variant="contained"
                 onClick={fireUpdatePassword}
+                className={classes.button}
               />
             </Grid>
             <br/>
