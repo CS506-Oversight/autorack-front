@@ -36,6 +36,12 @@ const navBarItems: Array<NavItemEntry> = [
     displayWhenAnonymous: true,
   },
   {
+    label: 'Restock',
+    link: AppPaths.RESTOCK_PURCHASES,
+    displayWhenLoggedIn: true,
+    displayWhenAnonymous: false,
+  },
+  {
     label: 'Manage Menu',
     link: AppPaths.MENU_MANAGEMENT,
     displayWhenLoggedIn: true,
