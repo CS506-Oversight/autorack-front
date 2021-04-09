@@ -14,21 +14,31 @@ import {UISelect} from '../../../elements/ui/Select';
 import {ManagementFormState} from './type';
 
 
-type ItemManagementProps<T extends NamedData, S extends SynchronizedState> = {
-  newItemSentinel: T
+// https://stackoverflow.com/a/51412935/11571888
+type ItemManagementConstituent<T extends NamedData> = {
+  newItemSentinel: T,
+  upsertDispatcher: AsyncThunk<Array<T>, UpsertListPayload<T>, {}>,
+  messageOnSuccess: string,
+} | {
+  newItemSentinel?: never,
+  upsertDispatcher?: never,
+  messageOnSuccess?: never,
+}
+
+
+type ItemManagementProps<T extends NamedData, S extends SynchronizedState> = ItemManagementConstituent<T> & {
   initialOptions: Array<T>,
   initialState: S,
   loadDispatcher: AsyncThunk<Array<T>, void, {}>,
-  upsertDispatcher: AsyncThunk<Array<T>, UpsertListPayload<T>, {}>,
   getInitialStateItems: (state: S) => Array<T>,
-  messageOnSuccess: string,
   selectLabel: string,
   renderItemList: (
     managementState: ManagementFormState<T>,
     setItemByIndex: (item: T, index: number) => void,
-    onSubmit: () => void,
     onDelete: (index: number) => () => void,
+    onSubmit: () => void,
   ) => React.ReactNode,
+  useManagementState?: [ManagementFormState<T>, (newState: ManagementFormState<T>) => void],
 }
 
 
@@ -45,14 +55,18 @@ export const ItemManagement = <T extends NamedData, S extends SynchronizedState>
     messageOnSuccess,
     selectLabel,
     renderItemList,
+    useManagementState,
   } = props;
 
   const dispatch = useDispatch();
 
-  const [managementState, setManagementState] = React.useState<ManagementFormState<T>>({
-    options: [{...newItemSentinel}, ...initialOptions],
+  const getOptions = (options: Array<T>) => {
+    return [...(newItemSentinel ? [{...newItemSentinel}] : []), ...options];
+  };
+
+  const [managementState, setManagementState] = useManagementState ?? React.useState<ManagementFormState<T>>({
+    options: getOptions(initialOptions),
     onForm: [],
-    selected: {...newItemSentinel},
   });
   const [fetchStatus, setFetchStatus] = React.useState<FetchStatus>({
     fetched: false,
@@ -87,55 +101,47 @@ export const ItemManagement = <T extends NamedData, S extends SynchronizedState>
   const reset = (options: Array<T>) => {
     // Refresh the options and reset the selected and onForm managementState to be the new one
     setManagementState({
-      options: [
-        {...newItemSentinel},
-        ...options,
-      ],
+      options: getOptions(options),
       onForm: [],
-      selected: {...newItemSentinel},
     });
   };
 
   const onSubmit = () => {
+    if (!upsertDispatcher) {
+      return;
+    }
+
     dispatch(upsertDispatcher({
       original: getInitialStateItems(initialState),
       updated: managementState.onForm,
     }))
       .then(unwrapResult)
       .then((options) => {
-        dispatch(alertDispatchers.showAlert({severity: 'success', message: messageOnSuccess}));
+        dispatch(alertDispatchers.showAlert({
+          severity: 'success',
+          message: messageOnSuccess || 'Update action succeed.',
+        }));
         reset(options);
       })
       .catch((error) => {
-        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
+        dispatch(alertDispatchers.showAlert({
+          severity: 'error',
+          message: error.message,
+        }));
       });
   };
 
-  const onDelete = (index: number) => () => {
-    managementState.onForm.splice(index, 1);
-
+  const onDelete = (deletedIndex: number) => () => {
     setManagementState({
       ...managementState,
+      onForm: managementState.onForm.filter((_, index) => index !== deletedIndex),
     });
   };
 
   const onIngredientSelected = (selected: T) => {
-    if (
-      selected.id !== newItemSentinel.id &&
-      managementState.onForm.some((item) => item.id === selected.id)
-    ) {
-      // Only change the selected option because the selected one is already queued
-      setManagementState({
-        ...managementState,
-        selected: selected,
-      });
-      return;
-    }
-
     setManagementState({
       ...managementState,
       onForm: managementState.onForm.concat({...selected}),
-      selected: selected,
     });
   };
 
@@ -161,9 +167,9 @@ export const ItemManagement = <T extends NamedData, S extends SynchronizedState>
           value={null}
           options={managementState.options}
           getOptionSelected={(option, value) => option.id === value.id}
-          getOptionLabel={(option) => option.id === newItemSentinel.id ? '(Add New)' : option.name}
+          getOptionLabel={(option) => option.id === newItemSentinel?.id ? '(Add New)' : option.name}
           getOptionDisabled={(option) => (
-            option.id !== newItemSentinel.id &&
+            option.id !== newItemSentinel?.id &&
             managementState.onForm.some((ingredient) => ingredient.id === option.id)
           )}
           onOptionSelected={onIngredientSelected}
@@ -172,7 +178,7 @@ export const ItemManagement = <T extends NamedData, S extends SynchronizedState>
       </Grid>
       {
         fetchStatus.fetched &&
-        renderItemList(managementState, onListSetIngredient, onSubmit, onDelete)
+        renderItemList(managementState, onListSetIngredient, onDelete, onSubmit)
       }
     </Grid>
   );

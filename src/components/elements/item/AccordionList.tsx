@@ -9,7 +9,7 @@ import UIButton from '../ui/Button';
 const useStyles = makeStyles(
   {
     root: {
-      width: '100vw',
+      width: '100%',
       margin: '0 0.8rem',
     },
   },
@@ -18,7 +18,7 @@ const useStyles = makeStyles(
 export type AccordionListProps<T> = {
   items: Array<T>,
   setItemByIndex: (newItemData: T, index: number) => void,
-  onSubmit: () => void,
+  onSubmit?: () => void,
   onDelete: (index: number) => () => void,
   isItemIncomplete: (item: T) => boolean,
   getAccordionTitle: (item: T) => string,
@@ -40,7 +40,7 @@ export const AccordionList = <T, >({
   const classes = useStyles();
 
   return (
-    <>
+    <Grid container item spacing={3}>
       {
         items.map((item, index) => {
           return (
@@ -49,7 +49,7 @@ export const AccordionList = <T, >({
                 {getAccordionTitle(item)}
               </AccordionSummary>
               <AccordionDetails>
-                <Grid container spacing={2}>
+                <Grid container item spacing={2}>
                   {renderItemForm(item, (data) => setItemByIndex(data, index))}
                   <Grid item xs={12}>
                     <UIButton text="Delete" variant="outlined" color="primary" onClick={onDelete(index)}/>
@@ -60,17 +60,21 @@ export const AccordionList = <T, >({
           );
         })
       }
-      <Grid item xs={12}>
-        <UIButton
-          text="Submit"
-          color="primary"
-          variant="contained"
-          name="submit"
-          onClick={() => onSubmit()}
-          disabled={items.length === 0 || items.some((item) => isItemIncomplete(item))}
-          fullWidth
-        />
-      </Grid>
-    </>
+      {
+        onSubmit &&
+        <Grid item xs={12}>
+          <UIButton
+            text="Submit"
+            color="primary"
+            variant="contained"
+            name="submit"
+            onClick={() => onSubmit()}
+            disabled={items.length === 0 || items.some((item) => isItemIncomplete(item))}
+            fullWidth
+          />
+        </Grid>
+      }
+    </Grid>
   );
-};
+}
+;

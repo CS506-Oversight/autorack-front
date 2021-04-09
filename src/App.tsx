@@ -13,6 +13,7 @@ import {Authenticated} from './components/pages/Authenticated';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
 import {IngredientManagement} from './components/pages/IngredientManagement';
+import {MenuManagement} from './components/pages/MenuManagement';
 import {RestockPurchases} from './components/pages/RestockPurchases';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
@@ -71,6 +72,9 @@ const PageContent = () => {
       </PrivateRoute>
       <PrivateRoute path={AppPaths.INGREDIENT_MANAGEMENT}>
         <IngredientManagement/>
+      </PrivateRoute>
+      <PrivateRoute path={AppPaths.MENU_MANAGEMENT}>
+        <MenuManagement/>
       </PrivateRoute>
 
       <Copyright/>

@@ -7,17 +7,17 @@ import {IngredientForm} from './Form';
 export type IngredientListProps = {
   ingredients: Array<Ingredient>,
   setIngredients: (newIngredientData: Ingredient, index: number) => void,
-  onSubmit: () => void,
   onDelete: (index: number) => () => void,
+  onSubmit?: () => void,
 }
 
-export const IngredientList = ({ingredients, setIngredients, onSubmit, onDelete}: IngredientListProps) => {
+export const IngredientList = ({ingredients, setIngredients, onDelete, onSubmit}: IngredientListProps) => {
   return (
     <AccordionList
       items={ingredients}
       setItemByIndex={setIngredients}
-      onSubmit={onSubmit}
       onDelete={onDelete}
+      onSubmit={onSubmit}
       isItemIncomplete={(ingredient) => !ingredient.name || !ingredient.unit || !ingredient.unitPrice}
       getAccordionTitle={(ingredient) => ingredient.name || '(no name)'}
       renderItemForm={(ingredient, setIngredient) => (

@@ -28,7 +28,7 @@ export const IngredientManagement = () => {
       getInitialStateItems={(state) => state.ingredients}
       messageOnSuccess="Ingredient Updated/Added."
       selectLabel="Ingredient to Add/Edit"
-      renderItemList={(managementState, setItemByIndex, onSubmit, onDelete) => (
+      renderItemList={(managementState, setItemByIndex, onDelete, onSubmit) => (
         <IngredientList
           ingredients={managementState.onForm}
           setIngredients={setItemByIndex}
