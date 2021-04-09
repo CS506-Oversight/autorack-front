@@ -31,12 +31,7 @@ const navBarItems: Array<NavItemEntry> = [
   {
     label: 'Login',
     link: AppPaths.SIGN_IN,
-    displayWhenLoggedIn: false,
-    displayWhenAnonymous: true,
-  },
-  {
-    label: 'Sign Up',
-    link: AppPaths.SIGN_UP,
+    buttonVariant: 'outlined',
     displayWhenLoggedIn: false,
     displayWhenAnonymous: true,
   },
