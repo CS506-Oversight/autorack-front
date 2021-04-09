@@ -13,10 +13,20 @@ type UISelectProps<T> = {
   getOptionDisabled?: (option: T) => boolean,
   onOptionSelected: (option: T) => void,
   name?: string,
+  disabled?: boolean,
 };
 
 export const UISelect = <T, >(props: UISelectProps<T>) => {
-  const {label, value, options, getOptionLabel, getOptionSelected, getOptionDisabled, onOptionSelected} = props;
+  const {
+    label,
+    value,
+    options,
+    disabled = false,
+    getOptionLabel,
+    getOptionSelected,
+    getOptionDisabled,
+    onOptionSelected,
+  } = props;
 
   return (
     <Autocomplete
@@ -34,6 +44,7 @@ export const UISelect = <T, >(props: UISelectProps<T>) => {
       renderInput={(params) => {
         return <UIInput {...params} label={label}/>;
       }}
+      disabled={disabled}
     />
   );
 };

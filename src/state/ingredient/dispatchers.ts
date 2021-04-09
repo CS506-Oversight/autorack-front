@@ -1,22 +1,22 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
-import {mockAddIngredient, mockFetchIngredient} from '../../api/mock/ingredient/utils';
-import {Ingredient, IngredientData} from './data';
+import {mockUpsertIngredients, mockFetchIngredient} from '../../api/mock/ingredient/utils';
+import {Ingredient, UpsertIngredientPayload} from './data';
 import {INGREDIENT_STATE_NAME, IngredientDispatcherName} from './name';
 
 export const ingredientDispatchers = {
-  [IngredientDispatcherName.LOAD_INGREDIENT]: createAsyncThunk<Array<IngredientData>>(
+  [IngredientDispatcherName.LOAD_INGREDIENT]: createAsyncThunk<Array<Ingredient>>(
     `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.LOAD_INGREDIENT}`,
     async () => {
       // TODO: Load ingredient from the database
       return await mockFetchIngredient();
     },
   ),
-  [IngredientDispatcherName.ADD_INGREDIENT]: createAsyncThunk<IngredientData, Ingredient>(
-    `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.ADD_INGREDIENT}`,
-    async (ingredient: Ingredient) => {
+  [IngredientDispatcherName.UPSERT_INGREDIENT]: createAsyncThunk<Array<Ingredient>, UpsertIngredientPayload>(
+    `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.UPSERT_INGREDIENT}`,
+    async ({originalIngredients, updatedIngredients}: UpsertIngredientPayload) => {
       // TODO: Add ingredient to the database
-      return await mockAddIngredient(ingredient);
+      return await mockUpsertIngredients(originalIngredients, updatedIngredients);
     },
   ),
   [IngredientDispatcherName.REMOVE_INGREDIENT]: createAsyncThunk<string, string>(
@@ -25,13 +25,6 @@ export const ingredientDispatchers = {
       // TODO: Remove ingredient from the database
       console.log(`Remove ingredient of ID ${ingredientId}`);
       return ingredientId;
-    },
-  ),
-  [IngredientDispatcherName.UPDATE_INGREDIENT]: createAsyncThunk<IngredientData, IngredientData>(
-    `${INGREDIENT_STATE_NAME}/${IngredientDispatcherName.UPDATE_INGREDIENT}`,
-    async (ingredientData: IngredientData) => {
-      // TODO: Update ingredient from the database
-      return ingredientData;
     },
   ),
 };

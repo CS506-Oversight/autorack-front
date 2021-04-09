@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
+import {unwrapResult} from '@reduxjs/toolkit';
 
 import {FetchStatus} from '../../api/definitions/misc';
 import AppValues from '../../const/values';
 import {alertDispatchers} from '../../state/alert/dispatchers';
-import {defaultMeasure, IngredientData} from '../../state/ingredient/data';
+import {defaultMeasure, Ingredient, newIngredientId} from '../../state/ingredient/data';
 import {ingredientDispatchers} from '../../state/ingredient/dispatchers';
 import {useIngredientSelector} from '../../state/ingredient/selector';
 import {useDispatch} from '../../state/store';
@@ -13,7 +14,7 @@ import {IngredientList} from '../elements/ingredient/List';
 import {UISelect} from '../elements/ui/Select';
 
 const sentinelNewIngredient = {
-  id: 'new',
+  id: newIngredientId,
   name: '',
   measure: defaultMeasure,
   unit: 0.0,
@@ -21,13 +22,15 @@ const sentinelNewIngredient = {
 };
 
 type IngredientsInForm = {
-  options: Array<IngredientData>,
-  onForm: Array<IngredientData>,
-  selected: IngredientData,
+  options: Array<Ingredient>,
+  onForm: Array<Ingredient>,
+  selected: Ingredient,
 }
 
 export const IngredientManagement = () => {
   const dispatch = useDispatch();
+
+  // Note that this state will not be refreshed on-rerender
   const ingredientState = useIngredientSelector();
 
   const [ingredients, setIngredients] = React.useState<IngredientsInForm>({
@@ -46,6 +49,8 @@ export const IngredientManagement = () => {
   // Load the ingredients if not yet do so or last fetch > threshold
   if (!ingredientState.ingredients.length || Date.now() - ingredientState.lastFetch > AppValues.DATA_EXPIRY_MS) {
     dispatch(ingredientDispatchers.loadIngredient())
+      .then(unwrapResult)
+      .then((newIngredients) => reset(newIngredients))
       .catch((error) => {
         setFetchStatus({
           fetching: false,
@@ -66,12 +71,12 @@ export const IngredientManagement = () => {
     });
   }
 
-  const reset = () => {
+  const reset = (ingredientOptions: Array<Ingredient>) => {
     // Refresh the options and reset the selected and onForm ingredients to be the new one
     setIngredients({
       options: [
         {...sentinelNewIngredient},
-        ...ingredientState.ingredients,
+        ...ingredientOptions,
       ],
       onForm: [],
       selected: {...sentinelNewIngredient},
@@ -79,26 +84,15 @@ export const IngredientManagement = () => {
   };
 
   const onSubmit = () => {
-    let action;
-
-    if (ingredients.onForm[0].id === sentinelNewIngredient.id) {
-      // Handle new ingredients
-      action = dispatch(ingredientDispatchers.addIngredient(ingredients.onForm[0]))
-        .then(() => {
-          dispatch(alertDispatchers.showAlert({severity: 'success', message: 'Ingredient Added.'}));
-          reset();
-        });
-    } else {
-      // Handle update ingredients
-      action = dispatch(ingredientDispatchers.updateIngredient(ingredients.onForm[0]))
-        .then(() => {
-          dispatch(alertDispatchers.showAlert({severity: 'success', message: 'Ingredient Updated.'}));
-          reset();
-        });
-    }
-
-    // Catch error if any
-    action
+    dispatch(ingredientDispatchers.upsertIngredient({
+      originalIngredients: ingredientState.ingredients,
+      updatedIngredients: ingredients.onForm,
+    }))
+      .then(unwrapResult)
+      .then((ingredients) => {
+        dispatch(alertDispatchers.showAlert({severity: 'success', message: 'Ingredient Updated/Added.'}));
+        reset(ingredients);
+      })
       .catch((error) => {
         dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
       });
@@ -112,7 +106,7 @@ export const IngredientManagement = () => {
     });
   };
 
-  const onIngredientSelected = (selectedIngredient: IngredientData) => {
+  const onIngredientSelected = (selectedIngredient: Ingredient) => {
     if (
       selectedIngredient.id !== sentinelNewIngredient.id &&
       ingredients.onForm.some((ingredient) => ingredient.id === selectedIngredient.id)
@@ -132,7 +126,7 @@ export const IngredientManagement = () => {
     });
   };
 
-  const onListSetIngredient = (ingredientData: IngredientData, index: number) => {
+  const onListSetIngredient = (ingredientData: Ingredient, index: number) => {
     const newOnForm = [...ingredients.onForm];
 
     newOnForm[index] = ingredientData;
@@ -155,8 +149,12 @@ export const IngredientManagement = () => {
           options={ingredients.options}
           getOptionSelected={(option, value) => option.id === value.id}
           getOptionLabel={(option) => option.id === sentinelNewIngredient.id ? '(Add New)' : option.name}
-          getOptionDisabled={(option) => ingredients.onForm.some((ingredient) => ingredient.id === option.id)}
+          getOptionDisabled={(option) => (
+            option.id !== newIngredientId &&
+            ingredients.onForm.some((ingredient) => ingredient.id === option.id)
+          )}
           onOptionSelected={onIngredientSelected}
+          disabled={fetchStatus.fetching}
         />
       </Grid>
       {

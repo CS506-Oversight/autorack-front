@@ -17,7 +17,7 @@ export enum VolumeMeasure {
   FL_OZ = 'fl. oz',
 }
 
-export const volumeMeasureData: {[key in VolumeMeasure]: Measure} = {
+export const volumeMeasureData: { [key in VolumeMeasure]: Measure } = {
   [VolumeMeasure.ML]: {
     name: VolumeMeasure.ML,
     equivalentMetric: 0.001,
@@ -46,7 +46,7 @@ export enum MassMeasure {
   OZ = 'oz',
 }
 
-export const massMeasureData: {[key in MassMeasure]: Measure} = {
+export const massMeasureData: { [key in MassMeasure]: Measure } = {
   [MassMeasure.G]: {
     name: MassMeasure.G,
     equivalentMetric: 1,
@@ -64,7 +64,7 @@ export const massMeasureData: {[key in MassMeasure]: Measure} = {
   },
 };
 
-export const measureData: {[key in MassMeasure | VolumeMeasure]: Measure} = {
+export const measureData: { [key in MassMeasure | VolumeMeasure]: Measure } = {
   ...volumeMeasureData,
   ...massMeasureData,
 };
@@ -72,22 +72,22 @@ export const measureData: {[key in MassMeasure | VolumeMeasure]: Measure} = {
 export const defaultMeasure = measureData.g;
 
 /**
- * Viewable ingredient data.
- *
- * These fields are commonly seen and editable.
+ * Ingredient data.
  */
 export type Ingredient = {
   name: string,
   measure: Measure,
   unit: number,
   unitPrice: number,
+  id: string,
 }
 
 /**
- * The actual ingredient data.
- *
- * This includes some auto-generated fields, such as `id`.
+ * ID that means the ingredient is to be newly added.
  */
-export type IngredientData = Ingredient & {
-  id: string,
+export const newIngredientId = '(new)';
+
+export type UpsertIngredientPayload = {
+  originalIngredients: Array<Ingredient>,
+  updatedIngredients: Array<Ingredient>,
 }

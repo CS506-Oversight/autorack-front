@@ -1,6 +1,6 @@
-import {IngredientData, measureData} from '../../../state/ingredient/data';
+import {Ingredient, measureData} from '../../../state/ingredient/data';
 
-export const dummyIngredientData: Array<IngredientData> = [
+export const dummyIngredientData: Array<Ingredient> = [
   {
     id: 'axpeax',
     name: 'sample ingredient',
@@ -17,7 +17,7 @@ export const dummyIngredientData: Array<IngredientData> = [
   },
   {
     id: 'axpeaz',
-    name: 'sample ingredient',
+    name: 'sample ingredient 3',
     measure: measureData.tbsp,
     unit: 1,
     unitPrice: 6,

@@ -1,9 +1,9 @@
-import {IngredientData, VolumeMeasure, volumeMeasureData} from './ingredient/data';
+import {Ingredient, VolumeMeasure, volumeMeasureData} from './ingredient/data';
 import {ingredientDispatchers} from './ingredient/dispatchers';
 import ingredientReducer from './ingredient/reducer';
 
 describe('ingredient reducer behavior', () => {
-  const ingredient: IngredientData = {
+  const ingredient: Ingredient = {
     id: 'aaa',
     name: 'test',
     measure: volumeMeasureData[VolumeMeasure.FL_OZ],
@@ -13,15 +13,113 @@ describe('ingredient reducer behavior', () => {
 
   it('adds a new ingredient', () => {
     const action = {
-      type: ingredientDispatchers.addIngredient.fulfilled,
-      payload: ingredient,
+      type: ingredientDispatchers.upsertIngredient.fulfilled,
+      payload: [ingredient],
     };
 
-    const newState = ingredientReducer(undefined, action);
-    const result = newState
-      .ingredients
-      .some((ingredient) => ingredient.name === ingredient.name);
-    expect(result).toBeTruthy();
+    const newState = ingredientReducer({ingredients: [], lastFetch: 0}, action);
+    expect(newState.ingredients.length).toBe(1);
+  });
+
+  it('updates an ingredient', () => {
+    const action = {
+      type: ingredientDispatchers.upsertIngredient.fulfilled,
+      payload: [{...ingredient, unitPrice: 90}],
+    };
+
+    const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.unitPrice === 90),
+    )
+      .toBeTruthy();
+    expect(newState.ingredients.length).toBe(1);
+  });
+
+  it('adds 3 and updates 1 ingredient', () => {
+    const action = {
+      type: ingredientDispatchers.upsertIngredient.fulfilled,
+      payload: [
+        {...ingredient, id: 'bbb'},
+        {...ingredient, id: 'ccc'},
+        {...ingredient, id: 'ddd'},
+        {...ingredient, unitPrice: 90},
+      ],
+    };
+
+    const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.unitPrice === 90),
+    )
+      .toBeTruthy();
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'bbb'),
+    )
+      .toBeTruthy();
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'ccc'),
+    )
+      .toBeTruthy();
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'ddd'),
+    )
+      .toBeTruthy();
+    expect(newState.ingredients.length).toBe(4);
+  });
+
+  it('updates 3 and adds 1 ingredient', () => {
+    const action = {
+      type: ingredientDispatchers.upsertIngredient.fulfilled,
+      payload: [
+        {...ingredient, id: 'eee'},
+        {...ingredient, id: 'bbb', unitPrice: 90},
+        {...ingredient, id: 'ccc', unitPrice: 900},
+        {...ingredient, id: 'ddd', unitPrice: 9000},
+      ],
+    };
+
+    const newState = ingredientReducer({
+      ingredients: [
+        {...ingredient, id: 'bbb'},
+        {...ingredient, id: 'ccc'},
+        {...ingredient, id: 'ddd'},
+      ],
+      lastFetch: 0,
+    }, action);
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'eee'),
+    )
+      .toBeTruthy();
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'bbb' && ingredient.unitPrice === 90),
+    )
+      .toBeTruthy();
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'ccc' && ingredient.unitPrice === 900),
+    )
+      .toBeTruthy();
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.id === 'ddd' && ingredient.unitPrice === 9000),
+    )
+      .toBeTruthy();
+    expect(newState.ingredients.length).toBe(4);
   });
 
   it('removes an ingredient', () => {
@@ -30,23 +128,13 @@ describe('ingredient reducer behavior', () => {
       payload: ingredient.id,
     };
 
-    const newState = ingredientReducer({ingredients: [ingredient]}, action);
-    const result = newState
-      .ingredients
-      .some((ingredient) => ingredient.name === ingredient.name);
-    expect(result).toBeFalsy();
-  });
-
-  it('updates an ingredient', () => {
-    const action = {
-      type: ingredientDispatchers.updateIngredient.fulfilled,
-      payload: {...ingredient, unitPrice: 90},
-    };
-
-    const newState = ingredientReducer({ingredients: [ingredient]}, action);
-    const result = newState
-      .ingredients
-      .some((ingredient) => ingredient.unitPrice === 90);
-    expect(result).toBeTruthy();
+    const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
+    expect(
+      newState
+        .ingredients
+        .some((ingredient) => ingredient.name === ingredient.name),
+    )
+      .toBeFalsy();
+    expect(newState.ingredients.length).toBe(0);
   });
 });

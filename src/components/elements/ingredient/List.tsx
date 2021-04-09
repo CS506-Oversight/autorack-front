@@ -4,13 +4,13 @@ import {Accordion, AccordionDetails, AccordionSummary, makeStyles} from '@materi
 import Grid from '@material-ui/core/Grid';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import {IngredientData} from '../../../state/ingredient/data';
+import {Ingredient} from '../../../state/ingredient/data';
 import UIButton from '../ui/Button';
 import {IngredientForm} from './Form';
 
 export type IngredientListProps = {
-  ingredients: Array<IngredientData>,
-  setIngredients: (newIngredientData: IngredientData, index: number) => void,
+  ingredients: Array<Ingredient>,
+  setIngredients: (newIngredientData: Ingredient, index: number) => void,
   onSubmit: () => void,
   onDelete: (index: number) => () => void,
 }
@@ -32,7 +32,7 @@ export const IngredientList = ({ingredients, setIngredients, onSubmit, onDelete}
       {
         ingredients.map((ingredient, index) => {
           return (
-            <Accordion key={ingredient.name} className={classes.root}>
+            <Accordion key={index} className={classes.root}>
               <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                 {ingredient.name || '(no name)'}
               </AccordionSummary>
