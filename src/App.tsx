@@ -10,7 +10,6 @@ import {AnonymousRoute} from './components/elements/routes/AnonymousRoute';
 import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {AccountSettings} from './components/pages/AccountSettings';
-import {Authenticated} from './components/pages/Authenticated';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
 import {IngredientManagement} from './components/pages/IngredientManagement';
@@ -65,9 +64,6 @@ const PageContent = () => {
 
       {/* Authentication needed */}
 
-      <PrivateRoute path={AppPaths.AUTHENTICATED}>
-        <Authenticated/>
-      </PrivateRoute>
       <PrivateRoute path={AppPaths.ACCOUNT_SETTINGS}>
         <AccountSettings/>
       </PrivateRoute>
