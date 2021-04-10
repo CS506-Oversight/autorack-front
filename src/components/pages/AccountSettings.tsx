@@ -17,12 +17,10 @@ import UIButton from '../elements/ui/Button';
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginTop: '15%',
+    marginTop: '10%',
   },
   paper: {
     padding: '5em 0',
-    marginLeft: '10em',
-    marginRight: '10em',
   },
   heading: {
     paddingBottom: '1em',
