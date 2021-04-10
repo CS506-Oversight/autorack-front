@@ -5,6 +5,7 @@ import Link from '@material-ui/core/Link';
 import {Redirect} from 'react-router-dom';
 
 import AppPaths from '../../const/paths';
+import AppValues from '../../const/values';
 import {alertDispatchers} from '../../state/alert/dispatchers';
 import {SignUpData} from '../../state/auth/data';
 import {authDispatchers} from '../../state/auth/dispatchers';
@@ -51,7 +52,7 @@ export const SignUp = () => {
 
   if (signedUp) {
     // TODO: Redirect to the page right after signing up
-    return <Redirect to={AppPaths.AUTHENTICATED}/>;
+    return <Redirect to={AppValues.TARGET_AFTER_SIGN_UP}/>;
   }
 
   return (
