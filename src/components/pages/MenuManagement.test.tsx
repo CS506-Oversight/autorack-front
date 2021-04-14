@@ -1,8 +1,19 @@
+import React from 'react';
+
+import {TextField} from '@material-ui/core';
+import {waitFor} from '@testing-library/react';
+import {act} from 'react-dom/test-utils';
+
 import {renderAppAsync} from '../../../test/utils/renderAsync';
 import {dummyMenuData} from '../../api/mock/menu/data';
 import AppPaths from '../../const/paths';
 import {User} from '../../state/auth/data';
+import {AccordionList} from '../elements/item/AccordionList';
+import {MenuForm} from '../elements/menu/Form';
 import {MenuList} from '../elements/menu/List';
+import UIInput from '../elements/ui/Input';
+import {UISelect} from '../elements/ui/Select';
+import {ItemManagement} from './base/management/ItemManagement';
 import {MenuManagement} from './MenuManagement';
 
 
@@ -62,6 +73,84 @@ describe('menu management behavior', () => {
 
     expect(app.find(MenuList).exists()).toBeTruthy();
     expect(store.getState().menu.lastFetch).toBe(current);
+  });
+
+
+  it('Test first Dropdown working', async () => {
+    const {app} = await renderAppAsync(AppPaths.MENU_MANAGEMENT, {
+      preloadState: {auth: {user: testUser}},
+      waitToPaint: true,
+    });
+    await waitFor(async () => {
+      const management = app.find(ItemManagement);
+      const menus = management.props().getInitialStateItems(management.props().initialState);
+      expect(menus[0].name).toBe('menu 1');
+      const select = management.find(UISelect);
+      const options = select.props().options;
+      await act(async () => {
+        // selects first option
+        select.props().onOptionSelected(options[0]);
+      });
+    });
+    expect(app.text()).toContain('(no name)');
+  });
+
+  it('Test first Form Fill in', async () => {
+    const {app} = await renderAppAsync(AppPaths.MENU_MANAGEMENT, {
+      preloadState: {auth: {user: testUser}},
+      waitToPaint: true,
+    });
+    await waitFor(async () => {
+      const management = app.find(ItemManagement);
+      const select = management.find(UISelect);
+      const options = select.props().options;
+      await act(async () => {
+        // selects first option
+        select.props().onOptionSelected(options[1]);
+      });
+    });
+    app.update();
+    await waitFor(async () => {
+      const list = app.find(ItemManagement).find(MenuList).find(AccordionList).first().find(MenuForm);
+      const inputs = list.find(UIInput);
+      console.log(inputs.first().props().value);
+      const input1 = inputs.at(0).find(TextField);
+      const input2 = inputs.at(1).find(TextField);
+      const input3 = inputs.at(2).find(TextField);
+      const finalInput1 = input1.find('input');
+      const finalInput2 = input2.find('input');
+      const finalInput3 = input3.find('input');
+      const event1 = {
+        preventDefault() {},
+        target: {value: 'potatoes'},
+      };
+      const event2 = {
+        preventDefault() {},
+        target: {value: 'I am potatoes'},
+      };
+      const event3 = {
+        preventDefault() {},
+        target: {value: 25},
+      };
+      await act(async () => {
+        finalInput1.simulate('change', event1);
+      });
+      await act(async () => {
+        finalInput2.simulate('change', event2);
+      });
+      await act(async () => {
+        finalInput3.simulate('change', event3);
+      });
+    });
+    app.update();
+    const list = app.find(ItemManagement).find(MenuList).find(AccordionList).first().find(MenuForm);
+    const inputs = list.find(UIInput);
+    const ingredientSelect = list.find(ItemManagement);
+    const ingred = ingredientSelect.props().getInitialStateItems(ingredientSelect.props().initialState);
+    expect(ingred[0].name).toBe('sample ingredient');
+    expect(inputs.get(0).props.value).toBe('potatoes');
+    expect(inputs.get(1).props.value).toBe('I am potatoes');
+    expect(inputs.get(2).props.value).toBe(25);
   });
 
   it('adds 1 menu', async () => {
