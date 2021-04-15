@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {TextField} from '@material-ui/core';
+import {Button, ButtonBase, TextField} from '@material-ui/core';
 import {waitFor} from '@testing-library/react';
 import {act} from 'react-dom/test-utils';
 
@@ -11,6 +11,7 @@ import {User} from '../../state/auth/data';
 import {AccordionList} from '../elements/item/AccordionList';
 import {MenuForm} from '../elements/menu/Form';
 import {MenuList} from '../elements/menu/List';
+import UIButton from '../elements/ui/Button';
 import UIInput from '../elements/ui/Input';
 import {UISelect} from '../elements/ui/Select';
 import {ItemManagement} from './base/management/ItemManagement';
@@ -113,7 +114,7 @@ describe('menu management behavior', () => {
     await waitFor(async () => {
       const list = app.find(ItemManagement).find(MenuList).find(AccordionList).first().find(MenuForm);
       const inputs = list.find(UIInput);
-      console.log(inputs.first().props().value);
+
       const input1 = inputs.at(0).find(TextField);
       const input2 = inputs.at(1).find(TextField);
       const input3 = inputs.at(2).find(TextField);
@@ -151,9 +152,42 @@ describe('menu management behavior', () => {
     expect(inputs.get(0).props.value).toBe('potatoes');
     expect(inputs.get(1).props.value).toBe('I am potatoes');
     expect(inputs.get(2).props.value).toBe(25);
+    await waitFor(async () => {
+      const submitButton = app.find(ItemManagement).find(MenuList).find(AccordionList).first().find(UIButton).last()
+        .find(Button);
+      await act(async () => {
+        submitButton.simulate('click');
+      });
+    });
+    // Should expect state to be filled here
   });
 
-  it('adds 1 menu', async () => {
+  /*  it('Test Accordion Working', async () => {
+    const {app} = await renderAppAsync(AppPaths.MENU_MANAGEMENT, {
+      preloadState: {auth: {user: testUser}},
+      waitToPaint: true,
+    });
+    await waitFor(async () => {
+      const management = app.find(ItemManagement);
+      const select = management.find(UISelect);
+      const options = select.props().options;
+      await act(async () => {
+        // selects first option
+        select.props().onOptionSelected(options[1]);
+      });
+    });
+    app.update();
+    await waitFor(async () => {
+      const submitButton = app.find(ItemManagement).find(MenuList).find(AccordionList).first();
+      console.log(submitButton.text());
+      await act(async () => {
+        submitButton.props().onSubmit;
+      });
+    });
+  });*/
+
+
+/*  it('adds 1 menu', async () => {
     // TODO: Implement test: adds 1 menu
     console.warn('Test "adds 1 menu" not implemented');
   });
@@ -191,5 +225,5 @@ describe('menu management behavior', () => {
   it('disallows adding menu with empty ingredients', () => {
     // TODO: Implement test: disallows adding menu with insufficient ingredients
     console.warn('Test "disallows adding menu with insufficient ingredients" not implemented');
-  });
+  });*/
 });
