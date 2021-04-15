@@ -34,7 +34,7 @@ export const AccountSettings = () => {
   const classes = useStyles();
   const {user} = useAuthSelector();
   const dispatch = useDispatch();
-
+  console.log(user);
   if (user == null) { // `==` for checking `null` or `undefined`
     return <Redirect to={AppPaths.SIGN_IN}/>;
   }

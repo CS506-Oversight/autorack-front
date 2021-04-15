@@ -2,6 +2,7 @@ import {renderAppAsync} from '../../../test/utils/renderAsync';
 import AppPaths from '../../const/paths';
 import {User} from '../../state/auth/data';
 import {AccountSettings} from './AccountSettings';
+import {SignIn} from './SignIn';
 
 describe('account settings behavior', () => {
   const testUser: User = {
@@ -26,7 +27,16 @@ describe('account settings behavior', () => {
     expect(app.find(AccountSettings).exists()).toBeTruthy();
   });
 
-  it('changes the user\'s password', async () => {
+  it('Tests Null User', async () => {
+    const {app} = await renderAppAsync(AppPaths.ACCOUNT_SETTINGS, {
+      preloadState: {auth: {user: null}},
+      waitToPaint: true,
+    });
+
+    expect(app.find(SignIn).exists()).toBeTruthy();
+  });
+
+/*  it('changes the user\'s password', async () => {
     // TODO: Implement test: changes the user's password
     console.warn('Test "changes the user\'s password" not implemented');
   });
@@ -39,5 +49,5 @@ describe('account settings behavior', () => {
   it('fails to change the user\'s password is the same', async () => {
     // TODO: Implement test: fails to change the user's password is the same
     console.warn('Test "fails to change the user\'s password is the same" not implemented');
-  });
+  });*/
 });
