@@ -13,6 +13,7 @@ export default class AppPaths {
   static AUTHENTICATED = '/authed';
   static ACCOUNT_SETTINGS = '/settings';
   static RESTOCK_PURCHASES = '/restock-purchases';
+  static DASHBOARD = '/dashboard';
 
   // Ingredient Management
   static INGREDIENT_MANAGEMENT = '/ingredient';

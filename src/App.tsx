@@ -11,6 +11,7 @@ import {PrivateRoute} from './components/elements/routes/PrivateRoute';
 import {PublicRoute} from './components/elements/routes/PublicRoute';
 import {AccountSettings} from './components/pages/AccountSettings';
 import {Authenticated} from './components/pages/Authenticated';
+import {Dashboard} from './components/pages/Dashboard';
 import {ForgotPassword} from './components/pages/ForgotPassword';
 import {Homepage} from './components/pages/Homepage';
 import {IngredientManagement} from './components/pages/IngredientManagement';
@@ -67,6 +68,9 @@ const PageContent = () => {
 
       <PrivateRoute path={AppPaths.AUTHENTICATED}>
         <Authenticated/>
+      </PrivateRoute>
+      <PrivateRoute path={AppPaths.DASHBOARD}>
+        <Dashboard/>
       </PrivateRoute>
       <PrivateRoute path={AppPaths.ACCOUNT_SETTINGS}>
         <AccountSettings/>

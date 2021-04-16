@@ -11,7 +11,7 @@ type UnauthedRouteProps = RouteCommonProps;
 
 const renderRoute = (user: User | null, {children}: React.PropsWithChildren<UnauthedRouteProps>) => () => {
   if (user != null) { // `==` for checking `null` or `undefined`
-    return <Redirect to={AppPaths.AUTHENTICATED}/>;
+    return <Redirect to={AppPaths.DASHBOARD}/>;
   }
 
   return children;
