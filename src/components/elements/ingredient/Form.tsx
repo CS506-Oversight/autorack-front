@@ -44,14 +44,6 @@ export const IngredientForm = <T extends Ingredient>(
           onOptionSelected={(measure) => setIngredient({...ingredient, measure})}
         />
       </Grid>
-      <Grid item sm={12} md={4}>
-        <UIInput
-          name="unitPrice"
-          value={ingredient.unitPrice}
-          onValueChanged={(val) => setIngredient({...ingredient, unitPrice: +val})}
-          label="Ingredient Unit Price"
-        />
-      </Grid>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import {AsyncThunk, unwrapResult} from '@reduxjs/toolkit';
@@ -73,30 +73,33 @@ export const ItemManagement = <T extends NamedData, S extends SynchronizedState>
     fetching: false,
   });
 
-  // Load the managementState if not yet do so or last fetch > threshold
-  if (!initialOptions.length || Date.now() - initialState.lastFetch > AppValues.DATA_EXPIRY_MS) {
-    dispatch(loadDispatcher())
-      .then(unwrapResult)
-      .then((loadedItems) => reset(loadedItems))
-      .catch((error) => {
-        setFetchStatus({
-          fetching: false,
-          fetched: true,
+  useEffect(() => {
+    // Load the managementState if not yet do so or last fetch > threshold
+    if (!initialOptions.length || Date.now() - initialState.lastFetch > AppValues.DATA_EXPIRY_MS) {
+      dispatch(loadDispatcher())
+        .then(unwrapResult)
+        .then((loadedItems) => reset(loadedItems))
+        .catch((error) => {
+          setFetchStatus({
+            fetching: false,
+            fetched: true,
+          });
+          dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
+        })
+        .finally(() => {
+          setFetchStatus({
+            fetching: false,
+            fetched: true,
+          });
         });
-        dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
-      })
-      .finally(() => {
-        setFetchStatus({
-          fetching: false,
-          fetched: true,
-        });
+    } else if (!fetchStatus.fetched) {
+      setFetchStatus({
+        ...fetchStatus,
+        fetched: true,
       });
-  } else if (!fetchStatus.fetched) {
-    setFetchStatus({
-      ...fetchStatus,
-      fetched: true,
-    });
-  }
+    }
+  }, []);
+
 
   const reset = (options: Array<T>) => {
     // Refresh the options and reset the selected and onForm managementState to be the new one

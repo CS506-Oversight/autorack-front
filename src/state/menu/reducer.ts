@@ -23,12 +23,12 @@ const menuSlice = createSlice({
         },
       );
     });
-    builder.addCase(
-      menuDispatchers.removeMenu.fulfilled,
-      (state, {payload}) => {
-        state.menus = state.menus.filter((x) => x.id !== payload);
-      },
-    );
+    // builder.addCase(
+    //   menuDispatchers.removeMenu.fulfilled,
+    //   (state, {payload}) => {
+    //     state.menus = state.menus.filter((x) => x.id !== payload);
+    //   },
+    // );
   },
 });
 

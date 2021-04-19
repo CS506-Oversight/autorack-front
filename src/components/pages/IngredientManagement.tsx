@@ -11,7 +11,6 @@ const sentinelNewIngredient = {
   name: '',
   measure: defaultMeasure,
   unit: 0.0,
-  unitPrice: 0.0,
 };
 
 export const IngredientManagement = () => {
