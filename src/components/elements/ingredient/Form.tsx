@@ -31,6 +31,7 @@ export const IngredientForm = <T extends Ingredient>(
           value={ingredient.unit}
           onValueChanged={(val) => setIngredient({...ingredient, unit: +val})}
           label="Ingredient Unit"
+          type="number"
         />
       </Grid>
       <Grid item sm={12} md={4}>
