@@ -7,7 +7,7 @@ import fireAuth from '../../config/firebaseConfig';
 import {ResetPasswordData, SignInData, SignUpData, User, UpdatePasswordData} from './data';
 import {AUTH_STATE_NAME, AuthDispatcherName} from './name';
 
-export type AuthActionReturn<R> = R extends User ? (R | null): R;
+export type AuthActionReturn<R> = R extends User ? (R | null) : R;
 
 export const authDispatchers = {
   [AuthDispatcherName.SIGN_UP]: createAsyncThunk<AuthActionReturn<User | null>, SignUpData>(

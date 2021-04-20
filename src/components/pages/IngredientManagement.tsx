@@ -1,16 +1,17 @@
 import React from 'react';
 
-import {defaultMeasure, newIngredientId} from '../../state/ingredient/data';
+import {defaultMeasure, Ingredient, newIngredientId} from '../../state/ingredient/data';
 import {ingredientDispatchers} from '../../state/ingredient/dispatchers';
 import {useIngredientSelector} from '../../state/ingredient/selector';
 import {IngredientList} from '../elements/ingredient/List';
 import {ItemManagement} from './base/management/ItemManagement';
 
-const sentinelNewIngredient = {
+const sentinelNewIngredient: Ingredient = {
   id: newIngredientId,
   name: '',
   measure: defaultMeasure,
   unit: 0.0,
+  currentStock: 0.0,
 };
 
 export const IngredientManagement = () => {

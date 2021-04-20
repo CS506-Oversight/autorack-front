@@ -79,7 +79,7 @@ export const defaultMeasure = measureData.g;
 export type Ingredient = NamedData & {
   measure: Measure,
   unit: number,
-  // unitPrice: number,
+  currentStock: number,
 }
 
 /**
