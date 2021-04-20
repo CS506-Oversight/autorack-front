@@ -53,13 +53,6 @@ export const MenuForm = <T extends Menu>(
           onValueChanged={(val) => setMenu({...menu, description: val})}
           label="Menu Description"
         />
-        <UIInput
-          name="price"
-          value={menu.price}
-          onValueChanged={(val) => setMenu({...menu, price: val})}
-          label="Price"
-          type="number"
-        />
       </Grid>
       <Grid item xs={12} md={6}>
         <ItemManagement

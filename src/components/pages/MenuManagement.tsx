@@ -10,7 +10,6 @@ const sentinelNewMenu: Menu = {
   id: newMenuId,
   name: '',
   description: '',
-  price: 0,
   ingredients: [],
 };
 
