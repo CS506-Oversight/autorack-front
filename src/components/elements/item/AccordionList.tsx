@@ -52,7 +52,7 @@ export const AccordionList = <T, >({
                 <Grid container item spacing={2}>
                   {renderItemForm(item, (data) => setItemByIndex(data, index))}
                   <Grid item xs={12}>
-                    <UIButton text="Delete" variant="outlined" color="primary" onClick={onDelete(index)}/>
+                    <UIButton text="Cancel" variant="outlined" color="primary" onClick={onDelete(index)}/>
                   </Grid>
                 </Grid>
               </AccordionDetails>
