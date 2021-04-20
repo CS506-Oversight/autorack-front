@@ -61,6 +61,11 @@ export const authDispatchers = {
           return res.data;
         });
 
+      if (!response.ok) {
+        rejectWithValue(response.message);
+        return null;
+      }
+
       const userData: User = response.data;
 
       return userData;
