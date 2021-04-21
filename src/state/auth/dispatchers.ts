@@ -88,20 +88,15 @@ export const authDispatchers = {
   [AuthDispatcherName.UPDATE_PASSWORD]:
     createAsyncThunk<AuthActionReturn<User>, UpdatePasswordData>(
       `${AUTH_STATE_NAME}/${AuthDispatcherName.UPDATE_PASSWORD}`,
-      async (payload: UpdatePasswordData, {rejectWithValue}) => {
+      async (payload: UpdatePasswordData) => {
         if (payload.password === payload.newPassword) {
-          rejectWithValue('New password is the same as the old one.');
-          return payload.originalUser;
+          throw new Error('New password is the same as the old one.');
         }
 
         const cred = firebase.auth.EmailAuthProvider.credential(payload.originalUser.email, payload.password);
         await fireAuth.currentUser?.reauthenticateWithCredential(cred);
 
-        try {
-          await fireAuth.currentUser?.updatePassword(payload.newPassword);
-        } catch (error) {
-          rejectWithValue(error.message);
-        }
+        await fireAuth.currentUser?.updatePassword(payload.newPassword);
 
         return payload.originalUser;
       },
