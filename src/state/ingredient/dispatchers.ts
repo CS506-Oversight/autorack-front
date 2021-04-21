@@ -57,12 +57,11 @@ export const ingredientDispatchers = {
       });
 
       const payload = {
-        id: id,
         payload: payloadData,
       };
 
       // Send the data to the backend
-      await axios.post(ApiPaths.INGREDIENT, JSON.stringify(payload), {
+      await axios.post(ApiPaths.INGREDIENT + `?user_id=${id}`, JSON.stringify(payload), {
         headers: {
           'Content-Type': 'application/json',
         },

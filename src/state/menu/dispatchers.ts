@@ -56,12 +56,11 @@ export const menuDispatchers = {
       });
 
       const payload = {
-        id: id,
         payload: payloadData,
       };
 
       // Send the data to the backend
-      await axios.post(ApiPaths.MENU, JSON.stringify(payload), {
+      await axios.post(ApiPaths.MENU + `?user_id=${id}`, JSON.stringify(payload), {
         headers: {
           'Content-Type': 'application/json',
         },
