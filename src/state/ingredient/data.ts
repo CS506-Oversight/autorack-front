@@ -71,6 +71,17 @@ export const measureData: { [key in MassMeasure | VolumeMeasure]: Measure } = {
   ...massMeasureData,
 };
 
+export const getMeasureOfSameCategory = (measure: Measure): Array<Measure> => {
+  if (measure.name in volumeMeasureData) {
+    return Object.values(volumeMeasureData);
+  }
+  if (measure.name in massMeasureData) {
+    return Object.values(massMeasureData);
+  }
+
+  return [];
+};
+
 export const defaultMeasure = measureData.g;
 
 /**
@@ -79,7 +90,7 @@ export const defaultMeasure = measureData.g;
 export type Ingredient = NamedData & {
   measure: Measure,
   unit: number,
-  currentStock: number,
+  capacity: number,
 }
 
 /**

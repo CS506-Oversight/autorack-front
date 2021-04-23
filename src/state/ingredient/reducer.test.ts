@@ -9,7 +9,7 @@ describe('ingredient reducer behavior', () => {
     name: 'test',
     measure: volumeMeasureData[VolumeMeasure.FL_OZ],
     unit: 1,
-    currentStock: 8,
+    capacity: 70.0,
   };
 
   it('loads dummy ingredients', () => {

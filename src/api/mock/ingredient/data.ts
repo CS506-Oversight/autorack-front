@@ -6,20 +6,20 @@ export const dummyIngredientData: Array<Ingredient> = [
     name: 'sample ingredient',
     measure: measureData.ml,
     unit: 10,
-    currentStock: 87,
+    capacity: 50,
   },
   {
     id: 'axpeay',
     name: 'sample ingredient 2',
     measure: measureData.g,
     unit: 5,
-    currentStock: 78,
+    capacity: 70,
   },
   {
     id: 'axpeaz',
     name: 'sample ingredient 3',
     measure: measureData.tbsp,
     unit: 1,
-    currentStock: 6,
+    capacity: 90,
   },
 ];

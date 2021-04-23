@@ -2,7 +2,7 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
-import {Ingredient, measureData} from '../../../state/ingredient/data';
+import {getMeasureOfSameCategory, Ingredient, measureData} from '../../../state/ingredient/data';
 import UIInput from '../ui/Input';
 import {UISelect} from '../ui/Select';
 
@@ -10,12 +10,21 @@ import {UISelect} from '../ui/Select';
 type IngredientFormProps<T extends Ingredient> = {
   ingredient: T,
   setIngredient: (newIngredient: T) => void,
+  isAddAllowed?: boolean,
 }
 
 export const IngredientForm = <T extends Ingredient>(
-  {ingredient, setIngredient}: IngredientFormProps<T>,
+  {ingredient, setIngredient, isAddAllowed = false}: IngredientFormProps<T>,
 ) => {
-  const [isNewIngredient] = React.useState(!ingredient.name);
+  const colWidth = isAddAllowed ? 4 : 6;
+
+  let measurements;
+
+  if (isAddAllowed) {
+    measurements = Object.values(measureData);
+  } else {
+    measurements = getMeasureOfSameCategory(ingredient.measure);
+  }
 
   return (
     <>
@@ -27,41 +36,38 @@ export const IngredientForm = <T extends Ingredient>(
           label="Ingredient Name"
         />
       </Grid>
-      <Grid item sm={12} md={4}>
+      <Grid item sm={12} md={colWidth}>
         <UIInput
           name="unit"
           value={ingredient.unit}
           onValueChanged={(val) => setIngredient({...ingredient, unit: +val})}
-          label="Ingredient Unit"
+          label={isAddAllowed ? 'Current In-stock' : 'Unit Amount'}
           type="number"
         />
       </Grid>
-      <Grid item sm={12} md={4}>
+      <Grid item sm={12} md={colWidth}>
         <UISelect
           name="measure"
           label="Ingredient Measure"
           value={ingredient.measure}
-          options={Object.values(measureData)}
+          options={measurements}
           getOptionLabel={(measure) => measure.name}
           getOptionSelected={(option, value) => option.name === value.name}
           onOptionSelected={(measure) => setIngredient({...ingredient, measure})}
         />
       </Grid>
-      <Grid item sm={12} md={4}>
-        <UIInput
-          name="unit"
-          value={ingredient.currentStock}
-          onValueChanged={
-            isNewIngredient ?
-              // Empty update function if is not new ingredient - https://stackoverflow.com/a/48659047/11571888
-              (val) => setIngredient({...ingredient, currentStock: +val}) :
-              () => void 0
-          }
-          label="Current In-stock"
-          type="number"
-          disabled={!isNewIngredient}
-        />
-      </Grid>
+      {
+        isAddAllowed &&
+        <Grid item sm={12} md={colWidth}>
+          <UIInput
+            name="capacity"
+            value={ingredient.capacity}
+            onValueChanged={(val) => setIngredient({...ingredient, capacity: +val})}
+            label="Max. Capacity"
+            type="number"
+          />
+        </Grid>
+      }
     </>
   );
 };

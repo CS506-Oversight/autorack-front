@@ -11,7 +11,7 @@ const sentinelNewIngredient: Ingredient = {
   name: '',
   measure: defaultMeasure,
   unit: 0.0,
-  currentStock: 0.0,
+  capacity: 0.0,
 };
 
 export const IngredientManagement = () => {
@@ -34,6 +34,7 @@ export const IngredientManagement = () => {
           setIngredients={setItemByIndex}
           onSubmit={onSubmit}
           onDelete={onDelete}
+          isAddAllowed
         />
       )}
     />

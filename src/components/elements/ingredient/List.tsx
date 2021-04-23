@@ -9,9 +9,16 @@ export type IngredientListProps = {
   setIngredients: (newIngredientData: Ingredient, index: number) => void,
   onDelete: (index: number) => () => void,
   onSubmit?: () => void,
+  isAddAllowed?: boolean,
 }
 
-export const IngredientList = ({ingredients, setIngredients, onDelete, onSubmit}: IngredientListProps) => {
+export const IngredientList = ({
+  ingredients,
+  setIngredients,
+  onDelete,
+  onSubmit,
+  isAddAllowed = false,
+}: IngredientListProps) => {
   return (
     <AccordionList
       items={ingredients}
@@ -24,6 +31,7 @@ export const IngredientList = ({ingredients, setIngredients, onDelete, onSubmit}
         <IngredientForm
           ingredient={ingredient}
           setIngredient={setIngredient}
+          isAddAllowed={isAddAllowed}
         />
       )}
     />
