@@ -39,8 +39,8 @@ export const IngredientForm = <T extends Ingredient>(
       <Grid item sm={12} md={colWidth}>
         <UIInput
           name="unit"
-          value={ingredient.unit}
-          onValueChanged={(val) => setIngredient({...ingredient, unit: +val})}
+          value={ingredient.currentStock}
+          onValueChanged={(val) => setIngredient({...ingredient, currentStock: +val})}
           label={isAddAllowed ? 'Current In-stock' : 'Unit Amount'}
           type="number"
         />

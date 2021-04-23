@@ -25,7 +25,7 @@ export const IngredientList = ({
       setItemByIndex={setIngredients}
       onDelete={onDelete}
       onSubmit={onSubmit}
-      isItemIncomplete={(ingredient) => !ingredient.name || !ingredient.unit}
+      isItemIncomplete={(ingredient) => !ingredient.name || !ingredient.currentStock}
       getAccordionTitle={(ingredient) => ingredient.name || '(no name)'}
       renderItemForm={(ingredient, setIngredient) => (
         <IngredientForm

@@ -8,7 +8,7 @@ describe('ingredient reducer behavior', () => {
     id: 'aaa',
     name: 'test',
     measure: volumeMeasureData[VolumeMeasure.FL_OZ],
-    unit: 1,
+    currentStock: 1,
     capacity: 70.0,
   };
 

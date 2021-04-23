@@ -39,21 +39,18 @@ export const ingredientDispatchers = {
       const payloadData: any[] = [];
 
       updated.forEach((element) => {
+        const payload: any = {
+          name: element.name,
+          currentStock: element.currentStock,
+          capacity: element.capacity,
+          measure: element.measure,
+        };
         // Format for new ingredients
-        if (element.id === '(new)') {
-          payloadData.push({
-            name: element.name,
-            unit: element.unit,
-            measure: element.measure,
-          });
-        } else { // Format for existing ingredients
-          payloadData.push({
-            id: element.id,
-            name: element.name,
-            unit: element.unit,
-            measure: element.measure,
-          });
+        if (element.id !== '(new)') {
+          payload.id = element.id;
         }
+
+        payloadData.push(payload);
       });
 
       const payload = {

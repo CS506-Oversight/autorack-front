@@ -10,7 +10,7 @@ const sentinelNewIngredient: Ingredient = {
   id: newIngredientId,
   name: '',
   measure: defaultMeasure,
-  unit: 0.0,
+  currentStock: 0.0,
   capacity: 0.0,
 };
 
