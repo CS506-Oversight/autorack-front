@@ -25,7 +25,14 @@ const UIInputNumber = ({
     onValueChanged?.(newValue);
   };
 
-  return <UIInput value={value} onValueChanged={onValueChangedInternal} {...props}/>;
+  return (
+    <UIInput
+      value={value}
+      type="number"
+      onValueChanged={onValueChangedInternal}
+      {...props}
+    />
+  );
 };
 
 export default UIInputNumber;
