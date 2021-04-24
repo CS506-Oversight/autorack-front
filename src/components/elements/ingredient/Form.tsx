@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 
 import {getMeasureOfSameCategory, Ingredient, measureData} from '../../../state/ingredient/data';
 import UIInput from '../ui/Input';
+import UIInputNumber from '../ui/InputNumber';
 import {UISelect} from '../ui/Select';
 
 
@@ -37,12 +38,12 @@ export const IngredientForm = <T extends Ingredient>(
         />
       </Grid>
       <Grid item sm={12} md={colWidth}>
-        <UIInput
+        <UIInputNumber
           name="unit"
           value={ingredient.currentStock}
           onValueChanged={(val) => setIngredient({...ingredient, currentStock: +val})}
           label={isAddAllowed ? 'Current In-stock' : 'Unit Amount'}
-          type="number"
+          isPositiveOnly
         />
       </Grid>
       <Grid item sm={12} md={colWidth}>
@@ -59,12 +60,12 @@ export const IngredientForm = <T extends Ingredient>(
       {
         isAddAllowed &&
         <Grid item sm={12} md={colWidth}>
-          <UIInput
+          <UIInputNumber
             name="capacity"
             value={ingredient.capacity}
             onValueChanged={(val) => setIngredient({...ingredient, capacity: +val})}
             label="Max. Capacity"
-            type="number"
+            isPositiveOnly
           />
         </Grid>
       }
