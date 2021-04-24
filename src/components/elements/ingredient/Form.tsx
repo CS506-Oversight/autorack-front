@@ -41,7 +41,12 @@ export const IngredientForm = <T extends Ingredient>(
         <UIInputNumber
           name="unit"
           value={ingredient.currentStock}
-          onValueChanged={(val) => setIngredient({...ingredient, currentStock: +val})}
+          onValueChanged={
+            (val) => setIngredient({
+              ...ingredient,
+              currentStock: Math.min(val, ingredient.capacity),
+            })
+          }
           label={isAddAllowed ? 'Current In-stock' : 'Unit Amount'}
           isPositiveOnly
         />
@@ -63,7 +68,13 @@ export const IngredientForm = <T extends Ingredient>(
           <UIInputNumber
             name="capacity"
             value={ingredient.capacity}
-            onValueChanged={(val) => setIngredient({...ingredient, capacity: +val})}
+            onValueChanged={
+              (val) => setIngredient({
+                ...ingredient,
+                currentStock: Math.min(val, ingredient.currentStock),
+                capacity: val,
+              })
+            }
             label="Max. Capacity"
             isPositiveOnly
           />
@@ -71,4 +82,5 @@ export const IngredientForm = <T extends Ingredient>(
       }
     </>
   );
-};
+}
+;
