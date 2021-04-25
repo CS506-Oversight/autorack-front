@@ -7,9 +7,12 @@ describe('ingredient reducer behavior', () => {
   const ingredient: Ingredient = {
     id: 'aaa',
     name: 'test',
+    currentStock: 1,
     measure: volumeMeasureData[VolumeMeasure.FL_OZ],
-    unit: 1,
-    unitPrice: 7,
+    currentStockEquivalent: volumeMeasureData[VolumeMeasure.FL_OZ].equivalentMetric,
+    capacity: 70.0,
+    capacityMeasure: volumeMeasureData[VolumeMeasure.FL_OZ],
+    capacityEquivalent: 70.0 * volumeMeasureData[VolumeMeasure.FL_OZ].equivalentMetric,
   };
 
   it('loads dummy ingredients', () => {
@@ -36,11 +39,11 @@ describe('ingredient reducer behavior', () => {
   it('updates an ingredient', () => {
     const action = {
       type: ingredientDispatchers.upsertIngredient.fulfilled,
-      payload: [{...ingredient, unitPrice: 90}],
+      payload: [{...ingredient, name: 'fff'}],
     };
 
     const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
-    expect(newState.ingredients.some((ingredient) => ingredient.unitPrice === 90)).toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.name === 'fff')).toBeTruthy();
     expect(newState.ingredients.length).toBe(1);
   });
 
@@ -51,12 +54,12 @@ describe('ingredient reducer behavior', () => {
         {...ingredient, id: 'bbb'},
         {...ingredient, id: 'ccc'},
         {...ingredient, id: 'ddd'},
-        {...ingredient, unitPrice: 90},
+        {...ingredient, name: 'fff'},
       ],
     };
 
     const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
-    expect(newState.ingredients.some((ingredient) => ingredient.unitPrice === 90)).toBeTruthy();
+    expect(newState.ingredients.some((ingredient) => ingredient.name === 'fff')).toBeTruthy();
     expect(newState.ingredients.some((ingredient) => ingredient.id === 'bbb')).toBeTruthy();
     expect(newState.ingredients.some((ingredient) => ingredient.id === 'ccc')).toBeTruthy();
     expect(newState.ingredients.some((ingredient) => ingredient.id === 'ddd')).toBeTruthy();
@@ -68,9 +71,9 @@ describe('ingredient reducer behavior', () => {
       type: ingredientDispatchers.upsertIngredient.fulfilled,
       payload: [
         {...ingredient, id: 'eee'},
-        {...ingredient, id: 'bbb', unitPrice: 90},
-        {...ingredient, id: 'ccc', unitPrice: 900},
-        {...ingredient, id: 'ddd', unitPrice: 9000},
+        {...ingredient, id: 'bbb'},
+        {...ingredient, id: 'ccc'},
+        {...ingredient, id: 'ddd'},
       ],
     };
 
@@ -91,37 +94,21 @@ describe('ingredient reducer behavior', () => {
     expect(
       newState
         .ingredients
-        .some((ingredient) => ingredient.id === 'bbb' && ingredient.unitPrice === 90),
+        .some((ingredient) => ingredient.id === 'bbb'),
     )
       .toBeTruthy();
     expect(
       newState
         .ingredients
-        .some((ingredient) => ingredient.id === 'ccc' && ingredient.unitPrice === 900),
+        .some((ingredient) => ingredient.id === 'ccc'),
     )
       .toBeTruthy();
     expect(
       newState
         .ingredients
-        .some((ingredient) => ingredient.id === 'ddd' && ingredient.unitPrice === 9000),
+        .some((ingredient) => ingredient.id === 'ddd'),
     )
       .toBeTruthy();
     expect(newState.ingredients.length).toBe(4);
-  });
-
-  it('removes an ingredient', () => {
-    const action = {
-      type: ingredientDispatchers.removeIngredient.fulfilled,
-      payload: ingredient.id,
-    };
-
-    const newState = ingredientReducer({ingredients: [ingredient], lastFetch: 0}, action);
-    expect(
-      newState
-        .ingredients
-        .some((ingredient) => ingredient.name === ingredient.name),
-    )
-      .toBeFalsy();
-    expect(newState.ingredients.length).toBe(0);
   });
 });

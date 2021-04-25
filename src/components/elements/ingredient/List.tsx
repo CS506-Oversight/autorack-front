@@ -9,21 +9,29 @@ export type IngredientListProps = {
   setIngredients: (newIngredientData: Ingredient, index: number) => void,
   onDelete: (index: number) => () => void,
   onSubmit?: () => void,
+  isAddAllowed?: boolean,
 }
 
-export const IngredientList = ({ingredients, setIngredients, onDelete, onSubmit}: IngredientListProps) => {
+export const IngredientList = ({
+  ingredients,
+  setIngredients,
+  onDelete,
+  onSubmit,
+  isAddAllowed = false,
+}: IngredientListProps) => {
   return (
     <AccordionList
       items={ingredients}
       setItemByIndex={setIngredients}
       onDelete={onDelete}
       onSubmit={onSubmit}
-      isItemIncomplete={(ingredient) => !ingredient.name || !ingredient.unit || !ingredient.unitPrice}
+      isItemIncomplete={(ingredient) => !ingredient.name || !ingredient.currentStock}
       getAccordionTitle={(ingredient) => ingredient.name || '(no name)'}
       renderItemForm={(ingredient, setIngredient) => (
         <IngredientForm
           ingredient={ingredient}
           setIngredient={setIngredient}
+          isAddAllowed={isAddAllowed}
         />
       )}
     />

@@ -16,7 +16,10 @@ const UIInput = ({onChange, onValueChanged, required, value, ...props}: InputPro
 
   return (
     <TextField
-      value={value || ''} // Force the component to be a controlled input
+      // Force the component to be a controlled input
+      // If `value || ''` and `value` = 0, the input value will be an empty string instead of `0`.
+      // Therefore, we are checking explicit `undefined` here.
+      value={value !== undefined ? value : ''}
       variant="outlined"
       margin="normal"
       fullWidth
