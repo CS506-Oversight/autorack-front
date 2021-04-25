@@ -9,9 +9,12 @@ import {ItemManagement} from './base/management/ItemManagement';
 const sentinelNewIngredient: Ingredient = {
   id: newIngredientId,
   name: '',
-  measure: defaultMeasure,
   currentStock: 0.0,
+  measure: defaultMeasure,
+  currentStockEquivalent: 0.0,
   capacity: 0.0,
+  capacityMeasure: defaultMeasure,
+  capacityEquivalent: 0.0,
 };
 
 export const IngredientManagement = () => {

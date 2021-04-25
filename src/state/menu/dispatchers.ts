@@ -4,6 +4,7 @@ import axios from 'axios';
 import ApiPaths from '../../api/definitions/paths';
 import fireAuth from '../../config/firebaseConfig';
 import {UpsertListPayload} from '../base/payload';
+// import {Ingredient} from '../ingredient/data';
 import {Menu} from './data';
 import {MENU_STATE_NAME, MenuDispatcherName} from './name';
 
@@ -28,6 +29,7 @@ export const menuDispatchers = {
   [MenuDispatcherName.UPSERT_MENU]: createAsyncThunk<Array<Menu>, UpsertListPayload<Menu>>(
     `${MENU_STATE_NAME}/${MenuDispatcherName.UPSERT_MENU}`,
     async ({updated}: UpsertListPayload<Menu>) => {
+      console.log(updated);
       const user = fireAuth.currentUser;
       let id = '';
 
@@ -37,22 +39,35 @@ export const menuDispatchers = {
 
       const payloadData: any[] = [];
 
+      // const formatIngredients = (ingredients: Array<Ingredient>) => {
+      //     type FormattedIngredient = {
+      //         id: string,
+      //         measureUnit: string,
+      //         amountNeeded: number,
+      //     }
+      //     const formattedIngredients: Array<FormattedIngredient> = [];
+      //
+      //     ingredients.forEach((ingredient) =>{
+      //         formattedIngredients.push({
+      //             id: ingredient.id,
+      //
+      //         })
+      //     });
+      // };
+
       updated.forEach((element) => {
-        // Format for new ingredients
-        if (element.id === '(new menu)') {
-          payloadData.push({
-            name: element.name,
-            description: element.description,
-            ingredients: element.ingredients,
-          });
-        } else { // Format for existing ingredients
-          payloadData.push({
-            id: element.id,
-            name: element.name,
-            description: element.description,
-            ingredients: element.ingredients,
-          });
+        // Format for new menu items
+        const payload: any = {
+          name: element.name,
+          description: element.description,
+          ingredients: element.ingredients,
+        };
+        // Format for existing menu items
+        if (element.id !== '(new menu)') {
+          payload.id = element.id;
         }
+
+        payloadData.push(payload);
       });
 
       const payload = {

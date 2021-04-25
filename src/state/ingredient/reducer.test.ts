@@ -7,9 +7,12 @@ describe('ingredient reducer behavior', () => {
   const ingredient: Ingredient = {
     id: 'aaa',
     name: 'test',
-    measure: volumeMeasureData[VolumeMeasure.FL_OZ],
     currentStock: 1,
+    measure: volumeMeasureData[VolumeMeasure.FL_OZ],
+    currentStockEquivalent: volumeMeasureData[VolumeMeasure.FL_OZ].equivalentMetric,
     capacity: 70.0,
+    capacityMeasure: volumeMeasureData[VolumeMeasure.FL_OZ],
+    capacityEquivalent: 70.0 * volumeMeasureData[VolumeMeasure.FL_OZ].equivalentMetric,
   };
 
   it('loads dummy ingredients', () => {
