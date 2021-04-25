@@ -44,8 +44,11 @@ export const ingredientDispatchers = {
           currentStock: element.currentStock,
           capacity: element.capacity,
           measure: element.measure,
+          capacityEquivalent: element.capacityEquivalent,
+          capacityMeasure: element.capacityMeasure,
+          currentStockEquivalent: element.currentStockEquivalent,
         };
-        // Format for new ingredients
+        // Format for existing ingredients
         if (element.id !== '(new)') {
           payload.id = element.id;
         }
