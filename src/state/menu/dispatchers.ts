@@ -29,7 +29,6 @@ export const menuDispatchers = {
   [MenuDispatcherName.UPSERT_MENU]: createAsyncThunk<Array<Menu>, UpsertListPayload<Menu>>(
     `${MENU_STATE_NAME}/${MenuDispatcherName.UPSERT_MENU}`,
     async ({updated}: UpsertListPayload<Menu>) => {
-      console.log(updated);
       const user = fireAuth.currentUser;
       let id = '';
 
@@ -38,22 +37,6 @@ export const menuDispatchers = {
       }
 
       const payloadData: any[] = [];
-
-      // const formatIngredients = (ingredients: Array<Ingredient>) => {
-      //     type FormattedIngredient = {
-      //         id: string,
-      //         measureUnit: string,
-      //         amountNeeded: number,
-      //     }
-      //     const formattedIngredients: Array<FormattedIngredient> = [];
-      //
-      //     ingredients.forEach((ingredient) =>{
-      //         formattedIngredients.push({
-      //             id: ingredient.id,
-      //
-      //         })
-      //     });
-      // };
 
       updated.forEach((element) => {
         // Format for new menu items
