@@ -26,12 +26,6 @@ const ingredientSlice = createSlice({
         },
       );
     });
-    builder.addCase(
-      ingredientDispatchers.removeIngredient.fulfilled,
-      (state, {payload}) => {
-        state.ingredients = state.ingredients.filter((x) => x.id !== payload);
-      },
-    );
   },
 });
 
