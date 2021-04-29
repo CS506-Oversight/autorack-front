@@ -105,14 +105,17 @@ export const ensureIngredientValid = <T extends Ingredient>(ingredient: T): T =>
   }
 
   // Calculate equivalents & check for capacity
-  newIngredient.capacityEquivalent = newIngredient.capacity * newIngredient.capacityMeasure.equivalentMetric;
-  newIngredient.currentStockEquivalent = Math.min(
-    newIngredient.capacityEquivalent,
-    newIngredient.currentStock * newIngredient.measure.equivalentMetric,
+  const capacityEquivalent = Math.round(
+    newIngredient.capacity * newIngredient.capacityMeasure.equivalentMetric * 10000,
+  );
+  let stockEquivalent = Math.round(
+    newIngredient.currentStock * newIngredient.measure.equivalentMetric * 10000,
   );
 
+  stockEquivalent = Math.min(stockEquivalent, capacityEquivalent);
+
   // Update current stock according to equivalent (capped)
-  newIngredient.currentStock = newIngredient.currentStockEquivalent / newIngredient.measure.equivalentMetric;
+  newIngredient.currentStock = stockEquivalent / newIngredient.measure.equivalentMetric / 10000;
 
   return newIngredient;
 };
