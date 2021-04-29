@@ -50,7 +50,7 @@ export const RestockEntries = ({data, pageState}: RestockEntriesProps) => {
                   {row.status}
                 </TableCell>
                 <TableCell>{row.type}</TableCell>
-                <TableCell>{row.totalPrice}</TableCell>
+                <TableCell>{row.totalPrice.toFixed(2)}</TableCell>
                 <TableCell>
                   <PurchaseModal data={row.purchasedItems} orderId={row.id}/>
                 </TableCell>

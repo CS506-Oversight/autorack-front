@@ -32,7 +32,7 @@ export const volumeMeasureData: { [key in VolumeMeasure]: Measure } = {
   },
   [VolumeMeasure.CUP]: {
     name: VolumeMeasure.CUP,
-    equivalentMetric: 0.24,
+    equivalentMetric: 0.236588,
     type: MeasureType.VOLUME,
   },
   [VolumeMeasure.FL_OZ]: {
@@ -71,16 +71,51 @@ export const measureData: { [key in MassMeasure | VolumeMeasure]: Measure } = {
   ...massMeasureData,
 };
 
+export const getMeasureOfSameCategory = (measure: Measure): Array<Measure> => {
+  if (measure.name in volumeMeasureData) {
+    return Object.values(volumeMeasureData);
+  }
+  if (measure.name in massMeasureData) {
+    return Object.values(massMeasureData);
+  }
+
+  return [];
+};
+
 export const defaultMeasure = measureData.g;
 
 /**
  * Ingredient data.
  */
 export type Ingredient = NamedData & {
+  currentStock: number,
   measure: Measure,
-  unit: number,
-  unitPrice: number,
+  currentStockEquivalent: number,
+  capacity: number,
+  capacityMeasure: Measure,
+  capacityEquivalent: number,
 }
+
+export const ensureIngredientValid = <T extends Ingredient>(ingredient: T): T => {
+  const newIngredient = {...ingredient};
+
+  if (newIngredient.measure.type !== newIngredient.capacityMeasure.type) {
+    // Ingredient capacity measurement type must = ingredient in-stock measurement type
+    newIngredient.capacityMeasure = getMeasureOfSameCategory(newIngredient.measure)[0];
+  }
+
+  // Calculate equivalents & check for capacity
+  newIngredient.capacityEquivalent = newIngredient.capacity * newIngredient.capacityMeasure.equivalentMetric;
+  newIngredient.currentStockEquivalent = Math.min(
+    newIngredient.capacityEquivalent,
+    newIngredient.currentStock * newIngredient.measure.equivalentMetric,
+  );
+
+  // Update current stock according to equivalent (capped)
+  newIngredient.currentStock = newIngredient.currentStockEquivalent / newIngredient.measure.equivalentMetric;
+
+  return newIngredient;
+};
 
 /**
  * ID that means the ingredient is to be newly added.

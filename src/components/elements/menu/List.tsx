@@ -18,7 +18,7 @@ export const MenuList = ({menus, setMenu, onSubmit, onDelete}: MenuListProps) =>
       setItemByIndex={setMenu}
       onSubmit={onSubmit}
       onDelete={onDelete}
-      isItemIncomplete={(menu) => !menu.name || !menu.description || !menu.price || menu.ingredients.length === 0}
+      isItemIncomplete={(menu) => !menu.name || !menu.description || menu.ingredients.length === 0}
       getAccordionTitle={(menu) => menu.name || '(no name)'}
       renderItemForm={(menu, setMenu) => <MenuForm menu={menu} setMenu={setMenu}/>}
     />

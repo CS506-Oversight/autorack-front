@@ -6,11 +6,13 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
+import axios from 'axios';
 
 import {FetchStatus} from '../../../api/definitions/misc';
+import ApiPaths from '../../../api/definitions/paths';
 import {RestockData, RestockInfo} from '../../../api/definitions/restock/data';
-import {mockFetchRestockData} from '../../../api/mock/restock/utils';
 import {alertDispatchers} from '../../../state/alert/dispatchers';
+import {useAuthSelector} from '../../../state/auth/selector';
 import {useDispatch} from '../../../state/store';
 import {Order} from '../../../utils/sort';
 import {NoData} from '../table/NoData';
@@ -66,17 +68,20 @@ const RestockTable = () => {
     orderBy: 'id',
   });
 
-  if (!restockData.fetched) {
-    mockFetchRestockData()
-      .then((data) => {
+  const {user} = useAuthSelector();
+
+  const fetchData = async () => {
+    const id = user?.id;
+    await axios.get(ApiPaths.RESTOCK_PURCHASES + `?user_id=${id}`)
+      .then((response) => {
         setRestockData({
           ...restockData,
           fetched: true,
           fetching: false,
-          response: data,
+          response: response.data.data,
         });
       })
-      .catch((error) => {
+      .catch((error) =>{
         setRestockData({
           ...restockData,
           fetched: true,
@@ -85,6 +90,10 @@ const RestockTable = () => {
         });
         dispatch(alertDispatchers.showAlert({severity: 'error', message: error.message}));
       });
+  };
+
+  if (!restockData.fetched) {
+    fetchData();
   }
 
   const onHeaderSort = (event: React.MouseEvent<HTMLSpanElement>, columnName: keyof RestockInfo) => {

@@ -6,7 +6,6 @@ import {Ingredient} from '../ingredient/data';
  */
 export type Menu = NamedData & {
   description: string,
-  price: number,
   ingredients: Array<Ingredient>,
 }
 

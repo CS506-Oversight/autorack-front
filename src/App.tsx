@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {Container, makeStyles} from '@material-ui/core';
+import {Redirect} from 'react-router-dom';
 
-import './App.css';
 import Copyright from './components/elements/Copyright';
 import {GlobalAlert} from './components/elements/GlobalAlert';
 import {Navigation} from './components/elements/nav/Main';
@@ -13,7 +13,6 @@ import {AccountSettings} from './components/pages/AccountSettings';
 import {Authenticated} from './components/pages/Authenticated';
 import {Dashboard} from './components/pages/Dashboard';
 import {ForgotPassword} from './components/pages/ForgotPassword';
-import {Homepage} from './components/pages/Homepage';
 import {IngredientManagement} from './components/pages/IngredientManagement';
 import {MenuManagement} from './components/pages/MenuManagement';
 import {RestockPurchases} from './components/pages/RestockPurchases';
@@ -21,6 +20,8 @@ import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
 import AppPaths from './const/paths';
 import {ReduxProvider, ReduxProviderProps} from './state/provider';
+
+import './App.css';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +50,7 @@ const PageContent = () => {
       {/* Accessible regardless the login status */}
 
       <PublicRoute path={AppPaths.HOME}>
-        <Homepage/>
+        <Redirect to={AppPaths.AUTHENTICATED}/>
       </PublicRoute>
 
       {/* Anonymous users only */}

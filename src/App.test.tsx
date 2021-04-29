@@ -1,7 +1,6 @@
 import {renderApp} from '../test/utils/render';
 import RequestSender from './api/utils/requestSender';
 import {Authenticated} from './components/pages/Authenticated';
-import {Homepage} from './components/pages/Homepage';
 import {SignIn} from './components/pages/SignIn';
 import {SignUp} from './components/pages/SignUp';
 import AppPaths from './const/paths';
@@ -15,14 +14,6 @@ describe('auth redirect behavior', () => {
     id: 'id',
   };
 
-  test('anonymous user can go to the home page', () => {
-    const {app, store} = renderApp(AppPaths.HOME);
-
-    expect(store.getState().auth.user).toBeNull();
-    expect(app.find(SignUp).exists()).toBeFalsy();
-    expect(app.find(Homepage).exists()).toBeTruthy();
-  });
-
   test('anonymous user is redirected to sign-in from authenticated', async () => {
     const {app, store} = renderApp(AppPaths.AUTHENTICATED);
 
@@ -35,16 +26,16 @@ describe('auth redirect behavior', () => {
     const {app, store} = renderApp(AppPaths.SIGN_IN);
 
     expect(store.getState().auth.user).toBeNull();
-    expect(app.find(Homepage).exists()).toBeFalsy();
+    expect(app.find(Authenticated).exists()).toBeFalsy();
     expect(app.find(SignIn).exists()).toBeTruthy();
   });
 
-  test('logged in user can go to the home page', () => {
+  test('logged in user can go to the authenticated page', () => {
     const {app, store} = renderApp(AppPaths.HOME);
 
     expect(store.getState().auth.user).toBeNull();
     expect(app.find(SignUp).exists()).toBeFalsy();
-    expect(app.find(Homepage).exists()).toBeTruthy();
+    expect(app.find(Authenticated).exists()).toBeTruthy();
   });
 
   test('logged in user is redirected from sign-in to authenticated', () => {

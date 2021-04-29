@@ -9,7 +9,6 @@ describe('menu reducer behavior', () => {
     id: 'aaa',
     name: 'test',
     description: 'test menu',
-    price: 7,
     ingredients: [dummyIngredientData[0], dummyIngredientData[1]],
   };
 
@@ -37,11 +36,11 @@ describe('menu reducer behavior', () => {
   it('updates a menu', () => {
     const action = {
       type: menuDispatchers.upsertMenu.fulfilled,
-      payload: [{...menu, price: 90}],
+      payload: [{...menu, name: 'fff'}],
     };
 
     const newState = menuReducer({menus: [menu], lastFetch: 0}, action);
-    expect(newState.menus.some((menu) => menu.price === 90)).toBeTruthy();
+    expect(newState.menus.some((menu) => menu.name === 'fff')).toBeTruthy();
     expect(newState.menus.length).toBe(1);
   });
 
@@ -52,12 +51,12 @@ describe('menu reducer behavior', () => {
         {...menu, id: 'bbb'},
         {...menu, id: 'ccc'},
         {...menu, id: 'ddd'},
-        {...menu, price: 90},
+        {...menu, name: 'fff'},
       ],
     };
 
     const newState = menuReducer({menus: [menu], lastFetch: 0}, action);
-    expect(newState.menus.some((menu) => menu.price === 90)).toBeTruthy();
+    expect(newState.menus.some((menu) => menu.name === 'fff')).toBeTruthy();
     expect(newState.menus.some((menu) => menu.id === 'bbb')).toBeTruthy();
     expect(newState.menus.some((menu) => menu.id === 'ccc')).toBeTruthy();
     expect(newState.menus.some((menu) => menu.id === 'ddd')).toBeTruthy();
@@ -69,9 +68,9 @@ describe('menu reducer behavior', () => {
       type: menuDispatchers.upsertMenu.fulfilled,
       payload: [
         {...menu, id: 'eee'},
-        {...menu, id: 'bbb', price: 90},
-        {...menu, id: 'ccc', price: 900},
-        {...menu, id: 'ddd', price: 9000},
+        {...menu, id: 'bbb', name: 'bbb'},
+        {...menu, id: 'ccc', name: 'ccc'},
+        {...menu, id: 'ddd', name: 'ddd'},
       ],
     };
 
@@ -84,20 +83,9 @@ describe('menu reducer behavior', () => {
       lastFetch: 0,
     }, action);
     expect(newState.menus.some((menu) => menu.id === 'eee')).toBeTruthy();
-    expect(newState.menus.some((menu) => menu.id === 'bbb' && menu.price === 90)).toBeTruthy();
-    expect(newState.menus.some((menu) => menu.id === 'ccc' && menu.price === 900)).toBeTruthy();
-    expect(newState.menus.some((menu) => menu.id === 'ddd' && menu.price === 9000)).toBeTruthy();
+    expect(newState.menus.some((menu) => menu.id === 'bbb' && menu.name === 'bbb')).toBeTruthy();
+    expect(newState.menus.some((menu) => menu.id === 'ccc' && menu.name === 'ccc')).toBeTruthy();
+    expect(newState.menus.some((menu) => menu.id === 'ddd' && menu.name === 'ddd')).toBeTruthy();
     expect(newState.menus.length).toBe(4);
-  });
-
-  it('removes a menu', () => {
-    const action = {
-      type: menuDispatchers.removeMenu.fulfilled,
-      payload: menu.id,
-    };
-
-    const newState = menuReducer({menus: [menu], lastFetch: 0}, action);
-    expect(newState.menus.some((menu) => menu.name === menu.name)).toBeFalsy();
-    expect(newState.menus.length).toBe(0);
   });
 });
