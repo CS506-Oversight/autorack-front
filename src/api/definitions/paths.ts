@@ -15,4 +15,6 @@ export default class ApiPaths {
   static INGREDIENT = ApiPaths.API_URL + '/ingredient';
 
   static MENU = ApiPaths.API_URL + '/menu-item';
+
+  static INVENTORY = ApiPaths.API_URL + '/inventory'
 }
