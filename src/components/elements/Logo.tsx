@@ -16,7 +16,9 @@ const AutoRackLogo = () => {
   const style = useStyles();
 
   return (
-    <img src={logo} className={style.logo} />
+    <a href={'/dashboard'}>
+      <img src={logo} className={style.logo} />
+    </a>
   );
 };
 

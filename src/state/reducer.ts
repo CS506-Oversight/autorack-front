@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import alertReducer from './alert/reducer';
 import authReducer from './auth/reducer';
 import ingredientReducer from './ingredient/reducer';
+import inventoryReducer from './inventory/reducer';
 import menuReducer from './menu/reducer';
 
 const persistConfig = {
@@ -19,6 +20,7 @@ const rootReducer = combineReducers(
     alert: alertReducer,
     ingredient: ingredientReducer,
     menu: menuReducer,
+    inventory: inventoryReducer,
   },
 );
 
