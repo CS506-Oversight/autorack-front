@@ -116,8 +116,8 @@ export const ensureIngredientValid = <T extends Ingredient>(ingredient: T): T =>
 
   // Update ingredient state
   newIngredient.currentStock = stockEquivalent / newIngredient.measure.equivalentMetric / 10000;
-  newIngredient.currentStockEquivalent = stockEquivalent;
-  newIngredient.capacityEquivalent = capacityEquivalent;
+  newIngredient.currentStockEquivalent = stockEquivalent / 10000;
+  newIngredient.capacityEquivalent = capacityEquivalent / 10000;
 
   return newIngredient;
 };
