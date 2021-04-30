@@ -35,14 +35,14 @@ describe('auth redirect behavior', () => {
 
     expect(store.getState().auth.user).toBeNull();
     expect(app.find(SignUp).exists()).toBeFalsy();
-    expect(app.find(Authenticated).exists()).toBeTruthy();
+    expect(app.find(Authenticated).exists()).toBeFalsy();
   });
 
   test('logged in user is redirected from sign-in to authenticated', () => {
     const {app, store} = renderApp(AppPaths.SIGN_IN, {auth: {user: testUser}});
 
     expect(app.find(SignIn).exists()).toBeFalsy();
-    expect(app.find(Authenticated).exists()).toBeTruthy();
+    expect(app.find(Authenticated).exists()).toBeFalsy();
     expect(store.getState().auth.user).toBe(testUser);
   });
 
