@@ -25,14 +25,4 @@ describe('restock purchase behavior', () => {
 
     expect(app.find(RestockPurchases).exists()).toBeTruthy();
   });
-
-  it('sorts by price', async () => {
-    // TODO: Implement test: sorts by price
-    console.warn('Test "sorts by price" not implemented');
-  });
-
-  it('sorts by status', async () => {
-    // TODO: Implement test: sorts by status
-    console.warn('Test "sorts by status" not implemented');
-  });
 });

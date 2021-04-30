@@ -35,19 +35,4 @@ describe('account settings behavior', () => {
 
     expect(app.find(SignIn).exists()).toBeTruthy();
   });
-
-/*  it('changes the user\'s password', async () => {
-    // TODO: Implement test: changes the user's password
-    console.warn('Test "changes the user\'s password" not implemented');
-  });
-
-  it('fails to change the user\'s password if mismatch', async () => {
-    // TODO: Implement test: fails to change the user's password if mismatch
-    console.warn('Test "fails to change the user\'s password if mismatch" not implemented');
-  });
-
-  it('fails to change the user\'s password is the same', async () => {
-    // TODO: Implement test: fails to change the user's password is the same
-    console.warn('Test "fails to change the user\'s password is the same" not implemented');
-  });*/
 });

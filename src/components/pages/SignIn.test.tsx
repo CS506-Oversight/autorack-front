@@ -25,22 +25,4 @@ describe('sign in behavior', () => {
 
     expect(app.find(SignIn).exists()).toBeFalsy();
   });
-
-  it('signs the user in if the auth info are correct', async () => {
-    // TODO: Implement test: signs the user in if the auth info are correct
-    console.warn('Test "signs the user in if the auth info are correct" not implemented');
-    // expect(store.getState().auth.user).toBe(testUser);
-  });
-
-  it('fails when the password is incorrect', async () => {
-    // TODO: Implement test: fails when the password is incorrect
-    console.warn('Test "fails when the password is incorrect" not implemented');
-    // expect(store.getState().auth.user).toBeNull();
-  });
-
-  it('fails when the user does not exist', async () => {
-    // TODO: Implement test: fails when the user does not exist
-    console.warn('Test "fails when the user does not exist" not implemented');
-    // expect(store.getState().auth.user).toBeNull();
-  });
 });

@@ -25,14 +25,4 @@ describe('forgot password behavior', () => {
 
     expect(app.find(ForgotPassword).exists()).toBeFalsy();
   });
-
-  it('sends password reset email', async () => {
-    // TODO: Implement test: sends password reset email
-    console.warn('Test "sends password reset email" not implemented');
-  });
-
-  it('fails on user account not found', async () => {
-    // TODO: Implement test: fails on user account not found
-    console.warn('Test "fails on user account not found" not implemented');
-  });
 });

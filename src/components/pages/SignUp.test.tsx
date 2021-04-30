@@ -25,22 +25,4 @@ describe('sign up behavior', () => {
 
     expect(app.find(SignUp).exists()).toBeFalsy();
   });
-
-  it('signs the user up', async () => {
-    // TODO: Implement test: signs the user up
-    console.warn('Test "signs the user up" not implemented');
-    // expect(store.getState().auth.user).toBe(testUser);
-  });
-
-  it('fails when the user already exists', async () => {
-    // TODO: Implement test: fails when the user already exists
-    console.warn('Test "fails when the user already exists" not implemented');
-    // expect(store.getState().auth.user).toBeNull();
-  });
-
-  it('fails when the user info is malformed', async () => {
-    // TODO: Implement test: fails when the user info is malformed
-    console.warn('Test "fails when the user info is malformed" not implemented');
-    // expect(store.getState().auth.user).toBeNull();
-  });
 });
