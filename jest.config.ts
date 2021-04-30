@@ -17,6 +17,8 @@ const config: Config.InitialOptions = {
     '!**/node_modules/**',
     // NOT Testing files
     '!./src/**/*.test.ts',
+    // NOT API mocking implementations
+    '!./src/api/mock/**/.ts',
   ],
   coverageReporters: ['clover'],
 };
