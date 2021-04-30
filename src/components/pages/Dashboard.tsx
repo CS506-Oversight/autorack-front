@@ -8,7 +8,6 @@ import {VictoryBar, VictoryChart, VictoryAxis,
 
 import {useAuthSelector} from '../../state/auth/selector';
 import {inventoryDispatchers} from '../../state/inventory/dispatchers';
-// import {InventoryDispatcherName} from '../../state/inventory/name' ;
 import {useInventorySelector} from '../../state/inventory/selector';
 import {useDispatch} from '../../state/store';
 
@@ -23,6 +22,7 @@ const useStyles = makeStyles(() => ({
   cardScale: {
     maxWidth: '100%',
     maxHeight: '90%',
+    marginTop: '8em',
   },
   cardHeader: {
     display: 'flex',
@@ -39,19 +39,38 @@ const useStyles = makeStyles(() => ({
   totalLabels: {
     paddingLeft: '3em',
   },
+  greeting: {
+    marginBottom: '0.75em',
+  },
 }));
 
 const InventoryBarGraph = () => {
   const {inventory} = useInventorySelector();
-  console.log(inventory);
 
   const getNames = () => {
     const names: string[] = [];
     inventory.forEach((ele) => {
       names.push(ele.name);
     });
-    console.log(names);
     return names;
+  };
+
+  const colorSwitcher: any = {
+    fill: (datum: any) => {
+      const percentage = datum.datum._y;
+      let color = 'blue';
+
+      if (percentage > 45.0) {
+        color = '#32a852';
+      } if (percentage <= 45.0 && percentage >= 20.0) {
+        color = '#dfe815';
+      } if (percentage < 20.0) {
+        color = '#e00000';
+      }
+
+      return color;
+    },
+    strokeWidth: 0,
   };
 
   return (
@@ -72,11 +91,13 @@ const InventoryBarGraph = () => {
         />
         <VictoryStack colorScale="cool">
           <VictoryBar
+            style={{data: {...colorSwitcher}}}
             data={inventory}
             x="name"
             y="amountInStockPercentage"
           />
           <VictoryBar
+            style={{data: {fill: '#c9c9c9'}}}
             data={inventory}
             x="name"
             y="amountInProgressPercentage"
@@ -87,50 +108,10 @@ const InventoryBarGraph = () => {
   );
 };
 
-// const TotalPurchases = () => {
-//   const classes = useStyles();
-//   const total = [
-//     {x: '1', y: 50, label: 'salt'},
-//     {x: '2', y: 80, label: 'pepper'},
-//     {x: '3', y: 90, label: 'almonds'},
-//   ];
-//   return (
-//     <Card elevation={3} variant="outlined" className={classes.totalFlex}>
-//       <CardHeader
-//         disableTypography={true}
-//         className={classes.totalLabels}
-//         title={
-//           <Typography variant="h4">
-//               Total Purchases: $500,000
-//           </Typography>
-//         }
-//         subheader={
-//           <Typography variant="h6">
-//               For April
-//           </Typography>
-//         }
-//       />
-//       <CardContent >
-//         <VictoryPie
-//           theme={VictoryTheme.material}
-//           colorScale="cool"
-//           animate={{duration: 500}}
-//           width={200} height={200}
-//           innerRadius={65}
-//           labelComponent={<VictoryTooltip/>}
-//           data={total}
-//         />
-//       </CardContent>
-//     </Card>
-//   );
-// };
 export const Dashboard = () => {
   const classes = useStyles();
   const {user} = useAuthSelector();
   const dispatch = useDispatch();
-
-  const {inventory} = useInventorySelector();
-  console.log(inventory);
 
   useEffect(() => {
     if (user != null) {
@@ -141,16 +122,14 @@ export const Dashboard = () => {
   return (
     <Container className={classes.cardScale}>
       {user?.firstName?
-        <Typography variant="h2">Welcome Back {user.firstName}</Typography> :
-        <Typography variant="h2">Welcome Back User</Typography>
+        <Typography variant="h2" className={classes.greeting}>Welcome Back {user.firstName}</Typography> :
+        <Typography variant="h2" className={classes.greeting}>Welcome Back User</Typography>
       }
-
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Card elevation={4} variant="outlined" className={classes.bg}>
             <Box borderBottom={1} className={classes.cardHeader}>
               <CardHeader
-
                 disableTypography={true}
                 title={
                   <Typography variant="h4">
