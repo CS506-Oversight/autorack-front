@@ -36,6 +36,12 @@ const navBarItems: Array<NavItemEntry> = [
     displayWhenAnonymous: true,
   },
   {
+    label: 'Dashboard',
+    link: AppPaths.DASHBOARD,
+    displayWhenLoggedIn: true,
+    displayWhenAnonymous: false,
+  },
+  {
     label: 'Restock',
     link: AppPaths.RESTOCK_PURCHASES,
     displayWhenLoggedIn: true,

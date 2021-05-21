@@ -20,7 +20,6 @@ const inventorySlice = createSlice({
       builder.addCase(
         thunkCase,
         (state, {payload}) => {
-          console.log(payload);
           state.inventory = payload;
         },
       );
