@@ -2,6 +2,7 @@ import React from 'react';
 
 import Alert from '@material-ui/lab/Alert';
 
+// comment
 // No type definitions available yet
 // https://material-ui.com/components/alert/
 type AlertSeverity = 'error' | 'warning' | 'success' | 'info';
